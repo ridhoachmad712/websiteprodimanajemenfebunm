@@ -36,8 +36,8 @@
                         <span class="nav-link-title">Dosen</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {{ request()->routeIs('admin.pages.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.pages.index') }}">
                         <span class="nav-link-icon"><i class="ti ti-file-text"></i></span>
                         <span class="nav-link-title">Halaman</span>
                     </a>

@@ -31,11 +31,11 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-profil" data-bs-toggle="dropdown" role="button" aria-expanded="false">Profil</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Profil Program Studi</a>
+                        <a class="dropdown-item" href="{{ route('page.profil') }}">Profil Program Studi</a>
                         <a class="dropdown-item" href="{{ route('dosen.index') }}">Daftar Dosen</a>
-                        <a class="dropdown-item" href="#">Peta Proses Bisnis</a>
-                        <a class="dropdown-item" href="#">Akreditasi</a>
-                        <a class="dropdown-item" href="#">Fasilitas</a>
+                        <a class="dropdown-item" href="{{ route('page.sop-petaprosesbisnis') }}">Peta Proses Bisnis</a>
+                        <a class="dropdown-item" href="{{ route('page.akreditasi') }}">Akreditasi</a>
+                        <a class="dropdown-item" href="{{ route('page.fasilitas') }}">Fasilitas</a>
                         <a class="dropdown-item" href="#">Galeri</a>
                     </div>
                 </li>
@@ -43,8 +43,8 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-akademik" data-bs-toggle="dropdown" role="button" aria-expanded="false">Akademik</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Kurikulum</a>
-                        <a class="dropdown-item" href="#">Kalender Akademik</a>
+                        <a class="dropdown-item" href="{{ route('page.kurikulum') }}">Kurikulum</a>
+                        <a class="dropdown-item" href="{{ route('page.kalender-akademik') }}">Kalender Akademik</a>
                         <a class="dropdown-item" href="#">Daftar Seminar</a>
                         <a class="dropdown-item" href="{{ route('post.category', 'prestasi') }}">Prestasi</a>
                     </div>
@@ -53,7 +53,7 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-kemahasiswaan" data-bs-toggle="dropdown" role="button" aria-expanded="false">Kemahasiswaan</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">HIMA Manajemen</a>
+                        <a class="dropdown-item" href="{{ route('page.hima') }}">HIMA Manajemen</a>
                         <a class="dropdown-item" href="#">KMM Asy Asyaamil</a>
                     </div>
                 </li>
@@ -61,16 +61,16 @@
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-alumni" data-bs-toggle="dropdown" role="button" aria-expanded="false">Alumni</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">Direktori Alumni</a>
-                        <a class="dropdown-item" href="#">Tracer Study</a>
+                        <a class="dropdown-item" href="{{ route('page.alumni') }}">Direktori Alumni</a>
+                        <a class="dropdown-item" href="https://tracerstudy.unm.ac.id" target="_blank" rel="noopener">Tracer Study</a>
                     </div>
                 </li>
 
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-jurnal" data-bs-toggle="dropdown" role="button" aria-expanded="false">Jurnal</a>
                     <div class="dropdown-menu">
-                        <a class="dropdown-item" href="#">ICOMAN 2025</a>
-                        <a class="dropdown-item" href="#">Jurnal (OJS)</a>
+                        <a class="dropdown-item" href="{{ route('page.icoman2025') }}">ICOMAN 2025</a>
+                        <a class="dropdown-item" href="https://ojs.unm.ac.id/manajemen" target="_blank" rel="noopener">Jurnal (OJS)</a>
                     </div>
                 </li>
 
@@ -79,7 +79,7 @@
                 </li>
 
                 <li class="nav-item">
-                    <a class="nav-link" href="#">Hubungi Kami</a>
+                    <a class="nav-link" href="{{ route('page.hubungi-kami') }}">Hubungi Kami</a>
                 </li>
             </ul>
         </div>

@@ -2,9 +2,11 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PostController;
 use Illuminate\Support\Facades\Route;
 
@@ -23,6 +25,19 @@ Route::get('/dosen/{dosen}', [DosenController::class, 'show'])->name('dosen.show
 Route::get('/berita', [PostController::class, 'index'])->name('post.index');
 Route::get('/category/{category}', [PostController::class, 'byCategory'])->name('post.category');
 
+// Halaman statis
+Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');
+
+$staticPages = [
+    'akreditasi', 'fasilitas', 'sop-petaprosesbisnis', 'kalender-akademik',
+    'kurikulum', 'hima', 'alumni', 'icoman2025', 'hubungi-kami',
+];
+foreach ($staticPages as $slug) {
+    Route::get("/{$slug}", [PageController::class, 'show'])
+        ->defaults('slug', $slug)
+        ->name("page.{$slug}");
+}
+
 /*
 |--------------------------------------------------------------------------
 | Admin (panel, butuh autentikasi)
@@ -33,6 +48,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::resource('dosen', AdminDosenController::class)->except('show')->names('admin.dosen');
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
+    Route::resource('pages', AdminPageController::class)->only(['index', 'edit', 'update'])->names('admin.pages');
 });
 
 require __DIR__.'/auth.php';

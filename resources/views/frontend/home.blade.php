@@ -16,7 +16,7 @@
                         Universitas Negeri Makassar.
                     </p>
                     <div class="d-flex flex-wrap gap-2">
-                        <a href="#" class="btn btn-primary btn-lg"><i class="ti ti-building-bank me-1"></i> Profil Program Studi</a>
+                        <a href="{{ route('page.profil') }}" class="btn btn-primary btn-lg"><i class="ti ti-building-bank me-1"></i> Profil Program Studi</a>
                         <a href="{{ route('post.index') }}" class="btn btn-outline-primary btn-lg"><i class="ti ti-news me-1"></i> Informasi Terbaru</a>
                     </div>
                 </div>
