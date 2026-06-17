@@ -48,14 +48,14 @@
                         <span class="nav-link-title">Galeri</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.menus.index') }}">
                         <span class="nav-link-icon"><i class="ti ti-menu-2"></i></span>
                         <span class="nav-link-title">Menu</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.settings.edit') }}">
                         <span class="nav-link-icon"><i class="ti ti-settings"></i></span>
                         <span class="nav-link-title">Pengaturan</span>
                     </a>

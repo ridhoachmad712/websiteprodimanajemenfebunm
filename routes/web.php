@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
+use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
@@ -49,6 +51,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('dosen', AdminDosenController::class)->except('show')->names('admin.dosen');
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
     Route::resource('pages', AdminPageController::class)->only(['index', 'edit', 'update'])->names('admin.pages');
+    Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
+    Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
+    Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
 });
 
 require __DIR__.'/auth.php';

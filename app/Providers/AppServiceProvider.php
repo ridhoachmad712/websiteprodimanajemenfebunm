@@ -2,7 +2,9 @@
 
 namespace App\Providers;
 
+use App\Models\Menu;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
 class AppServiceProvider extends ServiceProvider
@@ -22,5 +24,14 @@ class AppServiceProvider extends ServiceProvider
     {
         // Pagination memakai markup Bootstrap 5 agar konsisten dengan Tabler.
         Paginator::useBootstrapFive();
+
+        // Menu navigasi publik (3 level) tersedia di layout frontend & partial-nya.
+        View::composer('layouts.frontend', function ($view) {
+            $view->with('mainMenu', Menu::whereNull('parent_id')
+                ->where('aktif', true)
+                ->with('activeChildren.activeChildren')
+                ->orderBy('urutan')
+                ->get());
+        });
     }
 }

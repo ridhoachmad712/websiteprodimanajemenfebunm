@@ -1,7 +1,12 @@
-{{--
-    Footer publik 4 kolom — konten masih statis (placeholder).
-    Akan dibuat dinamis lewat tabel settings pada Tugas Pengaturan.
---}}
+{{-- Footer publik 4 kolom — kontak, sosmed & identitas dari tabel settings. --}}
+@php
+    $kontakAlamat  = \App\Models\Setting::get('kontak.alamat');
+    $kontakTelepon = \App\Models\Setting::get('kontak.telepon');
+    $kontakEmail   = \App\Models\Setting::get('kontak.email');
+    $ig = \App\Models\Setting::get('sosmed.instagram');
+    $tt = \App\Models\Setting::get('sosmed.tiktok');
+    $fb = \App\Models\Setting::get('sosmed.facebook');
+@endphp
 <footer class="footer mt-auto bg-dark text-white-50 d-print-none">
     <div class="container-xl py-5">
         <div class="row g-4">
@@ -9,14 +14,15 @@
             <div class="col-12 col-md-6 col-lg-3">
                 <div class="d-flex align-items-center mb-3">
                     <span class="avatar avatar-sm bg-primary text-white me-2">M</span>
-                    <span class="fw-bold text-white">Prodi Manajemen FEB UNM</span>
+                    <span class="fw-bold text-white">{{ \App\Models\Setting::get('site.nama', 'Prodi Manajemen FEB UNM') }}</span>
                 </div>
-                <p class="mb-2">Kampus Gunung Sari, Jl. A.P Pettarani &ndash; Jl. Pendidikan, Makassar.</p>
-                <p class="mb-1"><i class="ti ti-phone me-1"></i> 082 293 000 192</p>
-                <p class="mb-3"><i class="ti ti-mail me-1"></i> manajemen_fe@unm.ac.id</p>
+                @if ($kontakAlamat) <p class="mb-2">{{ $kontakAlamat }}</p> @endif
+                @if ($kontakTelepon) <p class="mb-1"><i class="ti ti-phone me-1"></i> {{ $kontakTelepon }}</p> @endif
+                @if ($kontakEmail) <p class="mb-3"><i class="ti ti-mail me-1"></i> {{ $kontakEmail }}</p> @endif
                 <div class="d-flex gap-2">
-                    <a href="https://www.instagram.com/manajemen.febunm/" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a>
-                    <a href="https://www.tiktok.com/@manajemenfebunm" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a>
+                    @if ($ig) <a href="{{ $ig }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a> @endif
+                    @if ($tt) <a href="{{ $tt }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a> @endif
+                    @if ($fb) <a href="{{ $fb }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a> @endif
                 </div>
             </div>
 

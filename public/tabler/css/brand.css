@@ -18,3 +18,34 @@
 :root {
   /* --tblr-primary: #066fd1;  (default Tabler — ubah di sini bila perlu) */
 }
+
+/* Submenu dropdown bertingkat (level 3) untuk mega-menu navbar publik. */
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu > .dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -0.5rem;
+  margin-left: 0;
+}
+.dropdown-submenu > .dropdown-toggle::after {
+  /* arah panah ke kanan untuk menandai submenu */
+  transform: rotate(-90deg);
+  margin-left: 0.4em;
+}
+@media (min-width: 768px) {
+  .dropdown-submenu:hover > .dropdown-menu {
+    display: block;
+  }
+}
+@media (max-width: 767.98px) {
+  /* Pada mobile, submenu tampil inline (di bawah induknya). */
+  .dropdown-submenu > .dropdown-menu {
+    position: static;
+    left: 0;
+    margin-left: 1rem;
+    border: 0;
+    box-shadow: none;
+  }
+}
