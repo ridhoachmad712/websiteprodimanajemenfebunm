@@ -26,7 +26,7 @@
                             <div class="col-6 col-md-4 col-lg-3">
                                 <a href="#" class="d-block" data-bs-toggle="modal" data-bs-target="#galleryModal"
                                    data-img="{{ Storage::url($item->gambar) }}" data-judul="{{ $item->judul }}">
-                                    <img src="{{ Storage::url($item->gambar) }}" class="rounded w-100" alt="{{ $item->judul }}"
+                                    <img src="{{ Storage::url($item->gambar) }}" class="rounded w-100" alt="{{ $item->judul }}" loading="lazy"
                                          style="aspect-ratio:1/1;object-fit:cover;cursor:zoom-in">
                                 </a>
                             </div>

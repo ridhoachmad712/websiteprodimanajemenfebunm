@@ -2,7 +2,7 @@
 <div class="card card-sm h-100">
     @if ($post->featured_image)
         <a href="{{ $post->url() }}" class="d-block">
-            <img src="{{ Storage::url($post->featured_image) }}" class="card-img-top" alt="{{ $post->judul }}" style="aspect-ratio:16/9;object-fit:cover">
+            <img src="{{ Storage::url($post->featured_image) }}" class="card-img-top" alt="{{ $post->judul }}" loading="lazy" style="aspect-ratio:16/9;object-fit:cover">
         </a>
     @endif
     <div class="card-body d-flex flex-column">

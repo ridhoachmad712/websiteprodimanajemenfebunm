@@ -33,7 +33,7 @@
                     </div>
 
                     @if ($post->featured_image)
-                        <img src="{{ Storage::url($post->featured_image) }}" class="rounded mb-4 img-fluid w-100" alt="{{ $post->judul }}">
+                        <img src="{{ Storage::url($post->featured_image) }}" class="rounded mb-4 img-fluid w-100" alt="{{ $post->judul }}" loading="lazy">
                     @endif
 
                     {{-- Konten HTML dari editor (dibuat oleh admin tepercaya) --}}

@@ -108,6 +108,9 @@ class PostController extends Controller
     {
         $data = $request->safe()->except(['categories', 'featured_image']);
 
+        // Sanitasi HTML dari WYSIWYG untuk mencegah XSS.
+        $data['konten'] = clean($data['konten']);
+
         if ($data['status'] === 'published' && empty($data['published_at'])) {
             $data['published_at'] = now();
         }

@@ -35,12 +35,12 @@ class PageController extends Controller
             foreach ($request->input('sections', []) as $key => $val) {
                 if (isset($sections[$key])) {
                     $sections[$key]['judul'] = $val['judul'] ?? $sections[$key]['judul'] ?? '';
-                    $sections[$key]['isi']   = $val['isi'] ?? '';
+                    $sections[$key]['isi']   = clean($val['isi'] ?? ''); // sanitasi HTML
                 }
             }
             $data['sections'] = $sections;
         } else {
-            $data['content'] = $request->validated('content');
+            $data['content'] = clean($request->validated('content') ?? ''); // sanitasi HTML
         }
 
         $page->update($data);

@@ -6,7 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
     <title>@yield('title', 'Beranda') &mdash; {{ config('app.name') }}</title>
-    <meta name="description" content="@yield('meta_description', 'Program Studi Manajemen, Fakultas Ekonomi dan Bisnis, Universitas Negeri Makassar.')">
+
+    @include('frontend.partials.seo')
 
     {{-- Tabler core + icons + brand override --}}
     <link href="{{ asset('tabler/css/tabler.min.css') }}" rel="stylesheet">
