@@ -1,0 +1,20 @@
+/*
+ * Brand override untuk Website Prodi Manajemen FEB UNM
+ * --------------------------------------------------------------------------
+ * File ini di-load SETELAH tabler.min.css, sehingga aman untuk meng-override
+ * variabel/utility Tabler tanpa menyentuh file inti.
+ *
+ * Saat ini memakai warna default Tabler (biru). Untuk mengganti warna brand
+ * (mis. oranye/biru UNM) nanti, cukup isi blok :root di bawah, contoh:
+ *
+ *   :root {
+ *     --tblr-primary:        #F47B20;
+ *     --tblr-primary-rgb:    244, 123, 32;
+ *   }
+ *
+ * Tidak perlu rebuild SCSS — perubahan langsung berlaku.
+ */
+
+:root {
+  /* --tblr-primary: #066fd1;  (default Tabler — ubah di sini bila perlu) */
+}
