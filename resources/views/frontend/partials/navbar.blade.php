@@ -28,7 +28,7 @@
                     <a class="nav-link dropdown-toggle" href="#navbar-profil" data-bs-toggle="dropdown" role="button" aria-expanded="false">Profil</a>
                     <div class="dropdown-menu">
                         <a class="dropdown-item" href="#">Profil Program Studi</a>
-                        <a class="dropdown-item" href="#">Daftar Dosen</a>
+                        <a class="dropdown-item" href="{{ route('dosen.index') }}">Daftar Dosen</a>
                         <a class="dropdown-item" href="#">Peta Proses Bisnis</a>
                         <a class="dropdown-item" href="#">Akreditasi</a>
                         <a class="dropdown-item" href="#">Fasilitas</a>
