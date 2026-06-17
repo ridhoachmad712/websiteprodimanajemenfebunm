@@ -48,4 +48,19 @@ class Post extends Model
     {
         return 'slug';
     }
+
+    /**
+     * URL publik berita dengan pola WordPress: /YYYY/MM/DD/slug.
+     */
+    public function url(): string
+    {
+        $date = $this->published_at ?? $this->created_at;
+
+        return route('post.show', [
+            'year'  => $date->format('Y'),
+            'month' => $date->format('m'),
+            'day'   => $date->format('d'),
+            'slug'  => $this->slug,
+        ]);
+    }
 }

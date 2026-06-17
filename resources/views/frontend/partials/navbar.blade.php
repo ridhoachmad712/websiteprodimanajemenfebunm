@@ -24,6 +24,10 @@
                     <a class="nav-link" href="{{ url('/') }}">Beranda</a>
                 </li>
 
+                <li class="nav-item">
+                    <a class="nav-link" href="{{ route('post.index') }}">Berita</a>
+                </li>
+
                 <li class="nav-item dropdown">
                     <a class="nav-link dropdown-toggle" href="#navbar-profil" data-bs-toggle="dropdown" role="button" aria-expanded="false">Profil</a>
                     <div class="dropdown-menu">
@@ -42,7 +46,7 @@
                         <a class="dropdown-item" href="#">Kurikulum</a>
                         <a class="dropdown-item" href="#">Kalender Akademik</a>
                         <a class="dropdown-item" href="#">Daftar Seminar</a>
-                        <a class="dropdown-item" href="#">Prestasi</a>
+                        <a class="dropdown-item" href="{{ route('post.category', 'prestasi') }}">Prestasi</a>
                     </div>
                 </li>
 
