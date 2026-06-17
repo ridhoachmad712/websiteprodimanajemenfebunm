@@ -2,11 +2,13 @@
 
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
+use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Frontend\DosenController;
+use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PostController;
@@ -26,6 +28,9 @@ Route::get('/dosen/{dosen}', [DosenController::class, 'show'])->name('dosen.show
 // Berita
 Route::get('/berita', [PostController::class, 'index'])->name('post.index');
 Route::get('/category/{category}', [PostController::class, 'byCategory'])->name('post.category');
+
+// Galeri
+Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
 
 // Halaman statis
 Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');
@@ -52,6 +57,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
     Route::resource('pages', AdminPageController::class)->only(['index', 'edit', 'update'])->names('admin.pages');
     Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
+    Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
     Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
     Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
 });

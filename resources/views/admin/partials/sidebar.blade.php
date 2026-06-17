@@ -42,8 +42,8 @@
                         <span class="nav-link-title">Halaman</span>
                     </a>
                 </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#">
+                <li class="nav-item {{ request()->routeIs('admin.gallery.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.gallery.index') }}">
                         <span class="nav-link-icon"><i class="ti ti-photo"></i></span>
                         <span class="nav-link-title">Galeri</span>
                     </a>
