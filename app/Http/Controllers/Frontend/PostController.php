@@ -14,8 +14,19 @@ class PostController extends Controller
      */
     public function index(): View
     {
+        // Post unggulan = terbaru, hanya tampil di halaman pertama.
+        $featured = request('page', 1) == 1
+            ? Post::published()->with('categories')->latest('published_at')->first()
+            : null;
+
+        $posts = Post::published()->with('categories')
+            ->when($featured, fn ($q) => $q->where('id', '!=', $featured->id))
+            ->latest('published_at')
+            ->paginate(8);
+
         return view('frontend.posts.index', [
-            'posts'      => Post::published()->with('categories')->latest('published_at')->paginate(9),
+            'featured'   => $featured,
+            'posts'      => $posts,
             'categories' => Category::orderBy('nama')->get(),
         ]);
     }

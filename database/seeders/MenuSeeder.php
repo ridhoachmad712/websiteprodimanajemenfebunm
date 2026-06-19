@@ -13,6 +13,7 @@ class MenuSeeder extends Seeder
         // Format: [title, url, target, children[]]
         $tree = [
             ['Beranda', '/', '_self', []],
+            ['Berita', '/berita', '_self', []],
             ['Profil', null, '_self', [
                 ['Profil Program Studi', '/profil', '_self', []],
                 ['Daftar Dosen', '/daftar-dosen', '_self', []],

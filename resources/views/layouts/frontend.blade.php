@@ -36,17 +36,24 @@
         @include('frontend.partials.footer')
     </div>
 
+    <button type="button" class="back-to-top" id="backToTop" aria-label="Kembali ke atas">
+        <i class="ti ti-arrow-up"></i>
+    </button>
+
     <script src="{{ asset('tabler/js/tabler.min.js') }}" defer></script>
 
     {{-- Interaksi landing: reveal-on-scroll, animasi counter, navbar saat scroll --}}
     <script>
         (function () {
-            // Navbar: tambah bayangan saat halaman di-scroll
+            // Navbar: tambah bayangan saat halaman di-scroll + tombol kembali ke atas
             var nav = document.querySelector('.site-navbar');
-            if (nav) {
-                var onScroll = function () { nav.classList.toggle('is-scrolled', window.scrollY > 8); };
-                onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
-            }
+            var btt = document.getElementById('backToTop');
+            var onScroll = function () {
+                if (nav) nav.classList.toggle('is-scrolled', window.scrollY > 8);
+                if (btt) btt.classList.toggle('show', window.scrollY > 400);
+            };
+            onScroll(); window.addEventListener('scroll', onScroll, { passive: true });
+            if (btt) btt.addEventListener('click', function () { window.scrollTo({ top: 0, behavior: 'smooth' }); });
 
             // Reveal-on-scroll
             var reveals = document.querySelectorAll('[data-reveal]');

@@ -152,12 +152,67 @@ h1, h2, h3, .h1, .h2, .h3, .display-1, .display-2, .display-3, .display-4, .disp
 
 /* ---------- Badge ---------- */
 .badge { border-radius: 2rem; font-weight: 600; letter-spacing: .01em; }
+.bg-gold-lt { background: rgba(230,168,23,.16); color: #9a6f08; }
+
+/* ---------- Featured post ---------- */
+.featured-post { overflow: hidden; }
+.featured-img { width: 100%; height: 100%; min-height: 260px; object-fit: cover; }
+
+/* ---------- Top utility bar ---------- */
+.topbar {
+  background: var(--brand-navy);
+  color: rgba(255,255,255,.8);
+  font-size: .82rem;
+  padding: .4rem 0;
+}
+.topbar .topbar-link { color: rgba(255,255,255,.8); text-decoration: none; transition: color .2s; }
+.topbar .topbar-link:hover { color: var(--brand-gold-soft); }
 
 /* ---------- Navbar ---------- */
 .site-navbar { transition: box-shadow .25s ease, background .25s ease; }
 .site-navbar.is-scrolled { box-shadow: 0 .5rem 1.25rem rgba(10,37,64,.08); }
-.navbar .nav-link { font-weight: 600; }
+.navbar .nav-link { font-weight: 600; position: relative; }
 .navbar .nav-link:hover { color: var(--brand-blue); }
+/* Penanda menu aktif */
+.navbar-nav .nav-item.active > .nav-link { color: var(--brand-blue); }
+.navbar-nav .nav-item.active > .nav-link::after {
+  content: ""; position: absolute; left: .5rem; right: .5rem; bottom: .15rem;
+  height: 2px; background: var(--brand-gold); border-radius: 2px;
+}
+/* Logo mark */
+.brand-mark {
+  width: 2.1rem; height: 2.1rem; border-radius: .55rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  font-weight: 800; color: #fff;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-navy));
+}
+
+/* ---------- Tombol kembali ke atas ---------- */
+.back-to-top {
+  position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 1030;
+  width: 2.8rem; height: 2.8rem; border-radius: 50%;
+  display: inline-flex; align-items: center; justify-content: center;
+  background: var(--brand-blue); color: #fff; border: 0;
+  box-shadow: 0 .5rem 1.25rem rgba(10,37,64,.25);
+  opacity: 0; visibility: hidden; transform: translateY(10px);
+  transition: opacity .25s ease, transform .25s ease, visibility .25s;
+}
+.back-to-top.show { opacity: 1; visibility: visible; transform: none; }
+.back-to-top:hover { background: var(--brand-navy); color: #fff; }
+
+/* ---------- Anchor nav Profil (scrollspy) ---------- */
+.profil-nav { border-left: 2px solid #e6ebf2; padding-left: 1rem; }
+.profil-nav-link {
+  display: block; padding: .4rem 0; color: #6b7a90; text-decoration: none;
+  font-weight: 600; font-size: .95rem; position: relative; transition: color .2s;
+}
+.profil-nav-link::before {
+  content: ""; position: absolute; left: calc(-1rem - 2px); top: 0; bottom: 0;
+  width: 2px; background: transparent; transition: background .2s;
+}
+.profil-nav-link:hover { color: var(--brand-blue); }
+.profil-nav-link.active { color: var(--brand-blue); }
+.profil-nav-link.active::before { background: var(--brand-gold); }
 
 /* ---------- Dosen card ---------- */
 .dosen-card .avatar { box-shadow: 0 .5rem 1rem rgba(10,37,64,.10); }
