@@ -22,7 +22,7 @@
 
     @stack('styles')
 </head>
-<body class="layout-fluid">
+<body>
     {{-- Theme bootstrap (light/dark, sebelum render body) --}}
     <script src="{{ asset('tabler/js/tabler-theme.min.js') }}"></script>
 

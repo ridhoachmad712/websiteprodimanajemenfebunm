@@ -4,6 +4,13 @@
    Mengandalkan token warna dari brand.css.
    ===================================================================== */
 
+/* ---------- Lebar layout (condensed) ----------
+   Batasi container agar konten terpusat & ringkas pada layar lebar,
+   alih-alih melebar penuh ke tepi (fluid). */
+@media (min-width: 1200px) {
+  .container-xl { max-width: 1140px; }
+}
+
 /* ---------- Tipografi ---------- */
 body {
   font-family: 'Inter', system-ui, sans-serif;
