@@ -1,0 +1,178 @@
+/* =====================================================================
+   Frontend (landing) theme — Website Prodi Manajemen FEB UNM
+   Dimuat HANYA pada layout publik (layouts/frontend.blade.php).
+   Mengandalkan token warna dari brand.css.
+   ===================================================================== */
+
+/* ---------- Tipografi ---------- */
+body {
+  font-family: 'Inter', system-ui, sans-serif;
+  color: #1f2d3d;
+}
+h1, h2, h3, .h1, .h2, .h3, .display-1, .display-2, .display-3, .display-4, .display-5, .navbar-brand {
+  font-family: 'Plus Jakarta Sans', 'Inter', sans-serif;
+  letter-spacing: -0.02em;
+}
+.lead, .fs-3 { line-height: 1.6; }
+
+/* ---------- Section & header ---------- */
+.section { padding: 5.5rem 0; }
+.section-sm { padding: 3.5rem 0; }
+.section-dark {
+  background: var(--brand-navy);
+  color: #cdd7e5;
+}
+.section-dark h1, .section-dark h2, .section-dark h3 { color: #fff; }
+.section-tint { background: #f6f8fb; }
+
+.section-header { max-width: 680px; margin-bottom: 3rem; }
+.section-header.text-center { margin-left: auto; margin-right: auto; }
+.eyebrow {
+  display: inline-flex;
+  align-items: center;
+  gap: .4rem;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: .12em;
+  text-transform: uppercase;
+  color: var(--brand-gold);
+  margin-bottom: .75rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 1.6rem; height: 2px;
+  background: var(--brand-gold);
+  display: inline-block;
+}
+.section-title { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 800; }
+.section-subtitle { color: #6b7a90; font-size: 1.05rem; margin-top: .5rem; }
+
+/* ---------- Hero ---------- */
+.hero {
+  position: relative;
+  overflow: hidden;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, rgba(230,168,23,.18), transparent 60%),
+    linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-navy) 100%);
+  color: #fff;
+  padding: 6.5rem 0 7.5rem;
+}
+.hero::after {
+  /* pattern titik halus */
+  content: "";
+  position: absolute; inset: 0;
+  background-image: radial-gradient(rgba(255,255,255,.10) 1px, transparent 1px);
+  background-size: 22px 22px;
+  opacity: .5;
+  pointer-events: none;
+}
+.hero .container-xl { position: relative; z-index: 2; }
+.hero h1 { color: #fff; font-weight: 800; font-size: clamp(2.2rem, 5vw, 3.6rem); line-height: 1.08; }
+.hero .hero-lead { color: rgba(255,255,255,.82); font-size: 1.2rem; max-width: 38rem; }
+.hero .text-accent { color: var(--brand-gold-soft); }
+.hero-blob {
+  position: absolute;
+  width: 480px; height: 480px;
+  right: -120px; top: -120px;
+  background: radial-gradient(circle at 30% 30%, rgba(246,196,83,.35), transparent 70%);
+  filter: blur(10px);
+  z-index: 1;
+}
+/* pembatas lengkung di bawah hero */
+.hero-wave { position: absolute; left: 0; right: 0; bottom: -1px; z-index: 2; line-height: 0; }
+.hero-wave svg { width: 100%; height: 70px; display: block; }
+
+/* kartu kaca di hero */
+.glass-card {
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.18);
+  backdrop-filter: blur(6px);
+  border-radius: 1rem;
+  color: #fff;
+}
+
+/* ---------- Page hero (halaman dalam) ---------- */
+.page-hero {
+  background:
+    radial-gradient(900px 400px at 90% -40%, rgba(230,168,23,.16), transparent 60%),
+    linear-gradient(135deg, var(--brand-blue) 0%, var(--brand-navy) 100%);
+  color: #fff;
+  padding: 3.25rem 0;
+}
+.page-hero h1 { color: #fff; font-weight: 800; }
+.page-hero .breadcrumb,
+.page-hero .breadcrumb-item,
+.page-hero .breadcrumb a { color: rgba(255,255,255,.8) !important; }
+.page-hero .breadcrumb a:hover { color: #fff !important; }
+
+/* ---------- Kartu ---------- */
+.card { border: 1px solid rgba(11,79,138,.08); border-radius: .9rem; }
+.card-hover { transition: transform .25s ease, box-shadow .25s ease; }
+.card-hover:hover { transform: translateY(-6px); box-shadow: 0 1.25rem 2.5rem rgba(10,37,64,.12); }
+.card-img-top { border-top-left-radius: .9rem; border-top-right-radius: .9rem; }
+
+/* Ikon fitur bulat */
+.feature-icon {
+  width: 3.5rem; height: 3.5rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: .85rem;
+  background: rgba(11,79,138,.10);
+  color: var(--brand-blue);
+  font-size: 1.6rem;
+}
+.feature-icon.gold { background: rgba(230,168,23,.15); color: #b9830a; }
+
+/* ---------- Statistik ---------- */
+.stat-value {
+  font-family: 'Plus Jakarta Sans', sans-serif;
+  font-weight: 800;
+  font-size: clamp(2rem, 4vw, 2.8rem);
+  line-height: 1;
+  color: var(--brand-blue);
+}
+.section-dark .stat-value { color: #fff; }
+.stat-value .plus { color: var(--brand-gold); }
+
+/* ---------- Tombol ---------- */
+.btn { border-radius: .6rem; font-weight: 600; }
+.btn-lg { padding: .7rem 1.4rem; }
+.btn-gold {
+  background: var(--brand-gold); border-color: var(--brand-gold); color: #2b2300;
+}
+.btn-gold:hover { background: var(--brand-gold-soft); border-color: var(--brand-gold-soft); color: #2b2300; }
+.btn-light-outline { border: 1px solid rgba(255,255,255,.5); color: #fff; }
+.btn-light-outline:hover { background: #fff; color: var(--brand-blue); }
+
+/* ---------- Badge ---------- */
+.badge { border-radius: 2rem; font-weight: 600; letter-spacing: .01em; }
+
+/* ---------- Navbar ---------- */
+.site-navbar { transition: box-shadow .25s ease, background .25s ease; }
+.site-navbar.is-scrolled { box-shadow: 0 .5rem 1.25rem rgba(10,37,64,.08); }
+.navbar .nav-link { font-weight: 600; }
+.navbar .nav-link:hover { color: var(--brand-blue); }
+
+/* ---------- Dosen card ---------- */
+.dosen-card .avatar { box-shadow: 0 .5rem 1rem rgba(10,37,64,.10); }
+
+/* ---------- Footer ---------- */
+.footer h3 { font-family: 'Plus Jakarta Sans', sans-serif; }
+.footer a:hover { color: var(--brand-gold-soft) !important; }
+
+/* ---------- Reveal on scroll ---------- */
+[data-reveal] {
+  opacity: 0;
+  transform: translateY(24px);
+  transition: opacity .6s ease, transform .6s ease;
+}
+[data-reveal].is-visible { opacity: 1; transform: none; }
+@media (prefers-reduced-motion: reduce) {
+  [data-reveal] { opacity: 1 !important; transform: none !important; transition: none; }
+}
+
+/* ---------- Markdown konten ---------- */
+.markdown { line-height: 1.8; color: #2b3a4d; }
+.markdown h2, .markdown h3 { margin-top: 1.6rem; }
+.markdown img { border-radius: .6rem; max-width: 100%; }
+
+html { scroll-behavior: smooth; }

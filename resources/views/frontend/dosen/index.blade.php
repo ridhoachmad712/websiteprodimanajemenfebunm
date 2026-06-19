@@ -4,21 +4,13 @@
 @section('meta_description', 'Daftar dosen Program Studi Manajemen FEB UNM, dikelompokkan menurut Guru Besar, Dosen Tetap, MKDU, dan Dosen Luar Biasa.')
 
 @section('content')
-    {{-- Header --}}
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item active">Daftar Dosen</li>
-                </ol>
-            </nav>
-            <h1 class="mt-2 mb-1">Dosen &amp; Tenaga Pengajar</h1>
-            <p class="text-secondary mb-0">{{ $total }} dosen di lingkungan Program Studi Manajemen FEB UNM.</p>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'    => 'Dosen & Tenaga Pengajar',
+        'subtitle' => $total.' dosen di lingkungan Program Studi Manajemen FEB UNM.',
+        'crumbs'   => ['Beranda' => url('/'), 'Daftar Dosen' => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             @forelse ($grup as $g)
                 <div class="mb-5">
@@ -29,13 +21,13 @@
 
                     <div class="row row-cards">
                         @foreach ($g['items'] as $d)
-                            <div class="col-sm-6 col-lg-4 col-xl-3">
-                                <div class="card card-sm h-100">
+                            <div class="col-sm-6 col-lg-4 col-xl-3" data-reveal>
+                                <div class="card card-hover dosen-card h-100">
                                     <div class="card-body text-center">
                                         @if ($d->foto)
                                             <span class="avatar avatar-xl mb-3" style="background-image: url('{{ Storage::url($d->foto) }}')"></span>
                                         @else
-                                            <span class="avatar avatar-xl mb-3 bg-primary-lt">{{ Str::of($d->nama)->substr(0, 1)->upper() }}</span>
+                                            <span class="avatar avatar-xl mb-3" style="background:linear-gradient(135deg,var(--brand-blue),var(--brand-navy));color:#fff">{{ Str::of($d->nama)->substr(0, 1)->upper() }}</span>
                                         @endif
                                         <div class="fw-bold">
                                             <a href="{{ route('dosen.show', $d) }}" class="text-reset text-decoration-none stretched-link">{{ $d->nama }}</a>

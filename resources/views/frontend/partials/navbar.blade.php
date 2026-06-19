@@ -1,5 +1,5 @@
 {{-- Navbar publik — dirender dari tabel menus via View Composer ($mainMenu). --}}
-<header class="navbar navbar-expand-md navbar-light d-print-none sticky-top bg-white border-bottom">
+<header class="navbar navbar-expand-md navbar-light d-print-none sticky-top bg-white site-navbar">
     <div class="container-xl">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>

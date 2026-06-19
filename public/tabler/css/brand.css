@@ -16,7 +16,25 @@
  */
 
 :root {
-  /* --tblr-primary: #066fd1;  (default Tabler — ubah di sini bila perlu) */
+  /* === Warna brand: biru tua + aksen emas === */
+  --tblr-primary:      #0b4f8a;
+  --tblr-primary-rgb:  11, 79, 138;
+
+  /* Token brand kustom (dipakai di frontend.css) */
+  --brand-blue:        #0b4f8a;
+  --brand-blue-dark:   #083d6b;
+  --brand-navy:        #0a2540;
+  --brand-gold:        #e6a817;
+  --brand-gold-soft:   #f6c453;
+}
+
+/* Recolor link & komponen Tabler agar ikut biru brand */
+a { color: var(--brand-blue); }
+.btn-primary {
+  --tblr-btn-bg: var(--brand-blue);
+  --tblr-btn-border-color: var(--brand-blue);
+  --tblr-btn-hover-bg: var(--brand-blue-dark);
+  --tblr-btn-hover-border-color: var(--brand-blue-dark);
 }
 
 /* Submenu dropdown bertingkat (level 3) untuk mega-menu navbar publik. */

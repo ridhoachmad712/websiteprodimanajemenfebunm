@@ -4,19 +4,13 @@
 @section('meta_description', 'Galeri kegiatan dan dokumentasi Program Studi Manajemen FEB UNM.')
 
 @section('content')
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item active">Galeri</li>
-                </ol>
-            </nav>
-            <h1 class="mt-2 mb-0">Galeri</h1>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'    => 'Galeri',
+        'subtitle' => 'Dokumentasi kegiatan dan momen Program Studi Manajemen FEB UNM.',
+        'crumbs'   => ['Beranda' => url('/'), 'Galeri' => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             @forelse ($grup as $kategori => $items)
                 <div class="mb-5">

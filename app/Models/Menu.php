@@ -5,7 +5,6 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Str;
 
 class Menu extends Model
@@ -54,12 +53,5 @@ class Menu extends Model
         }
 
         return Str::startsWith($u, ['http://', 'https://']) ? $u : url($u);
-    }
-
-    protected static function booted(): void
-    {
-        // Segarkan cache menu publik setiap kali data menu berubah.
-        static::saved(fn () => Cache::forget('menu.main'));
-        static::deleted(fn () => Cache::forget('menu.main'));
     }
 }

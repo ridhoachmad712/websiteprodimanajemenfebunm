@@ -4,19 +4,12 @@
 @section('meta_description', $post->excerpt ? Str::limit(strip_tags($post->excerpt), 155) : Str::limit(strip_tags($post->konten), 155))
 
 @section('content')
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('post.index') }}">Berita</a></li>
-                    <li class="breadcrumb-item active">{{ Str::limit($post->judul, 40) }}</li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'  => $post->judul,
+        'crumbs' => ['Beranda' => url('/'), 'Berita' => route('post.index'), Str::limit($post->judul, 40) => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             <div class="row justify-content-center">
                 <article class="col-lg-8">
@@ -25,7 +18,6 @@
                             <a href="{{ route('post.category', $c) }}" class="badge bg-primary-lt text-decoration-none">{{ $c->nama }}</a>
                         @endforeach
                     </div>
-                    <h1 class="mb-2">{{ $post->judul }}</h1>
                     <div class="text-secondary mb-4">
                         <i class="ti ti-user me-1"></i>{{ $post->user->name }}
                         <span class="mx-2">·</span>

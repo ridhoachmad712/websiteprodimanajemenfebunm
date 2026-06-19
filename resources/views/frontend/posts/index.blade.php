@@ -4,19 +4,13 @@
 @section('meta_description', 'Berita, artikel, prestasi, dan pengumuman terbaru Program Studi Manajemen FEB UNM.')
 
 @section('content')
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item active">Berita</li>
-                </ol>
-            </nav>
-            <h1 class="mt-2 mb-0">Berita &amp; Informasi</h1>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'    => 'Berita & Informasi',
+        'subtitle' => 'Kabar, artikel, prestasi, dan pengumuman terbaru dari Prodi Manajemen FEB UNM.',
+        'crumbs'   => ['Beranda' => url('/'), 'Berita' => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             <div class="row g-4">
                 <div class="col-lg-9 order-2 order-lg-1">

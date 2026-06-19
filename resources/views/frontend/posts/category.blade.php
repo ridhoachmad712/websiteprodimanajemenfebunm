@@ -4,20 +4,12 @@
 @section('meta_description', 'Arsip '.$category->nama.' — Program Studi Manajemen FEB UNM.')
 
 @section('content')
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('post.index') }}">Berita</a></li>
-                    <li class="breadcrumb-item active">{{ $category->nama }}</li>
-                </ol>
-            </nav>
-            <h1 class="mt-2 mb-0">Kategori: {{ $category->nama }}</h1>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'  => $category->nama,
+        'crumbs' => ['Beranda' => url('/'), 'Berita' => route('post.index'), $category->nama => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             <div class="row g-4">
                 <div class="col-lg-9 order-2 order-lg-1">

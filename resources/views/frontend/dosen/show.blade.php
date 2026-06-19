@@ -4,19 +4,12 @@
 @section('meta_description', $dosen->nama.' — '.$dosen->kategori_label.($dosen->konsentrasi ? ', '.$dosen->konsentrasi : '').'.')
 
 @section('content')
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item"><a href="{{ route('dosen.index') }}">Daftar Dosen</a></li>
-                    <li class="breadcrumb-item active">{{ $dosen->nama }}</li>
-                </ol>
-            </nav>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'  => $dosen->nama,
+        'crumbs' => ['Beranda' => url('/'), 'Daftar Dosen' => route('dosen.index'), $dosen->nama => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             <div class="row g-4">
                 <div class="col-lg-4">

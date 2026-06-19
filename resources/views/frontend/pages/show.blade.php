@@ -4,19 +4,12 @@
 @section('meta_description', Str::limit(strip_tags($page->content), 155))
 
 @section('content')
-    <section class="py-5 bg-light border-bottom">
-        <div class="container-xl">
-            <nav aria-label="breadcrumb">
-                <ol class="breadcrumb breadcrumb-arrows">
-                    <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
-                    <li class="breadcrumb-item active">{{ $page->title }}</li>
-                </ol>
-            </nav>
-            <h1 class="mt-2 mb-0">{{ $page->title }}</h1>
-        </div>
-    </section>
+    @include('frontend.partials.page-hero', [
+        'title'  => $page->title,
+        'crumbs' => ['Beranda' => url('/'), $page->title => null],
+    ])
 
-    <section class="py-5">
+    <section class="section">
         <div class="container-xl">
             <div class="row">
                 <div class="col-lg-9">

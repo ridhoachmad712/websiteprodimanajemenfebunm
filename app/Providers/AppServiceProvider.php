@@ -4,7 +4,6 @@ namespace App\Providers;
 
 use App\Models\Menu;
 use Illuminate\Pagination\Paginator;
-use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
 
@@ -28,11 +27,11 @@ class AppServiceProvider extends ServiceProvider
 
         // Menu navigasi publik (3 level) tersedia di layout frontend & partial-nya.
         View::composer('layouts.frontend', function ($view) {
-            $view->with('mainMenu', Cache::rememberForever('menu.main', fn () => Menu::whereNull('parent_id')
+            $view->with('mainMenu', Menu::whereNull('parent_id')
                 ->where('aktif', true)
                 ->with('activeChildren.activeChildren')
                 ->orderBy('urutan')
-                ->get()));
+                ->get());
         });
     }
 }
