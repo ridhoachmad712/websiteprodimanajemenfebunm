@@ -60,6 +60,14 @@
                         <span class="nav-link-title">Pengaturan</span>
                     </a>
                 </li>
+                @php($unread = \App\Models\ContactMessage::unread()->count())
+                <li class="nav-item {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.contacts.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-mail"></i></span>
+                        <span class="nav-link-title">Pesan</span>
+                        @if ($unread > 0)<span class="badge bg-red text-white ms-auto">{{ $unread }}</span>@endif
+                    </a>
+                </li>
             </ul>
         </div>
     </div>

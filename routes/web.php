@@ -6,9 +6,11 @@ use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Frontend\DosenController;
+use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\PageController;
@@ -34,6 +36,10 @@ Route::get('/category/{category}', [PostController::class, 'byCategory'])->name(
 
 // Galeri
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+
+// Form kontak (Hubungi Kami)
+Route::post('/hubungi-kami/kirim', [ContactController::class, 'store'])
+    ->middleware('throttle:5,1')->name('contact.store');
 
 // Halaman statis
 Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');
@@ -64,6 +70,9 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
     Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
     Route::post('uploads/image', [AdminUploadController::class, 'image'])->name('admin.uploads.image');
+    Route::get('pesan', [AdminContactController::class, 'index'])->name('admin.contacts.index');
+    Route::get('pesan/{contact}', [AdminContactController::class, 'show'])->name('admin.contacts.show');
+    Route::delete('pesan/{contact}', [AdminContactController::class, 'destroy'])->name('admin.contacts.destroy');
 });
 
 require __DIR__.'/auth.php';
