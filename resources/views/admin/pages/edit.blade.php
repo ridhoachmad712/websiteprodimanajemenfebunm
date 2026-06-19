@@ -32,14 +32,4 @@
     </form>
 @endsection
 
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '#editor-konten', height: 460, menubar: false,
-            plugins: 'lists link image table code autolink',
-            toolbar: 'undo redo | blocks | bold italic | bullist numlist | link image table | code',
-            branding: false, promotion: false,
-        });
-    </script>
-@endpush
+@include('admin.partials.tinymce', ['selector' => '#editor-konten'])

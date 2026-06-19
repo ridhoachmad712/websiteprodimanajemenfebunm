@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
+use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Frontend\HomeController;
@@ -62,6 +63,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
     Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
     Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
+    Route::post('uploads/image', [AdminUploadController::class, 'image'])->name('admin.uploads.image');
 });
 
 require __DIR__.'/auth.php';

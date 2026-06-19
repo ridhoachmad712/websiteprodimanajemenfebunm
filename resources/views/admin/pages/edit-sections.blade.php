@@ -50,14 +50,4 @@
     </form>
 @endsection
 
-@push('scripts')
-    <script src="https://cdn.jsdelivr.net/npm/tinymce@7/tinymce.min.js" referrerpolicy="origin"></script>
-    <script>
-        tinymce.init({
-            selector: '.editor-section', height: 240, menubar: false,
-            plugins: 'lists link table code autolink',
-            toolbar: 'undo redo | bold italic | bullist numlist | link | code',
-            branding: false, promotion: false,
-        });
-    </script>
-@endpush
+@include('admin.partials.tinymce', ['selector' => '.editor-section', 'height' => 240])
