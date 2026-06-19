@@ -28,13 +28,9 @@
     </div>
 </div>
 
-<header class="navbar navbar-expand-md navbar-light d-print-none sticky-top bg-white site-navbar">
+<header class="navbar navbar-expand-xl navbar-light d-print-none sticky-top bg-white site-navbar">
     <div class="container-xl">
-        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
-            <span class="navbar-toggler-icon"></span>
-        </button>
-
-        <h1 class="navbar-brand navbar-brand-autodark pe-0 pe-md-3 m-0">
+        <h1 class="navbar-brand navbar-brand-autodark pe-0 pe-xl-3 m-0">
             <a href="{{ url('/') }}" class="d-flex align-items-center text-reset text-decoration-none">
                 <span class="brand-mark me-2">M</span>
                 <span class="d-flex flex-column lh-1">
@@ -44,12 +40,12 @@
             </a>
         </h1>
 
-        <div class="navbar-nav flex-row order-md-last ms-md-3 d-none d-md-flex">
-            <a href="{{ route('page.hubungi-kami') }}" class="btn btn-gold btn-sm"><i class="ti ti-send me-1"></i>Hubungi Kami</a>
-        </div>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
 
         <div class="collapse navbar-collapse" id="navbar-menu">
-            <ul class="navbar-nav ms-auto">
+            <ul class="navbar-nav ms-auto align-items-xl-center">
                 @foreach ($mainMenu as $item)
                     @if ($item->activeChildren->isNotEmpty())
                         @php($childActive = $item->activeChildren->contains(fn ($c) => $isActive($c->href)))

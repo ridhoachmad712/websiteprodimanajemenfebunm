@@ -147,8 +147,14 @@ h1, h2, h3, .h1, .h2, .h3, .display-1, .display-2, .display-3, .display-4, .disp
   background: var(--brand-gold); border-color: var(--brand-gold); color: #2b2300;
 }
 .btn-gold:hover { background: var(--brand-gold-soft); border-color: var(--brand-gold-soft); color: #2b2300; }
-.btn-light-outline { border: 1px solid rgba(255,255,255,.5); color: #fff; }
-.btn-light-outline:hover { background: #fff; color: var(--brand-blue); }
+.btn-light-outline {
+  --tblr-btn-bg: transparent;
+  --tblr-btn-color: #fff;
+  background-color: transparent;
+  border: 1px solid rgba(255,255,255,.6);
+  color: #fff;
+}
+.btn-light-outline:hover { background-color: #fff; border-color: #fff; color: var(--brand-blue); }
 
 /* ---------- Badge ---------- */
 .badge { border-radius: 2rem; font-weight: 600; letter-spacing: .01em; }
@@ -171,13 +177,34 @@ h1, h2, h3, .h1, .h2, .h3, .display-1, .display-2, .display-3, .display-4, .disp
 /* ---------- Navbar ---------- */
 .site-navbar { transition: box-shadow .25s ease, background .25s ease; }
 .site-navbar.is-scrolled { box-shadow: 0 .5rem 1.25rem rgba(10,37,64,.08); }
-.navbar .nav-link { font-weight: 600; position: relative; }
+.navbar .nav-link { font-weight: 600; font-size: .95rem; position: relative; }
 .navbar .nav-link:hover { color: var(--brand-blue); }
+
+/* Header sedikit lebih lega dari konten agar 9 menu muat nyaman */
+@media (min-width: 1200px) {
+  .site-navbar > .container-xl,
+  .topbar > .container-xl { max-width: 1240px; }
+}
+/* Jarak antar item menu (hanya saat horizontal/expanded ≥1200px) */
+@media (min-width: 1200px) {
+  .site-navbar .navbar-nav { gap: .35rem; }
+  .site-navbar .navbar-nav .nav-link { padding-left: .65rem; padding-right: .65rem; }
+}
+
 /* Penanda menu aktif */
 .navbar-nav .nav-item.active > .nav-link { color: var(--brand-blue); }
-.navbar-nav .nav-item.active > .nav-link::after {
-  content: ""; position: absolute; left: .5rem; right: .5rem; bottom: .15rem;
-  height: 2px; background: var(--brand-gold); border-radius: 2px;
+@media (min-width: 1200px) {
+  .navbar-nav .nav-item.active > .nav-link::after {
+    content: ""; position: absolute; left: .65rem; right: .65rem; bottom: -.15rem;
+    height: 2px; background: var(--brand-gold); border-radius: 2px;
+  }
+}
+
+/* Dropdown menu saat tampilan hamburger (<1200px): rapikan & beri ruang */
+@media (max-width: 1199.98px) {
+  .site-navbar .navbar-collapse { padding-bottom: .5rem; }
+  .site-navbar .navbar-nav .nav-link { padding: .5rem .25rem; }
+  .site-navbar .dropdown-menu { border: 0; box-shadow: none; padding-left: 1rem; }
 }
 /* Logo mark */
 .brand-mark {
