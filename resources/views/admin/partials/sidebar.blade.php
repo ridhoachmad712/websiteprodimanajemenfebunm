@@ -61,6 +61,12 @@
                         <span class="nav-link-title">Galeri</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.kegiatan.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.kegiatan.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-calendar-event"></i></span>
+                        <span class="nav-link-title">Kegiatan</span>
+                    </a>
+                </li>
 
                 <li class="nav-section">Tampilan Situs</li>
                 <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">

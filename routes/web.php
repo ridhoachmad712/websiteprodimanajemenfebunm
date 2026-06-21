@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\PengumumanController as AdminPengumumanController;
 use App\Http\Controllers\Admin\AppearanceController as AdminAppearanceController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
+use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\KalenderController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PostController;
 use App\Http\Controllers\Frontend\SitemapController;
@@ -45,11 +47,15 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index
 Route::post('/hubungi-kami/kirim', [ContactController::class, 'store'])
     ->middleware('throttle:5,1')->name('contact.store');
 
+// Kalender Akademik (kalender visual) & Agenda kegiatan
+Route::get('/kalender-akademik', [KalenderController::class, 'index'])->name('page.kalender-akademik');
+Route::get('/agenda', [KalenderController::class, 'agenda'])->name('agenda');
+
 // Halaman statis
 Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');
 
 $staticPages = [
-    'akreditasi', 'fasilitas', 'sop-petaprosesbisnis', 'kalender-akademik',
+    'akreditasi', 'fasilitas', 'sop-petaprosesbisnis',
     'kurikulum', 'hima', 'alumni', 'icoman2025', 'hubungi-kami',
 ];
 foreach ($staticPages as $slug) {
@@ -72,6 +78,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('pages', AdminPageController::class)->only(['index', 'edit', 'update'])->names('admin.pages');
     Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
+    Route::resource('kegiatan', AdminKegiatanController::class)->except('show')->names('admin.kegiatan');
     Route::resource('users', AdminUserController::class)->except('show')->names('admin.users');
     Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
     Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
