@@ -16,19 +16,24 @@
  */
 
 :root {
-  /* === Warna brand: biru tua + aksen emas === */
-  --tblr-primary:      #0b4f8a;
-  --tblr-primary-rgb:  11, 79, 138;
+  /* === Warna brand: navy (primary) === */
+  --tblr-primary:      #1b3a5b;
+  --tblr-primary-rgb:  27, 58, 91;
 
   /* Token brand kustom (dipakai di frontend.css) */
-  --brand-blue:        #0b4f8a;
-  --brand-blue-dark:   #083d6b;
-  --brand-navy:        #0a2540;
-  --brand-gold:        #e6a817;
-  --brand-gold-soft:   #f6c453;
+  --brand-blue:        #1b3a5b;
+  --brand-blue-dark:   #142c45;
+  --brand-navy:        #0e2238;
+
+  /* Font: sans-serif standar (override Geist bawaan Tabler) */
+  --tblr-font-sans-serif: system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
 }
 
-/* Recolor link & komponen Tabler agar ikut biru brand */
+body, .h1, .h2, .h3, .h4, .h5, .h6, h1, h2, h3, h4, h5, h6 {
+  font-family: var(--tblr-font-sans-serif);
+}
+
+/* Recolor link & komponen Tabler agar ikut navy brand */
 a { color: var(--brand-blue); }
 .btn-primary {
   --tblr-btn-bg: var(--brand-blue);
@@ -36,6 +41,14 @@ a { color: var(--brand-blue); }
   --tblr-btn-hover-bg: var(--brand-blue-dark);
   --tblr-btn-hover-border-color: var(--brand-blue-dark);
 }
+.btn-outline-primary {
+  --tblr-btn-color: var(--brand-blue);
+  --tblr-btn-border-color: var(--brand-blue);
+  --tblr-btn-hover-bg: var(--brand-blue);
+  --tblr-btn-hover-border-color: var(--brand-blue);
+}
+.text-primary { color: var(--brand-blue) !important; }
+.badge.bg-primary-lt { background: rgba(var(--tblr-primary-rgb), .12); color: var(--brand-blue); }
 
 /* Submenu dropdown bertingkat (level 3) untuk mega-menu navbar publik. */
 .dropdown-submenu {

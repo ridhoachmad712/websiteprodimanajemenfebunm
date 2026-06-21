@@ -23,8 +23,9 @@
 
                 <div class="mb-3">
                     <label class="form-label">Ringkasan (excerpt)</label>
-                    <textarea name="excerpt" rows="2" class="form-control @error('excerpt') is-invalid @enderror"
-                              placeholder="Ringkasan singkat untuk kartu & SEO">{{ old('excerpt', $p->excerpt ?? '') }}</textarea>
+                    <textarea name="excerpt" rows="2" maxlength="200" class="form-control @error('excerpt') is-invalid @enderror"
+                              placeholder="Ringkasan singkat untuk kartu & SEO (maks 200 karakter)">{{ old('excerpt', $p->excerpt ?? '') }}</textarea>
+                    <small class="form-hint">Maksimal 200 karakter. Kosongkan → otomatis diambil ringkas dari isi.</small>
                     @error('excerpt') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
 

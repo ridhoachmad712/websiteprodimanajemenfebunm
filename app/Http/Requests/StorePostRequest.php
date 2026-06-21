@@ -19,7 +19,7 @@ class StorePostRequest extends FormRequest
     {
         return [
             'judul'          => ['required', 'string', 'max:255'],
-            'excerpt'        => ['nullable', 'string', 'max:500'],
+            'excerpt'        => ['nullable', 'string', 'max:200'],
             'konten'         => ['required', 'string'],
             'featured_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'],
             'status'         => ['required', Rule::in(['draft', 'published'])],

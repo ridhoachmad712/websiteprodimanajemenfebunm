@@ -1,0 +1,151 @@
+<?php
+
+namespace App\Http\Controllers\Admin;
+
+use App\Http\Controllers\Controller;
+use App\Models\Setting;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class HomeBuilderController extends Controller
+{
+    /**
+     * Tipe blok yang tersedia beserta metadata (label & ikon) untuk UI.
+     *
+     * @return array<string, array{label: string, icon: string}>
+     */
+    public static function types(): array
+    {
+        return [
+            'features' => ['label' => 'Fitur / Pilar', 'icon' => 'ti-layout-grid'],
+            'about' => ['label' => 'Tentang / Sambutan', 'icon' => 'ti-article'],
+            'posts' => ['label' => 'Daftar Postingan', 'icon' => 'ti-news'],
+            'dosen' => ['label' => 'Daftar Dosen', 'icon' => 'ti-users'],
+            'cta' => ['label' => 'Ajakan (CTA)', 'icon' => 'ti-speakerphone'],
+            'richtext' => ['label' => 'Konten Bebas (WYSIWYG)', 'icon' => 'ti-code'],
+        ];
+    }
+
+    /**
+     * Blok bawaan — mencerminkan tampilan beranda default. Dipakai bila admin
+     * belum pernah menyimpan konfigurasi.
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function defaultBlocks(): array
+    {
+        return [
+            ['type' => 'features', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Filosofi Kami', 'title' => 'Build · Manage · Integrate', 'center' => '1',
+                'subtitle' => 'Tiga pilar yang menjadi pijakan pembelajaran dan pengembangan diri mahasiswa.',
+                'items' => [
+                    ['icon' => 'ti-tools', 'title' => 'Build', 'desc' => 'Membangun fondasi keilmuan manajemen yang kuat dan aplikatif.'],
+                    ['icon' => 'ti-adjustments', 'title' => 'Manage', 'desc' => 'Mengelola sumber daya secara efektif, efisien, dan beretika.'],
+                    ['icon' => 'ti-affiliate', 'title' => 'Integrate', 'desc' => 'Mengintegrasikan teori, praktik, dan teknologi untuk daya saing global.'],
+                ],
+            ]],
+            ['type' => 'about', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Tentang Kami', 'title' => 'Pusat pendidikan manajemen berbasis kewirausahaan',
+                'body' => 'Berdiri sejak 1999, Program Studi Manajemen FEB UNM berkomitmen menghasilkan sarjana manajemen yang profesional, adaptif, dan berdaya saing — dengan tiga konsentrasi: Keuangan, Pemasaran, dan Sumber Daya Manusia.',
+                'image_url' => '', 'button_label' => 'Selengkapnya tentang prodi', 'button_url' => '/profil',
+                'items' => [
+                    ['text' => 'Akreditasi Baik Sekali (LAMEMBA)'],
+                    ['text' => 'Kurikulum berbasis kewirausahaan'],
+                    ['text' => 'Dosen kompeten & berpengalaman'],
+                    ['text' => 'Jejaring alumni yang luas'],
+                ],
+            ]],
+            ['type' => 'posts', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Kabar Terkini', 'title' => 'Berita & Informasi', 'category' => 'berita-informasi',
+                'count' => '3', 'link_label' => 'Lihat Semua', 'link_url' => '/berita', 'style' => 'normal',
+            ]],
+            ['type' => 'dosen', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Tenaga Pengajar', 'title' => 'Dosen & Tendik',
+                'count' => '6', 'link_label' => 'Semua Dosen', 'link_url' => '/daftar-dosen',
+            ]],
+            ['type' => 'posts', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Capaian', 'title' => 'Prestasi', 'category' => 'prestasi',
+                'count' => '3', 'link_label' => 'Lihat Semua', 'link_url' => '/category/prestasi', 'style' => 'normal',
+            ]],
+            ['type' => 'posts', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Wawasan', 'title' => 'Artikel', 'category' => 'artikel',
+                'count' => '3', 'link_label' => 'Lihat Semua', 'link_url' => '/category/artikel', 'style' => 'tint',
+            ]],
+            ['type' => 'posts', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Penting', 'title' => 'Pengumuman', 'category' => 'pengumuman',
+                'count' => '4', 'link_label' => '', 'link_url' => '', 'style' => 'dark',
+            ]],
+            ['type' => 'cta', 'enabled' => true, 'data' => [
+                'title' => 'Tertarik bergabung dengan Prodi Manajemen?',
+                'subtitle' => 'Pelajari profil, kurikulum, dan layanan akademik kami lebih lanjut.',
+                'btn1_label' => 'Jelajahi Program Studi', 'btn1_url' => '/profil',
+                'btn2_label' => 'Hubungi Kami', 'btn2_url' => '/hubungi-kami',
+            ]],
+        ];
+    }
+
+    /**
+     * Blok beranda terkini (konfigurasi admin atau bawaan).
+     *
+     * @return array<int, array<string, mixed>>
+     */
+    public static function resolveBlocks(): array
+    {
+        $raw = Setting::get('home.blocks');
+
+        if ($raw) {
+            $decoded = json_decode($raw, true);
+            if (is_array($decoded)) {
+                return $decoded;
+            }
+        }
+
+        return static::defaultBlocks();
+    }
+
+    public function edit(): View
+    {
+        return view('admin.home.edit', [
+            'blocks' => static::resolveBlocks(),
+            'types' => static::types(),
+        ]);
+    }
+
+    public function update(Request $request): RedirectResponse
+    {
+        $allowed = array_keys(static::types());
+        $blocks = [];
+
+        foreach (array_values((array) $request->input('blocks', [])) as $raw) {
+            $type = $raw['type'] ?? null;
+            if (! in_array($type, $allowed, true)) {
+                continue;
+            }
+
+            $data = is_array($raw['data'] ?? null) ? $raw['data'] : [];
+
+            // Rapikan repeater "items": buang baris yang seluruhnya kosong.
+            if (isset($data['items']) && is_array($data['items'])) {
+                $data['items'] = array_values(array_filter($data['items'], function ($it) {
+                    return is_array($it) && trim(implode('', array_map(fn ($x) => (string) $x, $it))) !== '';
+                }));
+            }
+
+            // Sanitasi HTML konten bebas.
+            if ($type === 'richtext') {
+                $data['html'] = clean($data['html'] ?? '');
+            }
+
+            $blocks[] = [
+                'type' => $type,
+                'enabled' => (string) ($raw['enabled'] ?? '1') === '1',
+                'data' => $data,
+            ];
+        }
+
+        Setting::set('home.blocks', json_encode($blocks, JSON_UNESCAPED_UNICODE), 'home');
+
+        return redirect()->route('admin.home.edit')->with('status', 'Beranda berhasil diperbarui.');
+    }
+}

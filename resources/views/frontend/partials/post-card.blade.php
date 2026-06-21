@@ -22,8 +22,6 @@
         <div class="text-secondary small mb-2">
             <i class="ti ti-calendar me-1"></i>{{ $post->published_at?->translatedFormat('d F Y') }}
         </div>
-        @if ($post->excerpt)
-            <p class="text-secondary mb-0">{{ Str::limit($post->excerpt, 110) }}</p>
-        @endif
+        <p class="text-secondary mb-0 excerpt-clamp">{{ $post->ringkasan(100) }}</p>
     </div>
 </div>

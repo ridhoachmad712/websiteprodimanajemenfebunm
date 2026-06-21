@@ -38,7 +38,7 @@
                                 </div>
                                 <h2 class="mb-2"><a href="{{ $featured->url() }}" class="text-reset text-decoration-none">{{ $featured->judul }}</a></h2>
                                 <div class="text-secondary small mb-3"><i class="ti ti-calendar me-1"></i>{{ $featured->published_at?->translatedFormat('d F Y') }}</div>
-                                @if ($featured->excerpt)<p class="text-secondary">{{ Str::limit($featured->excerpt, 180) }}</p>@endif
+                                <p class="text-secondary excerpt-clamp">{{ $featured->ringkasan(180) }}</p>
                                 <a href="{{ $featured->url() }}" class="btn btn-primary mt-auto align-self-start">Baca selengkapnya <i class="ti ti-arrow-right ms-1"></i></a>
                             </div>
                         </div>

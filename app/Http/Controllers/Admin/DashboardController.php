@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Models\ContactMessage;
 use App\Models\Dosen;
 use App\Models\Gallery;
 use App\Models\Page;
@@ -17,12 +18,15 @@ class DashboardController extends Controller
     public function index(): View
     {
         $stats = [
-            'berita'  => Post::count(),
-            'dosen'   => Dosen::count(),
+            'berita' => Post::count(),
+            'dosen' => Dosen::count(),
             'halaman' => Page::count(),
-            'galeri'  => Gallery::count(),
+            'galeri' => Gallery::count(),
         ];
 
-        return view('admin.dashboard', compact('stats'));
+        $unread = ContactMessage::unread()->count();
+        $recentMessages = ContactMessage::latest()->take(5)->get();
+
+        return view('admin.dashboard', compact('stats', 'unread', 'recentMessages'));
     }
 }

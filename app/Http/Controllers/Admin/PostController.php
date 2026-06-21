@@ -10,14 +10,16 @@ use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
-use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class PostController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Post::with('categories')->latest();
+        // Berita = semua post KECUALI yang berkategori Pengumuman (dikelola terpisah).
+        $query = Post::with('categories')
+            ->whereDoesntHave('categories', fn ($q) => $q->where('slug', 'pengumuman'))
+            ->latest();
 
         if ($status = $request->query('status')) {
             $query->where('status', $status);
@@ -35,14 +37,14 @@ class PostController extends Controller
     public function create(): View
     {
         return view('admin.posts.create', [
-            'categories' => Category::orderBy('nama')->get(),
+            'categories' => Category::where('slug', '!=', 'pengumuman')->orderBy('nama')->get(),
         ]);
     }
 
     public function store(StorePostRequest $request): RedirectResponse
     {
         $data = $this->prepareData($request);
-        $data['slug'] = $this->uniqueSlug($data['judul']);
+        $data['slug'] = Post::generateSlug($data['judul']);
         $data['user_id'] = $request->user()->id;
 
         if ($request->hasFile('featured_image')) {
@@ -59,9 +61,9 @@ class PostController extends Controller
     public function edit(Post $post): View
     {
         return view('admin.posts.edit', [
-            'post'       => $post->load('categories'),
-            'categories' => Category::orderBy('nama')->get(),
-            'selected'   => $post->categories->pluck('id')->all(),
+            'post' => $post->load('categories'),
+            'categories' => Category::where('slug', '!=', 'pengumuman')->orderBy('nama')->get(),
+            'selected' => $post->categories->pluck('id')->all(),
         ]);
     }
 
@@ -70,7 +72,7 @@ class PostController extends Controller
         $data = $this->prepareData($request);
 
         if ($data['judul'] !== $post->judul) {
-            $data['slug'] = $this->uniqueSlug($data['judul'], $post->id);
+            $data['slug'] = Post::generateSlug($data['judul'], $post->id);
         }
 
         if ($request->hasFile('featured_image')) {
@@ -120,21 +122,5 @@ class PostController extends Controller
         }
 
         return $data;
-    }
-
-    private function uniqueSlug(string $judul, ?int $ignoreId = null): string
-    {
-        $base = Str::slug($judul);
-        $slug = $base;
-        $i = 1;
-
-        while (Post::where('slug', $slug)
-            ->when($ignoreId, fn ($q) => $q->where('id', '!=', $ignoreId))
-            ->exists()) {
-            $slug = "{$base}-{$i}";
-            $i++;
-        }
-
-        return $slug;
     }
 }

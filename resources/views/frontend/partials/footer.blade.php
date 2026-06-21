@@ -6,16 +6,31 @@
     $ig = \App\Models\Setting::get('sosmed.instagram');
     $tt = \App\Models\Setting::get('sosmed.tiktok');
     $fb = \App\Models\Setting::get('sosmed.facebook');
+    $logo = \App\Models\Setting::get('navbar.logo');
+    $namaSitus = \App\Models\Setting::get('site.nama', 'Prodi Manajemen FEB UNM');
+    $footerAbout = \App\Models\Setting::get('footer.about');
+    $footerCols = \App\Http\Controllers\Admin\AppearanceController::footerColumns();
+    $footerCopyright = str_replace('{year}', date('Y'), \App\Models\Setting::get('footer.copyright', '© {year} '.$namaSitus.'. Hak cipta dilindungi.'));
+    $footerTagline = \App\Models\Setting::get('footer.tagline', 'Forever in Brotherhood · Build — Manage — Integrate');
 @endphp
 <footer class="footer mt-auto bg-dark text-white-50 d-print-none">
     <div class="container-xl py-5">
         <div class="row g-4">
             {{-- Kolom 1: Identitas & kontak --}}
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="d-flex align-items-center mb-3">
-                    <span class="avatar avatar-sm bg-primary text-white me-2">M</span>
-                    <span class="fw-bold text-white">{{ \App\Models\Setting::get('site.nama', 'Prodi Manajemen FEB UNM') }}</span>
+                <div class="mb-3">
+                    @if ($logo)
+                        <span class="d-inline-block bg-white rounded p-2">
+                            <img src="{{ Storage::url($logo) }}" alt="{{ $namaSitus }}" style="height:42px;width:auto;display:block">
+                        </span>
+                    @else
+                        <div class="d-flex align-items-center">
+                            <span class="avatar avatar-sm bg-primary text-white me-2">M</span>
+                            <span class="fw-bold text-white">{{ $namaSitus }}</span>
+                        </div>
+                    @endif
                 </div>
+                @if ($footerAbout) <p class="mb-3">{{ $footerAbout }}</p> @endif
                 @if ($kontakAlamat) <p class="mb-2">{{ $kontakAlamat }}</p> @endif
                 @if ($kontakTelepon) <p class="mb-1"><i class="ti ti-phone me-1"></i> {{ $kontakTelepon }}</p> @endif
                 @if ($kontakEmail) <p class="mb-3"><i class="ti ti-mail me-1"></i> {{ $kontakEmail }}</p> @endif
@@ -26,44 +41,23 @@
                 </div>
             </div>
 
-            {{-- Kolom 2: Info Kemahasiswaan --}}
-            <div class="col-6 col-md-6 col-lg-3">
-                <h3 class="text-white fs-5 mb-3">Info Kemahasiswaan</h3>
-                <ul class="list-unstyled space-y-1">
-                    <li><a class="link-secondary text-decoration-none" href="#">Pusat Prestasi Nasional</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">IISMA</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Kampus Mengajar</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Wirausaha Merdeka</a></li>
-                </ul>
-            </div>
-
-            {{-- Kolom 3: Sumber Belajar --}}
-            <div class="col-6 col-md-6 col-lg-3">
-                <h3 class="text-white fs-5 mb-3">Sumber Belajar</h3>
-                <ul class="list-unstyled space-y-1">
-                    <li><a class="link-secondary text-decoration-none" href="#">Pustaka UNM</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">OJS UNM</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Repositori (eprints)</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">OER UNM</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Thesis UNM</a></li>
-                </ul>
-            </div>
-
-            {{-- Kolom 4: Tautan Penting --}}
-            <div class="col-6 col-md-6 col-lg-3">
-                <h3 class="text-white fs-5 mb-3">Tautan Penting</h3>
-                <ul class="list-unstyled space-y-1">
-                    <li><a class="link-secondary text-decoration-none" href="#">PDDIKTI</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">UNM</a></li>
-                    <li><a class="link-secondary text-decoration-none" href="#">Beasiswa Pendidikan Indonesia</a></li>
-                </ul>
-            </div>
+            {{-- Kolom tautan (dinamis dari admin → Tampilan → Footer) --}}
+            @foreach ($footerCols as $col)
+                <div class="col-6 col-md-6 col-lg-3">
+                    @if (!empty($col['title']))<h3 class="text-white fs-5 mb-3">{{ $col['title'] }}</h3>@endif
+                    <ul class="list-unstyled space-y-1">
+                        @foreach ($col['links'] ?? [] as $l)
+                            <li><a class="link-secondary text-decoration-none" href="{{ $l['url'] ?: '#' }}">{{ $l['label'] }}</a></li>
+                        @endforeach
+                    </ul>
+                </div>
+            @endforeach
         </div>
 
         <hr class="my-4 border-secondary">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-2">
-            <span>&copy; {{ date('Y') }} Program Studi Manajemen FEB UNM. Hak cipta dilindungi.</span>
-            <span class="text-secondary">Forever in Brotherhood &middot; Build &mdash; Manage &mdash; Integrate</span>
+            <span>{{ $footerCopyright }}</span>
+            @if ($footerTagline)<span class="text-secondary">{{ $footerTagline }}</span>@endif
         </div>
     </div>
 </footer>
