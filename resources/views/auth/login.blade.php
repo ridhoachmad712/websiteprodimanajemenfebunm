@@ -47,10 +47,4 @@
             </div>
         </div>
     </form>
-
-    @if (Route::has('register'))
-        <div class="text-center text-secondary mt-3">
-            Belum punya akun? <a href="{{ route('register') }}">Daftar</a>
-        </div>
-    @endif
 @endsection
