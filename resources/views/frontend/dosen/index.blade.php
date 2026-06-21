@@ -29,24 +29,30 @@
                         <h2 class="section-title mb-0" style="font-size:1.5rem">{{ $g['label'] }}</h2>
                     </div>
 
-                    <div class="row row-cards">
+                    <div class="row row-cards row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
                         @foreach ($g['items'] as $d)
-                            <div class="col-sm-6 col-lg-4 col-xl-3" data-reveal>
-                                <div class="card card-hover dosen-card h-100">
-                                    <div class="card-body text-center">
+                            <div class="col" data-reveal>
+                                <a href="{{ route('dosen.show', $d) }}" class="card card-hover dosen-card h-100 text-reset text-decoration-none">
+                                    <div class="dosen-photo">
                                         @if ($d->foto)
-                                            <span class="avatar avatar-xl mb-3" style="background-image: url('{{ Storage::url($d->foto) }}')"></span>
+                                            <img src="{{ Storage::url($d->foto) }}" alt="Foto {{ $d->nama }}" loading="lazy">
                                         @else
-                                            <span class="avatar avatar-xl mb-3" style="background:linear-gradient(135deg,var(--brand-blue),var(--brand-navy));color:#fff">{{ Str::of($d->nama)->substr(0, 1)->upper() }}</span>
-                                        @endif
-                                        <div class="fw-bold">
-                                            <a href="{{ route('dosen.show', $d) }}" class="text-reset text-decoration-none stretched-link">{{ $d->nama }}</a>
-                                        </div>
-                                        @if ($d->konsentrasi)
-                                            <div class="text-secondary small mt-1">{{ $d->konsentrasi }}</div>
+                                            <span class="ph">{{ Str::of($d->nama)->substr(0, 1)->upper() }}</span>
                                         @endif
                                     </div>
-                                </div>
+                                    <div class="card-body">
+                                        <h3 class="dosen-name fw-bold mb-1">{{ $d->nama }}</h3>
+                                        @if ($d->nip)
+                                            <div class="text-secondary small mb-1">NIP. {{ $d->nip }}</div>
+                                        @endif
+                                        @if ($d->konsentrasi)
+                                            @php($km = \App\Models\Dosen::konsentrasiMeta($d->konsentrasi))
+                                            <span class="badge bg-{{ $km['color'] }}-lt dosen-konsentrasi">
+                                                <i class="ti {{ $km['icon'] }} me-1"></i>{{ $d->konsentrasi }}
+                                            </span>
+                                        @endif
+                                    </div>
+                                </a>
                             </div>
                         @endforeach
                     </div>

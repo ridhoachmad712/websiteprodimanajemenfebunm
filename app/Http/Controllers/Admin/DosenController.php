@@ -29,7 +29,7 @@ class DosenController extends Controller
         $dosen = $query->orderBy('kategori')->orderBy('urutan')->paginate(15)->withQueryString();
 
         return view('admin.dosen.index', [
-            'dosen'    => $dosen,
+            'dosen' => $dosen,
             'kategori' => Dosen::KATEGORI,
         ]);
     }
@@ -45,6 +45,8 @@ class DosenController extends Controller
     {
         $data = $request->validated();
         $data['slug'] = $this->uniqueSlug($data['nama']);
+        $data['biografi'] = filled($data['biografi'] ?? null) ? clean($data['biografi']) : null;
+        $data['tautan'] = $this->cleanTautan($request->input('tautan', []));
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('dosen', 'public');
@@ -59,7 +61,7 @@ class DosenController extends Controller
     public function edit(Dosen $dosen): View
     {
         return view('admin.dosen.edit', [
-            'dosen'    => $dosen,
+            'dosen' => $dosen,
             'kategori' => Dosen::KATEGORI,
         ]);
     }
@@ -67,6 +69,8 @@ class DosenController extends Controller
     public function update(UpdateDosenRequest $request, Dosen $dosen): RedirectResponse
     {
         $data = $request->validated();
+        $data['biografi'] = filled($data['biografi'] ?? null) ? clean($data['biografi']) : null;
+        $data['tautan'] = $this->cleanTautan($request->input('tautan', []));
 
         // Perbarui slug hanya bila nama berubah.
         if ($data['nama'] !== $dosen->nama) {
@@ -98,6 +102,26 @@ class DosenController extends Controller
 
         return redirect()->route('admin.dosen.index')
             ->with('status', 'Data dosen berhasil dihapus.');
+    }
+
+    /**
+     * Rapikan daftar tautan kustom: buang baris tanpa URL/label, normalisasi.
+     *
+     * @param  array<int, mixed>  $tautan
+     * @return array<int, array<string, string>>
+     */
+    private function cleanTautan(array $tautan): array
+    {
+        return collect($tautan)
+            ->filter(fn ($t) => is_array($t) && filled($t['label'] ?? null) && filled($t['url'] ?? null))
+            ->map(fn ($t) => [
+                'label' => trim($t['label']),
+                'url' => trim($t['url']),
+                'icon' => trim($t['icon'] ?? '') ?: 'ti-link',
+                'color' => $t['color'] ?? 'primary',
+            ])
+            ->values()
+            ->all();
     }
 
     /**
