@@ -54,10 +54,6 @@
     {{-- Baris 1: brand + aksi --}}
     <header class="navbar navbar-expand-xl d-print-none site-navbar">
         <div class="container-xl">
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Buka menu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-
             <a href="{{ url('/') }}" class="navbar-brand d-flex align-items-center text-reset text-decoration-none m-0">
                 @if ($navLogo)
                     <img src="{{ Storage::url($navLogo) }}" alt="{{ $navText }}">
@@ -71,7 +67,7 @@
             </a>
 
             @if (count($navButtons))
-                <div class="navbar-nav flex-row order-md-last ms-auto">
+                <div class="navbar-nav flex-row ms-auto">
                     <div class="d-none d-xl-flex align-items-center gap-2">
                         @foreach ($navButtons as $b)
                             <a href="{{ $b['url'] ?: '#' }}" class="btn btn-{{ $b['color'] ?? 'primary' }}">{{ $b['label'] }}</a>
@@ -79,6 +75,10 @@
                     </div>
                 </div>
             @endif
+
+            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Buka menu">
+                <span class="navbar-toggler-icon"></span>
+            </button>
         </div>
     </header>
 

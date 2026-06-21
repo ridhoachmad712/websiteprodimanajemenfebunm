@@ -23,8 +23,31 @@ class HomeBuilderController extends Controller
             'posts' => ['label' => 'Daftar Postingan', 'icon' => 'ti-news'],
             'dosen' => ['label' => 'Daftar Dosen', 'icon' => 'ti-users'],
             'cta' => ['label' => 'Ajakan (CTA)', 'icon' => 'ti-speakerphone'],
+            'video' => ['label' => 'Video (YouTube)', 'icon' => 'ti-brand-youtube'],
             'richtext' => ['label' => 'Konten Bebas (WYSIWYG)', 'icon' => 'ti-code'],
         ];
+    }
+
+    /**
+     * Ambil ID video YouTube dari berbagai bentuk URL (atau ID langsung).
+     */
+    public static function youtubeId(?string $url): ?string
+    {
+        $url = trim((string) $url);
+        if ($url === '') {
+            return null;
+        }
+
+        if (preg_match('~(?:youtube\.com/(?:watch\?(?:.*&)?v=|embed/|shorts/|live/)|youtu\.be/)([A-Za-z0-9_-]{11})~', $url, $m)) {
+            return $m[1];
+        }
+
+        // Admin menempel ID langsung (11 karakter).
+        if (preg_match('~^[A-Za-z0-9_-]{11}$~', $url)) {
+            return $url;
+        }
+
+        return null;
     }
 
     /**
@@ -135,6 +158,11 @@ class HomeBuilderController extends Controller
             // Sanitasi HTML konten bebas.
             if ($type === 'richtext') {
                 $data['html'] = clean($data['html'] ?? '');
+            }
+
+            // Normalisasi URL/ID YouTube agar iframe frontend hanya memakai ID valid.
+            if ($type === 'video') {
+                $data['video_id'] = static::youtubeId($data['video_url'] ?? '');
             }
 
             $blocks[] = [

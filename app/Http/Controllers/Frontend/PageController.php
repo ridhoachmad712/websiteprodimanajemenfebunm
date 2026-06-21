@@ -25,6 +25,14 @@ class PageController extends Controller
     public function show(string $slug): View
     {
         $page = Page::where('slug', $slug)->firstOrFail();
+        abort_unless($page->isPublished() || request()->boolean('preview') && auth()->check(), 404);
+
+        return view('frontend.pages.show', compact('page'));
+    }
+
+    public function custom(Page $page): View
+    {
+        abort_unless($page->isPublished() || request()->boolean('preview') && auth()->check(), 404);
 
         return view('frontend.pages.show', compact('page'));
     }

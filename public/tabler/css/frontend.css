@@ -134,7 +134,16 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 /* Baris brand (atas) — logo rapi & seimbang */
 .site-navbar { background: #fff; }
 .site-navbar .navbar-brand { padding-top: .75rem; padding-bottom: .75rem; }
-.site-navbar .navbar-brand img { height: 44px; width: auto; display: block; }
+.site-navbar .navbar-brand img { height: 42px; width: auto; display: block; }
+
+/* Mobile: logo lebih kecil + padding kiri-kanan konten lebih lega */
+@media (max-width: 575.98px) {
+  .site-navbar .navbar-brand img { height: 32px; }
+  .site-navbar .navbar-brand { padding-top: .5rem; padding-bottom: .5rem; }
+  .container, .container-sm, .container-md, .container-lg, .container-xl {
+    padding-left: 1.25rem; padding-right: 1.25rem;
+  }
+}
 
 /* Baris menu (bawah) */
 .site-navmenu .navbar {
@@ -206,6 +215,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 
 /* ---------- Anchor nav Profil (scrollspy) ---------- */
 .profil-nav { border-left: 2px solid var(--tblr-border-color, #e6e7e9); padding-left: 1rem; }
+.profil-nav.sticky-top { top: var(--sticky-header-offset, 8rem); }
 .profil-nav-link {
   display: block; padding: .4rem 0; color: #6b7280; text-decoration: none;
   font-weight: 500; font-size: .9rem; position: relative; transition: color .2s;
@@ -216,6 +226,7 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 }
 .profil-nav-link:hover, .profil-nav-link.active { color: var(--brand-blue); }
 .profil-nav-link.active::before { background: var(--brand-blue); }
+.profil-section { scroll-margin-top: var(--sticky-header-offset, 8rem); }
 
 /* ---------- Dosen card ---------- */
 .dosen-card .avatar { box-shadow: 0 .25rem .75rem rgba(24,36,64,.08); }
@@ -273,7 +284,10 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 .markdown h2, .markdown h3 { margin-top: 1.6rem; color: #1d273b; }
 .markdown img { border-radius: var(--tblr-border-radius, .5rem); max-width: 100%; }
 
-html { scroll-behavior: smooth; }
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--sticky-header-offset, 8rem);
+}
 
 /* ---------- Google Translate widget (sembunyikan UI bawaan) ---------- */
 #google_translate_element { display: none !important; }
@@ -287,10 +301,184 @@ html { scroll-behavior: smooth; }
 body { top: 0 !important; position: static !important; }
 
 /* ---------- Tombol bahasa melayang (kanan bawah) ---------- */
-.lang-fab { position: fixed; right: 1.25rem; bottom: 1.25rem; z-index: 1031; }
+.floating-actions {
+  position: fixed;
+  right: 1.25rem;
+  bottom: 1.25rem;
+  z-index: 1032;
+  display: flex;
+  align-items: flex-end;
+  justify-content: flex-end;
+  gap: .75rem;
+}
+.lang-fab { position: relative; }
 .lang-fab-btn {
-  display: inline-flex; align-items: center; gap: .4rem;
-  border-radius: 2rem; font-weight: 600; padding: .55rem 1.1rem;
+  width: 3rem; height: 3rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-weight: 600; padding: 0;
   box-shadow: 0 .5rem 1.25rem rgba(24,36,64,.25);
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width .2s ease, border-radius .2s ease, padding .2s ease;
 }
 .lang-fab .dropdown-menu { min-width: 12rem; }
+
+/* ---------- Aksesibilitas ---------- */
+.skip-link {
+  position: fixed;
+  top: .75rem;
+  left: .75rem;
+  z-index: 2000;
+  transform: translateY(-150%);
+  background: #fff;
+  color: var(--brand-blue);
+  border: 2px solid var(--brand-blue);
+  border-radius: var(--tblr-border-radius, .5rem);
+  padding: .65rem 1rem;
+  font-weight: 700;
+  box-shadow: 0 .5rem 1.25rem rgba(24,36,64,.18);
+}
+.skip-link:focus {
+  transform: none;
+  outline: 3px solid #ffbf00;
+  outline-offset: 2px;
+}
+
+:where(a, button, input, select, textarea, [tabindex]):focus-visible {
+  outline: 3px solid #ffbf00;
+  outline-offset: 3px;
+}
+
+.accessibility-widget {
+  position: relative;
+}
+.accessibility-toggle {
+  width: 3rem;
+  height: 3rem;
+  border-radius: 50%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 .5rem 1.25rem rgba(24,36,64,.25);
+  overflow: hidden;
+  white-space: nowrap;
+  transition: width .2s ease, border-radius .2s ease, padding .2s ease;
+}
+.floating-action-text {
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transition: max-width .2s ease, opacity .15s ease, margin-left .2s ease;
+}
+.accessibility-toggle:hover,
+.accessibility-toggle:focus-visible,
+.lang-fab-btn:hover,
+.lang-fab-btn:focus-visible {
+  width: auto;
+  min-width: 3rem;
+  border-radius: 2rem;
+  padding: 0 1rem;
+}
+.accessibility-toggle:hover .floating-action-text,
+.accessibility-toggle:focus-visible .floating-action-text,
+.lang-fab-btn:hover .floating-action-text,
+.lang-fab-btn:focus-visible .floating-action-text {
+  max-width: 9rem;
+  opacity: 1;
+  margin-left: .45rem;
+}
+.accessibility-panel {
+  position: absolute;
+  right: 0;
+  bottom: 3.75rem;
+  width: min(19rem, calc(100vw - 2.5rem));
+  background: #fff;
+  color: #1d273b;
+  border: 1px solid var(--tblr-border-color, #e6e7e9);
+  border-radius: var(--tblr-border-radius, .5rem);
+  padding: 1rem;
+}
+.accessibility-actions {
+  display: grid;
+  gap: .45rem;
+}
+.accessibility-actions .btn {
+  justify-content: flex-start;
+  text-align: left;
+}
+.accessibility-actions .btn.active {
+  background: var(--brand-blue);
+  border-color: var(--brand-blue);
+  color: #fff;
+}
+
+html.a11y-large-text { font-size: 112.5%; }
+html.a11y-readable-font body {
+  font-family: Arial, Verdana, Tahoma, sans-serif;
+  letter-spacing: 0;
+}
+html.a11y-underline-links a:not(.btn):not(.nav-link):not(.navbar-brand) {
+  text-decoration: underline !important;
+  text-underline-offset: .18em;
+}
+html.a11y-grayscale body { filter: grayscale(1); }
+html.a11y-high-contrast body {
+  background: #000 !important;
+  color: #fff !important;
+}
+html.a11y-high-contrast .page,
+html.a11y-high-contrast .section,
+html.a11y-high-contrast .section-tint,
+html.a11y-high-contrast .site-navbar,
+html.a11y-high-contrast .site-navmenu .navbar,
+html.a11y-high-contrast .site-navmenu .navbar-collapse,
+html.a11y-high-contrast .card,
+html.a11y-high-contrast .dropdown-menu,
+html.a11y-high-contrast .accessibility-panel {
+  background: #000 !important;
+  color: #fff !important;
+  border-color: #fff !important;
+}
+html.a11y-high-contrast h1,
+html.a11y-high-contrast h2,
+html.a11y-high-contrast h3,
+html.a11y-high-contrast h4,
+html.a11y-high-contrast .section-title,
+html.a11y-high-contrast .card-title,
+html.a11y-high-contrast .nav-link,
+html.a11y-high-contrast .dropdown-item,
+html.a11y-high-contrast .text-secondary,
+html.a11y-high-contrast .section-subtitle {
+  color: #fff !important;
+}
+html.a11y-high-contrast a:not(.btn),
+html.a11y-high-contrast .eyebrow { color: #ffdf5d !important; }
+html.a11y-high-contrast .btn-outline-primary,
+html.a11y-high-contrast .btn-ghost-secondary {
+  color: #fff !important;
+  border-color: #fff !important;
+}
+html.a11y-high-contrast .btn-primary,
+html.a11y-high-contrast .accessibility-actions .btn.active {
+  background: #ffdf5d !important;
+  border-color: #ffdf5d !important;
+  color: #000 !important;
+}
+html.a11y-reduce-motion,
+html.a11y-reduce-motion body { scroll-behavior: auto !important; }
+html.a11y-reduce-motion *,
+html.a11y-reduce-motion *::before,
+html.a11y-reduce-motion *::after {
+  animation-duration: .001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: .001ms !important;
+}
+html.a11y-reduce-motion [data-reveal] {
+  opacity: 1 !important;
+  transform: none !important;
+}
+
+@media (max-width: 575.98px) {
+  .floating-actions { right: 1rem; bottom: 1rem; gap: .55rem; }
+  .back-to-top { right: 1rem; bottom: 4.6rem; }
+}

@@ -15,7 +15,7 @@
             <div class="row g-5">
                 {{-- Anchor navigation (sticky + scrollspy) --}}
                 <aside class="col-lg-3 d-none d-lg-block">
-                    <nav class="profil-nav sticky-top" id="profilNav" style="top:5.5rem">
+                    <nav class="profil-nav sticky-top" id="profilNav">
                         <div class="eyebrow mb-2">Daftar Isi</div>
                         @foreach ($page->sections as $key => $section)
                             <a href="#{{ $key }}" class="profil-nav-link {{ $loop->first ? 'active' : '' }}">{{ $section['judul'] }}</a>
@@ -25,7 +25,7 @@
 
                 <div class="col-lg-9">
                     @foreach ($page->sections as $key => $section)
-                        <section id="{{ $key }}" class="profil-section mb-5" style="scroll-margin-top:6rem">
+                        <section id="{{ $key }}" class="profil-section mb-5">
                             <div class="d-flex align-items-center mb-3">
                                 <span class="feature-icon me-3 flex-shrink-0"><span class="fw-bold">{{ $loop->iteration }}</span></span>
                                 <h2 class="section-title mb-0" style="font-size:1.6rem">{{ $section['judul'] }}</h2>
