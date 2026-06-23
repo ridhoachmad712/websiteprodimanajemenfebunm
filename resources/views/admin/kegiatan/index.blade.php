@@ -36,7 +36,7 @@
                 <tbody>
                     @forelse ($kegiatan as $k)
                         <tr>
-                            <td><span class="badge" style="background:{{ $k->warna }}">&nbsp;</span></td>
+                            <td><span class="badge" style="background:{{ $k->warna ?: '#1b3a5b' }}">&nbsp;</span></td>
                             <td><div class="fw-bold">{{ $k->judul }}</div></td>
                             <td class="text-secondary">
                                 {{ $k->mulai->translatedFormat($k->seharian ? 'd M Y' : 'd M Y, H:i') }}

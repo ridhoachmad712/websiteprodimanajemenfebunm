@@ -19,7 +19,7 @@
                             <div class="card-body d-flex gap-3">
                                 {{-- Tanggal --}}
                                 <div class="text-center flex-shrink-0" style="width:64px">
-                                    <div class="rounded text-white py-2" style="background:{{ $k->warna }}">
+                                    <div class="rounded text-white py-2" style="background:{{ $k->warna ?: \App\Models\Setting::get('theme.primary', '#1b3a5b') }}">
                                         <div class="fw-bold lh-1" style="font-size:1.5rem">{{ $k->mulai->format('d') }}</div>
                                         <div class="small text-uppercase">{{ $k->mulai->translatedFormat('M') }}</div>
                                     </div>

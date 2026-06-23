@@ -58,7 +58,7 @@ class Kegiatan extends Model
             'start' => $this->seharian ? $this->mulai->toDateString() : $this->mulai->toIso8601String(),
             'end' => $end,
             'allDay' => $this->seharian,
-            'color' => $this->warna ?: '#1b3a5b',
+            'color' => $this->warna ?: Setting::get('theme.primary', '#1b3a5b'),
             'extendedProps' => [
                 'lokasi' => $this->lokasi,
                 'deskripsi' => $this->deskripsi,

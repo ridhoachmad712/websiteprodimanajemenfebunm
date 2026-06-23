@@ -73,7 +73,7 @@ class KegiatanController extends Controller
         ]);
 
         $data['seharian'] = $request->boolean('seharian');
-        $data['warna'] = $data['warna'] ?? '#1b3a5b';
+        $data['warna'] = $data['warna'] ?? '';
 
         return $data;
     }

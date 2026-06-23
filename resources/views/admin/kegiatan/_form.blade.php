@@ -58,8 +58,14 @@
         <div class="card mb-3">
             <div class="card-header"><h3 class="card-title">Warna di Kalender</h3></div>
             <div class="card-body">
-                <input type="color" name="warna" value="{{ old('warna', $k->warna ?? '#1b3a5b') }}" class="form-control form-control-color">
-                <small class="form-hint">Warna penanda kegiatan pada kalender.</small>
+                @php($warnaNow = old('warna', $k->warna ?? ''))
+                <select name="warna" class="form-select">
+                    <option value="" @selected($warnaNow === '' || $warnaNow === null)>Otomatis (warna tema)</option>
+                    @foreach (['#1b3a5b' => 'Navy', '#066fd1' => 'Biru', '#2f9e44' => 'Hijau', '#d63939' => 'Merah', '#f76707' => 'Oranye', '#6d28d9' => 'Ungu', '#0f766e' => 'Teal'] as $hex => $lbl)
+                        <option value="{{ $hex }}" @selected($warnaNow === $hex)>{{ $lbl }}</option>
+                    @endforeach
+                </select>
+                <small class="form-hint">Opsional. "Otomatis" memakai warna tema situs.</small>
             </div>
         </div>
     </div>
