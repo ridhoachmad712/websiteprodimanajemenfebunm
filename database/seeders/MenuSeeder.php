@@ -42,8 +42,9 @@ class MenuSeeder extends Seeder
                 ['Jurnal (OJS)', 'https://ojs.unm.ac.id/manajemen', '_blank', []],
             ]],
             ['Download', null, '_self', [
-                ['SK Mengajar', '#', '_self', []],
-                ['RPS', '#', '_self', []],
+                ['Semua Dokumen', '/unduhan', '_self', []],
+                ['SK Mengajar', '/unduhan#sk-mengajar', '_self', []],
+                ['RPS', '/unduhan#rps', '_self', []],
             ]],
             ['Hubungi Kami', '/hubungi-kami', '_self', []],
         ];

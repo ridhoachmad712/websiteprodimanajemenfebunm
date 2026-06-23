@@ -73,6 +73,12 @@
                         <span class="nav-link-title">Prestasi</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.downloads.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.downloads.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-download"></i></span>
+                        <span class="nav-link-title">Pusat Unduhan</span>
+                    </a>
+                </li>
 
                 <li class="nav-section">Tampilan Situs</li>
                 <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">

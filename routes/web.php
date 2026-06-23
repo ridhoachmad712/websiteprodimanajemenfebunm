@@ -4,6 +4,7 @@ use App\Http\Controllers\Admin\AppearanceController as AdminAppearanceController
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
+use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
 use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController;
@@ -17,6 +18,7 @@ use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\DosenController;
+use App\Http\Controllers\Frontend\DownloadController;
 use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\JadwalUjianController;
@@ -48,6 +50,9 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index
 
 // Prestasi
 Route::get('/prestasi', [PrestasiController::class, 'index'])->name('prestasi.index');
+
+// Pusat Unduhan
+Route::get('/unduhan', [DownloadController::class, 'index'])->name('unduhan.index');
 
 // Form kontak (Hubungi Kami)
 Route::post('/hubungi-kami/kirim', [ContactController::class, 'store'])
@@ -92,6 +97,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
     Route::resource('kegiatan', AdminKegiatanController::class)->except('show')->names('admin.kegiatan');
     Route::resource('prestasi', AdminPrestasiController::class)->except('show')->names('admin.prestasi')->parameters(['prestasi' => 'prestasi']);
+    Route::resource('downloads', AdminDownloadController::class)->except('show')->names('admin.downloads');
     Route::resource('users', AdminUserController::class)->except('show')->names('admin.users');
     Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
     Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
