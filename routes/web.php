@@ -55,6 +55,9 @@ Route::get('/agenda', [KalenderController::class, 'agenda'])->name('agenda');
 // Jadwal Ujian (ditarik dari Google Sheet, URL dapat diatur di Pengaturan)
 Route::get('/jadwal-ujian', [JadwalUjianController::class, 'index'])->name('page.jadwal-ujian');
 
+// Halaman custom buatan Page Builder (slug bebas di bawah /halaman)
+Route::get('/halaman/{page}', [PageController::class, 'custom'])->name('page.custom');
+
 // Halaman statis
 Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');
 
@@ -79,7 +82,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('dosen', AdminDosenController::class)->except('show')->names('admin.dosen');
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
     Route::resource('pengumuman', AdminPengumumanController::class)->except('show')->names('admin.pengumuman')->parameters(['pengumuman' => 'pengumuman']);
-    Route::resource('pages', AdminPageController::class)->only(['index', 'edit', 'update'])->names('admin.pages');
+    Route::resource('pages', AdminPageController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])->names('admin.pages');
     Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
     Route::resource('kegiatan', AdminKegiatanController::class)->except('show')->names('admin.kegiatan');
