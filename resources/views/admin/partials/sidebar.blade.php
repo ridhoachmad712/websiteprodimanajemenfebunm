@@ -67,6 +67,12 @@
                         <span class="nav-link-title">Kegiatan</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.prestasi.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.prestasi.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-trophy"></i></span>
+                        <span class="nav-link-title">Prestasi</span>
+                    </a>
+                </li>
 
                 <li class="nav-section">Tampilan Situs</li>
                 <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">

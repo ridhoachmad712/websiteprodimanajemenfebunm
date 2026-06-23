@@ -17,7 +17,7 @@ class DatabaseSeeder extends Seeder
         User::updateOrCreate(
             ['email' => 'admin@manajemenunm.test'],
             [
-                'name'     => 'Admin Manajemen',
+                'name' => 'Admin Manajemen',
                 'password' => Hash::make('password123'),
             ],
         );
@@ -29,6 +29,7 @@ class DatabaseSeeder extends Seeder
             DosenSeeder::class,
             PostSeeder::class,
             PageSeeder::class,
+            PrestasiSeeder::class,
         ]);
     }
 }

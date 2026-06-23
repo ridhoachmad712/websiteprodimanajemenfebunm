@@ -11,6 +11,7 @@ use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PengumumanController as AdminPengumumanController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
+use App\Http\Controllers\Admin\PrestasiController as AdminPrestasiController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -22,6 +23,7 @@ use App\Http\Controllers\Frontend\JadwalUjianController;
 use App\Http\Controllers\Frontend\KalenderController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PostController;
+use App\Http\Controllers\Frontend\PrestasiController;
 use App\Http\Controllers\Frontend\SitemapController;
 use Illuminate\Support\Facades\Route;
 
@@ -43,6 +45,9 @@ Route::get('/category/{category}', [PostController::class, 'byCategory'])->name(
 
 // Galeri
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');
+
+// Prestasi
+Route::get('/prestasi', [PrestasiController::class, 'index'])->name('prestasi.index');
 
 // Form kontak (Hubungi Kami)
 Route::post('/hubungi-kami/kirim', [ContactController::class, 'store'])
@@ -86,6 +91,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
     Route::resource('kegiatan', AdminKegiatanController::class)->except('show')->names('admin.kegiatan');
+    Route::resource('prestasi', AdminPrestasiController::class)->except('show')->names('admin.prestasi')->parameters(['prestasi' => 'prestasi']);
     Route::resource('users', AdminUserController::class)->except('show')->names('admin.users');
     Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
     Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
