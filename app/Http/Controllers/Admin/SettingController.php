@@ -17,23 +17,28 @@ class SettingController extends Controller
      */
     private array $fields = [
         'umum' => [
-            'site.nama'          => ['label' => 'Nama Situs'],
-            'site.tagline'       => ['label' => 'Tagline'],
+            'site.nama' => ['label' => 'Nama Situs'],
+            'site.tagline' => ['label' => 'Tagline'],
             'site.tagline_brand' => ['label' => 'Tagline Brand'],
         ],
         'kontak' => [
-            'kontak.alamat'  => ['label' => 'Alamat', 'type' => 'textarea'],
+            'kontak.alamat' => ['label' => 'Alamat', 'type' => 'textarea'],
             'kontak.telepon' => ['label' => 'Telepon'],
-            'kontak.email'   => ['label' => 'Email'],
+            'kontak.email' => ['label' => 'Email'],
         ],
         'sosmed' => [
             'sosmed.instagram' => ['label' => 'Instagram (URL)'],
-            'sosmed.tiktok'    => ['label' => 'TikTok (URL)'],
-            'sosmed.facebook'  => ['label' => 'Facebook (URL)'],
+            'sosmed.tiktok' => ['label' => 'TikTok (URL)'],
+            'sosmed.facebook' => ['label' => 'Facebook (URL)'],
         ],
         'statistik' => [
             'statistik.mahasiswa' => ['label' => 'Jumlah Mahasiswa'],
-            'statistik.dosen'     => ['label' => 'Jumlah Dosen'],
+            'statistik.dosen' => ['label' => 'Jumlah Dosen'],
+        ],
+        'jadwal' => [
+            'jadwal_ujian.file_url' => ['label' => 'URL Google Sheet Jadwal Ujian', 'hint' => 'Tautan berbagi file (pastikan dapat diakses publik / "siapa saja dengan link").'],
+            'jadwal_ujian.sheet_number' => ['label' => 'Nomor Sheet', 'hint' => 'Sheet ke-berapa di dalam file (default 1).'],
+            'jadwal_ujian.header_row' => ['label' => 'Baris Header', 'hint' => 'Baris yang berisi judul kolom (default 4).'],
         ],
     ];
 

@@ -1,23 +1,24 @@
 <?php
 
+use App\Http\Controllers\Admin\AppearanceController as AdminAppearanceController;
+use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
-use App\Http\Controllers\Admin\MenuController as AdminMenuController;
-use App\Http\Controllers\Admin\PageController as AdminPageController;
-use App\Http\Controllers\Admin\PostController as AdminPostController;
-use App\Http\Controllers\Admin\PengumumanController as AdminPengumumanController;
-use App\Http\Controllers\Admin\AppearanceController as AdminAppearanceController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
 use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController;
-use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
+use App\Http\Controllers\Admin\MenuController as AdminMenuController;
+use App\Http\Controllers\Admin\PageController as AdminPageController;
+use App\Http\Controllers\Admin\PengumumanController as AdminPengumumanController;
+use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
-use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\ContactController;
+use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\GalleryController;
 use App\Http\Controllers\Frontend\HomeController;
+use App\Http\Controllers\Frontend\JadwalUjianController;
 use App\Http\Controllers\Frontend\KalenderController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PostController;
@@ -50,6 +51,9 @@ Route::post('/hubungi-kami/kirim', [ContactController::class, 'store'])
 // Kalender Akademik (kalender visual) & Agenda kegiatan
 Route::get('/kalender-akademik', [KalenderController::class, 'index'])->name('page.kalender-akademik');
 Route::get('/agenda', [KalenderController::class, 'agenda'])->name('agenda');
+
+// Jadwal Ujian (ditarik dari Google Sheet, URL dapat diatur di Pengaturan)
+Route::get('/jadwal-ujian', [JadwalUjianController::class, 'index'])->name('page.jadwal-ujian');
 
 // Halaman statis
 Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');

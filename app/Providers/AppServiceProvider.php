@@ -3,7 +3,6 @@
 namespace App\Providers;
 
 use App\Http\Controllers\Admin\PageController as AdminPageController;
-use App\Http\Controllers\Frontend\JadwalUjianController;
 use App\Http\Controllers\Frontend\PageController as FrontendPageController;
 use App\Models\Menu;
 use Illuminate\Pagination\Paginator;
@@ -28,10 +27,6 @@ class AppServiceProvider extends ServiceProvider
     {
         // Pagination memakai markup Bootstrap 5 agar konsisten dengan Tabler.
         Paginator::useBootstrapFive();
-
-        Route::get('jadwal-ujian', [JadwalUjianController::class, 'index'])
-            ->middleware('web')
-            ->name('jadwal-ujian.index');
 
         Route::middleware(['web', 'auth'])->prefix('admin')->group(function () {
             Route::get('pages/create', [AdminPageController::class, 'create'])->name('admin.pages.create');

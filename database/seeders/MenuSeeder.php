@@ -25,6 +25,7 @@ class MenuSeeder extends Seeder
             ['Akademik', null, '_self', [
                 ['Kurikulum', '/kurikulum', '_self', []],
                 ['Kalender Akademik', '/kalender-akademik', '_self', []],
+                ['Jadwal Ujian', '/jadwal-ujian', '_self', []],
                 ['Daftar Seminar', '/daftar-seminar', '_self', []],
                 ['Prestasi', '/prestasi', '_self', []],
             ]],
@@ -59,11 +60,11 @@ class MenuSeeder extends Seeder
     {
         $menu = Menu::create([
             'parent_id' => $parentId,
-            'title'     => $title,
-            'url'       => $url,
-            'target'    => $target,
-            'urutan'    => $urutan,
-            'aktif'     => true,
+            'title' => $title,
+            'url' => $url,
+            'target' => $target,
+            'urutan' => $urutan,
+            'aktif' => true,
         ]);
 
         foreach ($children as $j => [$cTitle, $cUrl, $cTarget, $cChildren]) {

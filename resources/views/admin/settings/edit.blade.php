@@ -5,7 +5,7 @@
 @section('page-title', 'Pengaturan Situs')
 
 @php
-    $labelGrup = ['umum' => 'Umum', 'kontak' => 'Kontak', 'sosmed' => 'Media Sosial', 'statistik' => 'Statistik Beranda'];
+    $labelGrup = ['umum' => 'Umum', 'kontak' => 'Kontak', 'sosmed' => 'Media Sosial', 'statistik' => 'Statistik Beranda', 'jadwal' => 'Jadwal Ujian'];
 @endphp
 
 @section('content')
@@ -32,6 +32,9 @@
                                         <textarea name="{{ $name }}" rows="2" class="form-control">{{ $val }}</textarea>
                                     @else
                                         <input type="text" name="{{ $name }}" value="{{ $val }}" class="form-control">
+                                    @endif
+                                    @if (!empty($meta['hint']))
+                                        <small class="form-hint">{{ $meta['hint'] }}</small>
                                     @endif
                                 </div>
                             @endforeach
