@@ -79,6 +79,12 @@
                         <span class="nav-link-title">Pusat Unduhan</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.seminar.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.seminar.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-presentation"></i></span>
+                        <span class="nav-link-title">Daftar Seminar</span>
+                    </a>
+                </li>
 
                 <li class="nav-section">Tampilan Situs</li>
                 <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">

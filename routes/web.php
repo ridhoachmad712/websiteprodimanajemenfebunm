@@ -13,6 +13,7 @@ use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PengumumanController as AdminPengumumanController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
 use App\Http\Controllers\Admin\PrestasiController as AdminPrestasiController;
+use App\Http\Controllers\Admin\SeminarController as AdminSeminarController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
@@ -26,6 +27,7 @@ use App\Http\Controllers\Frontend\KalenderController;
 use App\Http\Controllers\Frontend\PageController;
 use App\Http\Controllers\Frontend\PostController;
 use App\Http\Controllers\Frontend\PrestasiController;
+use App\Http\Controllers\Frontend\SeminarController;
 use App\Http\Controllers\Frontend\SitemapController;
 use Illuminate\Support\Facades\Route;
 
@@ -53,6 +55,9 @@ Route::get('/prestasi', [PrestasiController::class, 'index'])->name('prestasi.in
 
 // Pusat Unduhan
 Route::get('/unduhan', [DownloadController::class, 'index'])->name('unduhan.index');
+
+// Daftar Seminar (proposal/hasil/ujian tutup)
+Route::get('/daftar-seminar', [SeminarController::class, 'index'])->name('seminar.index');
 
 // Form kontak (Hubungi Kami)
 Route::post('/hubungi-kami/kirim', [ContactController::class, 'store'])
@@ -98,6 +103,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('kegiatan', AdminKegiatanController::class)->except('show')->names('admin.kegiatan');
     Route::resource('prestasi', AdminPrestasiController::class)->except('show')->names('admin.prestasi')->parameters(['prestasi' => 'prestasi']);
     Route::resource('downloads', AdminDownloadController::class)->except('show')->names('admin.downloads');
+    Route::resource('seminar', AdminSeminarController::class)->except('show')->names('admin.seminar')->parameters(['seminar' => 'seminar']);
     Route::resource('users', AdminUserController::class)->except('show')->names('admin.users');
     Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
     Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
