@@ -104,6 +104,13 @@
                             @endif
                         @endforeach
                     </ul>
+
+                    <form class="d-flex ms-xl-auto my-2 my-xl-0 site-search" role="search" action="{{ route('search.index') }}" method="GET">
+                        <div class="input-icon">
+                            <span class="input-icon-addon"><i class="ti ti-search"></i></span>
+                            <input type="search" name="q" value="{{ request('q') }}" class="form-control" placeholder="Cari…" aria-label="Cari di situs">
+                        </div>
+                    </form>
                 </div>
             </div>
         </div>
