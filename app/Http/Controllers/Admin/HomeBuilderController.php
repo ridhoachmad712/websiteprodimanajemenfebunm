@@ -102,7 +102,7 @@ class HomeBuilderController extends Controller
                 'count' => '4', 'link_label' => 'Semua Pengumuman', 'link_url' => '/pengumuman',
             ]],
             ['type' => 'mitra', 'enabled' => true, 'data' => [
-                'eyebrow' => 'Kolaborasi', 'title' => 'Mitra & Kerjasama', 'style' => 'tint', 'grayscale' => '1',
+                'eyebrow' => 'Kolaborasi', 'title' => 'Mitra & Kerjasama', 'style' => 'tint', 'grayscale' => '0',
             ]],
             ['type' => 'cta', 'enabled' => true, 'data' => [
                 'title' => 'Tertarik bergabung dengan Prodi Manajemen?',

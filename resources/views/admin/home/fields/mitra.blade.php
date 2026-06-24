@@ -24,7 +24,7 @@
     <div class="col-md-6 mb-2 d-flex align-items-end">
         <label class="form-check form-switch">
             <input type="hidden" name="blocks[{{ $i }}][data][grayscale]" value="0">
-            <input class="form-check-input" type="checkbox" name="blocks[{{ $i }}][data][grayscale]" value="1" @checked(($d['grayscale'] ?? '1') === '1')>
+            <input class="form-check-input" type="checkbox" name="blocks[{{ $i }}][data][grayscale]" value="1" @checked(($d['grayscale'] ?? '0') === '1')>
             <span class="form-check-label">Logo abu-abu (berwarna saat disentuh)</span>
         </label>
     </div>

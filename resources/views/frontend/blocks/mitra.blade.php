@@ -2,7 +2,7 @@
 @php
     $d = $block['data'] ?? [];
     $items = \App\Models\Mitra::aktif()->orderBy('urutan')->orderBy('nama')->get();
-    $grayscale = ($d['grayscale'] ?? '1') === '1';
+    $grayscale = ($d['grayscale'] ?? '0') === '1';
 @endphp
 @if ($items->isNotEmpty())
     <section class="section {{ ($d['style'] ?? 'tint') === 'tint' ? 'section-tint' : '' }}">
