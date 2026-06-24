@@ -22,6 +22,8 @@
                         <i class="ti ti-user me-1"></i>{{ $post->user->name }}
                         <span class="mx-2">·</span>
                         <i class="ti ti-calendar me-1"></i>{{ $post->published_at?->translatedFormat('d F Y') }}
+                        <span class="mx-2">·</span>
+                        <i class="ti ti-eye me-1"></i>{{ number_format($post->dilihat, 0, ',', '.') }} dilihat
                     </div>
 
                     @if ($post->featured_image)
@@ -32,6 +34,8 @@
                     <div class="markdown">
                         {!! $post->konten !!}
                     </div>
+
+                    @include('frontend.partials.share', ['url' => $post->url(), 'judul' => $post->judul])
 
                     <hr class="my-4">
                     <a href="{{ route('post.index') }}" class="btn btn-link px-0"><i class="ti ti-arrow-left me-1"></i> Semua berita</a>

@@ -40,6 +40,9 @@ class SettingController extends Controller
             'jadwal_ujian.sheet_number' => ['label' => 'Nomor Sheet', 'hint' => 'Sheet ke-berapa di dalam file (default 1).'],
             'jadwal_ujian.header_row' => ['label' => 'Baris Header', 'hint' => 'Baris yang berisi judul kolom (default 4).'],
         ],
+        'integrasi' => [
+            'analytics.ga_id' => ['label' => 'Google Analytics ID (GA4)', 'hint' => 'Format G-XXXXXXXXXX. Kosongkan untuk menonaktifkan pelacakan.'],
+        ],
     ];
 
     public function edit(): View

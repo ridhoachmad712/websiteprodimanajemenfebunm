@@ -25,8 +25,8 @@ class PostController extends Controller
             ->paginate(8);
 
         return view('frontend.posts.index', [
-            'featured'   => $featured,
-            'posts'      => $posts,
+            'featured' => $featured,
+            'posts' => $posts,
             'categories' => Category::orderBy('nama')->get(),
         ]);
     }
@@ -37,8 +37,8 @@ class PostController extends Controller
     public function byCategory(Category $category): View
     {
         return view('frontend.posts.category', [
-            'category'   => $category,
-            'posts'      => $category->posts()->published()->with('categories')->latest('published_at')->paginate(9),
+            'category' => $category,
+            'posts' => $category->posts()->published()->with('categories')->latest('published_at')->paginate(9),
             'categories' => Category::orderBy('nama')->get(),
         ]);
     }
@@ -56,8 +56,10 @@ class PostController extends Controller
             abort(404);
         }
 
+        $post->increment('dilihat');
+
         return view('frontend.posts.show', [
-            'post'   => $post->load('categories', 'user'),
+            'post' => $post->load('categories', 'user'),
             'terkait' => Post::published()
                 ->where('id', '!=', $post->id)
                 ->latest('published_at')

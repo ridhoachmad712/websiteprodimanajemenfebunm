@@ -5,7 +5,7 @@
 @section('page-title', 'Pengaturan Situs')
 
 @php
-    $labelGrup = ['umum' => 'Umum', 'kontak' => 'Kontak', 'sosmed' => 'Media Sosial', 'statistik' => 'Statistik Beranda', 'jadwal' => 'Jadwal Ujian'];
+    $labelGrup = ['umum' => 'Umum', 'kontak' => 'Kontak', 'sosmed' => 'Media Sosial', 'statistik' => 'Statistik Beranda', 'jadwal' => 'Jadwal Ujian', 'integrasi' => 'Integrasi'];
 @endphp
 
 @section('content')

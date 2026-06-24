@@ -16,6 +16,7 @@
     <link href="{{ asset('tabler/css/brand.css') }}" rel="stylesheet">
     <link href="{{ asset('tabler/css/frontend.css') }}" rel="stylesheet">
     @include('partials.theme')
+    @include('frontend.partials.analytics')
 
     {{-- Font default Tabler: Geist --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
