@@ -27,7 +27,7 @@
     <div class="col-md-4 mb-2">
         <label class="form-label">Gaya latar</label>
         <select class="form-select" name="blocks[{{ $i }}][data][style]">
-            @foreach (['normal' => 'Normal (putih abu)', 'tint' => 'Tint (putih)', 'dark' => 'Gelap'] as $k => $lbl)
+            @foreach (['normal' => 'Normal (putih abu)', 'tint' => 'Tint (putih)', 'dark' => 'Gelap', 'list' => 'Daftar minimalis'] as $k => $lbl)
                 <option value="{{ $k }}" @selected(($d['style'] ?? 'normal') === $k)>{{ $lbl }}</option>
             @endforeach
         </select>

@@ -97,7 +97,7 @@ class HomeBuilderController extends Controller
             ]],
             ['type' => 'posts', 'enabled' => true, 'data' => [
                 'eyebrow' => 'Penting', 'title' => 'Pengumuman', 'category' => 'pengumuman',
-                'count' => '4', 'link_label' => '', 'link_url' => '', 'style' => 'dark',
+                'count' => '4', 'link_label' => '', 'link_url' => '', 'style' => 'list',
             ]],
             ['type' => 'cta', 'enabled' => true, 'data' => [
                 'title' => 'Tertarik bergabung dengan Prodi Manajemen?',
