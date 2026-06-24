@@ -16,10 +16,7 @@ class PostController extends Controller
 {
     public function index(Request $request): View
     {
-        // Berita = semua post KECUALI yang berkategori Pengumuman (dikelola terpisah).
-        $query = Post::with('categories')
-            ->whereDoesntHave('categories', fn ($q) => $q->where('slug', 'pengumuman'))
-            ->latest();
+        $query = Post::with('categories')->latest();
 
         if ($status = $request->query('status')) {
             $query->where('status', $status);
@@ -37,7 +34,7 @@ class PostController extends Controller
     public function create(): View
     {
         return view('admin.posts.create', [
-            'categories' => Category::where('slug', '!=', 'pengumuman')->orderBy('nama')->get(),
+            'categories' => Category::orderBy('nama')->get(),
         ]);
     }
 
@@ -62,7 +59,7 @@ class PostController extends Controller
     {
         return view('admin.posts.edit', [
             'post' => $post->load('categories'),
-            'categories' => Category::where('slug', '!=', 'pengumuman')->orderBy('nama')->get(),
+            'categories' => Category::orderBy('nama')->get(),
             'selected' => $post->categories->pluck('id')->all(),
         ]);
     }

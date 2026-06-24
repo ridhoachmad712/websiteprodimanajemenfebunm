@@ -21,6 +21,7 @@ class HomeBuilderController extends Controller
             'features' => ['label' => 'Fitur / Pilar', 'icon' => 'ti-layout-grid'],
             'about' => ['label' => 'Tentang / Sambutan', 'icon' => 'ti-article'],
             'posts' => ['label' => 'Daftar Postingan', 'icon' => 'ti-news'],
+            'pengumuman' => ['label' => 'Pengumuman', 'icon' => 'ti-speakerphone'],
             'dosen' => ['label' => 'Daftar Dosen', 'icon' => 'ti-users'],
             'cta' => ['label' => 'Ajakan (CTA)', 'icon' => 'ti-speakerphone'],
             'video' => ['label' => 'Video (YouTube)', 'icon' => 'ti-brand-youtube'],
@@ -95,9 +96,9 @@ class HomeBuilderController extends Controller
                 'eyebrow' => 'Wawasan', 'title' => 'Artikel', 'category' => 'artikel',
                 'count' => '3', 'link_label' => 'Lihat Semua', 'link_url' => '/category/artikel', 'style' => 'tint',
             ]],
-            ['type' => 'posts', 'enabled' => true, 'data' => [
-                'eyebrow' => 'Penting', 'title' => 'Pengumuman', 'category' => 'pengumuman',
-                'count' => '4', 'link_label' => '', 'link_url' => '', 'style' => 'list',
+            ['type' => 'pengumuman', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Penting', 'title' => 'Pengumuman',
+                'count' => '4', 'link_label' => 'Semua Pengumuman', 'link_url' => '/pengumuman',
             ]],
             ['type' => 'cta', 'enabled' => true, 'data' => [
                 'title' => 'Tertarik bergabung dengan Prodi Manajemen?',

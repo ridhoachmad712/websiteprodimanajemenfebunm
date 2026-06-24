@@ -14,7 +14,6 @@ class CategorySeeder extends Seeder
             'Berita & Informasi',
             'Artikel',
             'Prestasi',
-            'Pengumuman',
         ];
 
         foreach ($kategori as $nama) {

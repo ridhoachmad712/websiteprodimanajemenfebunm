@@ -17,26 +17,25 @@ class PostSeeder extends Seeder
             return; // butuh minimal satu user sebagai penulis
         }
 
-        $berita     = Category::where('slug', 'berita-informasi')->first();
-        $artikel    = Category::where('slug', 'artikel')->first();
-        $prestasi   = Category::where('slug', 'prestasi')->first();
-        $pengumuman = Category::where('slug', 'pengumuman')->first();
+        $berita = Category::where('slug', 'berita-informasi')->first();
+        $artikel = Category::where('slug', 'artikel')->first();
+        $prestasi = Category::where('slug', 'prestasi')->first();
 
         $posts = [
             [
-                'judul'   => 'Selamat Datang di Website Baru Prodi Manajemen FEB UNM',
+                'judul' => 'Selamat Datang di Website Baru Prodi Manajemen FEB UNM',
                 'excerpt' => 'Website resmi Program Studi Manajemen kini hadir dengan tampilan baru yang lebih modern dan cepat.',
-                'kategori'=> [$berita, $pengumuman],
+                'kategori' => [$berita],
             ],
             [
-                'judul'   => 'Mahasiswa Manajemen Raih Juara Kompetisi Bisnis Nasional',
+                'judul' => 'Mahasiswa Manajemen Raih Juara Kompetisi Bisnis Nasional',
                 'excerpt' => 'Tim mahasiswa Prodi Manajemen berhasil meraih prestasi membanggakan di tingkat nasional.',
-                'kategori'=> [$prestasi, $berita],
+                'kategori' => [$prestasi, $berita],
             ],
             [
-                'judul'   => 'Strategi Manajemen Keuangan di Era Digital',
+                'judul' => 'Strategi Manajemen Keuangan di Era Digital',
                 'excerpt' => 'Artikel singkat mengenai pengelolaan keuangan yang adaptif terhadap perubahan teknologi.',
-                'kategori'=> [$artikel],
+                'kategori' => [$artikel],
             ],
         ];
 
@@ -44,11 +43,11 @@ class PostSeeder extends Seeder
             $post = Post::updateOrCreate(
                 ['slug' => Str::slug($row['judul'])],
                 [
-                    'judul'        => $row['judul'],
-                    'excerpt'      => $row['excerpt'],
-                    'konten'       => '<p>'.$row['excerpt'].'</p><p>Konten lengkap akan diisi melalui panel admin.</p>',
-                    'user_id'      => $user->id,
-                    'status'       => 'published',
+                    'judul' => $row['judul'],
+                    'excerpt' => $row['excerpt'],
+                    'konten' => '<p>'.$row['excerpt'].'</p><p>Konten lengkap akan diisi melalui panel admin.</p>',
+                    'user_id' => $user->id,
+                    'status' => 'published',
                     'published_at' => now()->subDays(count($posts) - $i),
                 ],
             );

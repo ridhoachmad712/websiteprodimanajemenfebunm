@@ -25,6 +25,7 @@ use App\Http\Controllers\Frontend\HomeController;
 use App\Http\Controllers\Frontend\JadwalUjianController;
 use App\Http\Controllers\Frontend\KalenderController;
 use App\Http\Controllers\Frontend\PageController;
+use App\Http\Controllers\Frontend\PengumumanController;
 use App\Http\Controllers\Frontend\PostController;
 use App\Http\Controllers\Frontend\PrestasiController;
 use App\Http\Controllers\Frontend\SearchController;
@@ -50,6 +51,10 @@ Route::get('/dosen/{dosen}', [DosenController::class, 'show'])->name('dosen.show
 // Berita
 Route::get('/berita', [PostController::class, 'index'])->name('post.index');
 Route::get('/category/{category}', [PostController::class, 'byCategory'])->name('post.category');
+
+// Pengumuman (modul mandiri, terpisah dari Berita)
+Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
+Route::get('/pengumuman/{pengumuman}', [PengumumanController::class, 'show'])->name('pengumuman.show');
 
 // Galeri
 Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index');

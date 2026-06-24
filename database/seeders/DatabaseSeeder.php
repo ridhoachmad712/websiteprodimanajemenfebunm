@@ -28,6 +28,7 @@ class DatabaseSeeder extends Seeder
             MenuSeeder::class,
             DosenSeeder::class,
             PostSeeder::class,
+            PengumumanSeeder::class,
             PageSeeder::class,
             PrestasiSeeder::class,
             DownloadSeeder::class,

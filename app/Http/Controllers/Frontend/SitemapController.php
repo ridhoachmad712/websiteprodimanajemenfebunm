@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Dosen;
 use App\Models\Page;
+use App\Models\Pengumuman;
 use App\Models\Post;
 use Illuminate\Http\Response;
 
@@ -18,6 +19,7 @@ class SitemapController extends Controller
         // Beranda + daftar utama
         $urls[] = ['loc' => url('/'), 'priority' => '1.0'];
         $urls[] = ['loc' => route('post.index'), 'priority' => '0.8'];
+        $urls[] = ['loc' => route('pengumuman.index'), 'priority' => '0.7'];
         $urls[] = ['loc' => route('dosen.index'), 'priority' => '0.7'];
         $urls[] = ['loc' => route('gallery.index'), 'priority' => '0.5'];
 
@@ -40,6 +42,11 @@ class SitemapController extends Controller
         // Berita terbit
         foreach (Post::published()->get() as $post) {
             $urls[] = ['loc' => $post->url(), 'lastmod' => $post->updated_at?->toAtomString(), 'priority' => '0.7'];
+        }
+
+        // Pengumuman terbit
+        foreach (Pengumuman::published()->get() as $p) {
+            $urls[] = ['loc' => $p->url(), 'lastmod' => $p->updated_at?->toAtomString(), 'priority' => '0.6'];
         }
 
         return response()
