@@ -90,6 +90,7 @@ class PengumumanController extends Controller
         ]);
 
         $data['konten'] = clean($data['konten']);
+        $data['sorot'] = $request->boolean('sorot');
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
             $data['published_at'] = now();

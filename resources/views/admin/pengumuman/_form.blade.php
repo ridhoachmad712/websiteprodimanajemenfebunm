@@ -36,7 +36,7 @@
                         <option value="published" @selected(old('status', $p->status ?? '') === 'published')>Terbit</option>
                     </select>
                 </div>
-                <div class="mb-0">
+                <div class="mb-3">
                     <label class="form-label">Tanggal terbit</label>
                     <input type="datetime-local" name="published_at"
                            value="{{ old('published_at', optional($p->published_at ?? null)->format('Y-m-d\TH:i')) }}"
@@ -44,6 +44,11 @@
                     <small class="form-hint">Kosongkan → otomatis "sekarang" saat Terbit.</small>
                     @error('published_at') <div class="invalid-feedback">{{ $message }}</div> @enderror
                 </div>
+                <label class="form-check form-switch mb-0">
+                    <input type="hidden" name="sorot" value="0">
+                    <input class="form-check-input" type="checkbox" name="sorot" value="1" @checked(old('sorot', $p->sorot ?? false))>
+                    <span class="form-check-label">Tampilkan sebagai banner di seluruh situs</span>
+                </label>
             </div>
         </div>
     </div>

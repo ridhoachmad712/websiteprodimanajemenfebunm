@@ -31,6 +31,7 @@
     <a href="#content" class="skip-link">Lewati ke konten utama</a>
 
     <div class="page">
+        @include('frontend.partials.announcement-bar')
         @include('frontend.partials.navbar')
 
         <main id="content" tabindex="-1">

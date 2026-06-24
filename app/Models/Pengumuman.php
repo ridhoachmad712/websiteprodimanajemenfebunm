@@ -15,12 +15,22 @@ class Pengumuman extends Model
         'slug',
         'konten',
         'status',
+        'sorot',
         'published_at',
     ];
 
     protected $casts = [
+        'sorot' => 'boolean',
         'published_at' => 'datetime',
     ];
+
+    /**
+     * Pengumuman terbit yang ditandai untuk tampil sebagai banner situs (terbaru).
+     */
+    public static function banner(): ?self
+    {
+        return static::published()->where('sorot', true)->latest('published_at')->first();
+    }
 
     public function getRouteKeyName(): string
     {
