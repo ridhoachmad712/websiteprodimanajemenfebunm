@@ -85,6 +85,12 @@
                         <span class="nav-link-title">Daftar Seminar</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.mitra.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.mitra.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-heart-handshake"></i></span>
+                        <span class="nav-link-title">Mitra & Kerjasama</span>
+                    </a>
+                </li>
 
                 <li class="nav-section">Tampilan Situs</li>
                 <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">

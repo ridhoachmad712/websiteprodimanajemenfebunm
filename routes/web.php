@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
 use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
+use App\Http\Controllers\Admin\MitraController as AdminMitraController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
 use App\Http\Controllers\Admin\PengumumanController as AdminPengumumanController;
 use App\Http\Controllers\Admin\PostController as AdminPostController;
@@ -113,6 +114,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('prestasi', AdminPrestasiController::class)->except('show')->names('admin.prestasi')->parameters(['prestasi' => 'prestasi']);
     Route::resource('downloads', AdminDownloadController::class)->except('show')->names('admin.downloads');
     Route::resource('seminar', AdminSeminarController::class)->except('show')->names('admin.seminar')->parameters(['seminar' => 'seminar']);
+    Route::resource('mitra', AdminMitraController::class)->except('show')->names('admin.mitra')->parameters(['mitra' => 'mitra']);
     Route::resource('users', AdminUserController::class)->except('show')->names('admin.users');
     Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
     Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');

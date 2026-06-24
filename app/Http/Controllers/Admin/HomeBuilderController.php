@@ -23,6 +23,7 @@ class HomeBuilderController extends Controller
             'posts' => ['label' => 'Daftar Postingan', 'icon' => 'ti-news'],
             'pengumuman' => ['label' => 'Pengumuman', 'icon' => 'ti-speakerphone'],
             'dosen' => ['label' => 'Daftar Dosen', 'icon' => 'ti-users'],
+            'mitra' => ['label' => 'Mitra (Logo Berjalan)', 'icon' => 'ti-heart-handshake'],
             'cta' => ['label' => 'Ajakan (CTA)', 'icon' => 'ti-speakerphone'],
             'video' => ['label' => 'Video (YouTube)', 'icon' => 'ti-brand-youtube'],
             'richtext' => ['label' => 'Konten Bebas (WYSIWYG)', 'icon' => 'ti-code'],
@@ -99,6 +100,9 @@ class HomeBuilderController extends Controller
             ['type' => 'pengumuman', 'enabled' => true, 'data' => [
                 'eyebrow' => 'Penting', 'title' => 'Pengumuman',
                 'count' => '4', 'link_label' => 'Semua Pengumuman', 'link_url' => '/pengumuman',
+            ]],
+            ['type' => 'mitra', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Kolaborasi', 'title' => 'Mitra & Kerjasama', 'style' => 'tint', 'grayscale' => '1',
             ]],
             ['type' => 'cta', 'enabled' => true, 'data' => [
                 'title' => 'Tertarik bergabung dengan Prodi Manajemen?',

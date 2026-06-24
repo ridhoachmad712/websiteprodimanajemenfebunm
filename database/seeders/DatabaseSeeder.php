@@ -33,6 +33,7 @@ class DatabaseSeeder extends Seeder
             PrestasiSeeder::class,
             DownloadSeeder::class,
             SeminarSeeder::class,
+            MitraSeeder::class,
         ]);
     }
 }

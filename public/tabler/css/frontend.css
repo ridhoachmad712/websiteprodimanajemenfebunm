@@ -482,3 +482,15 @@ html.a11y-reduce-motion [data-reveal] {
   .floating-actions { right: 1rem; bottom: 1rem; gap: .55rem; }
   .back-to-top { right: 1rem; bottom: 4.6rem; }
 }
+
+/* ---------- Mitra: logo berjalan otomatis (marquee) ---------- */
+.mitra-marquee { overflow: hidden; -webkit-mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); mask-image: linear-gradient(90deg, transparent, #000 8%, #000 92%, transparent); }
+.mitra-track { display: flex; width: max-content; align-items: center; gap: 3.5rem; animation: mitra-scroll 40s linear infinite; }
+.mitra-marquee:hover .mitra-track { animation-play-state: paused; }
+.mitra-item { flex: 0 0 auto; display: flex; align-items: center; justify-content: center; }
+.mitra-item img { height: 52px; width: auto; max-width: 160px; object-fit: contain; display: block; }
+.mitra-item .mitra-name { font-weight: 700; color: var(--brand-blue); font-size: 1.1rem; white-space: nowrap; }
+.mitra-marquee.is-grayscale .mitra-item img { filter: grayscale(1); opacity: .65; transition: filter .25s, opacity .25s; }
+.mitra-marquee.is-grayscale .mitra-item:hover img { filter: grayscale(0); opacity: 1; }
+@keyframes mitra-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+@media (prefers-reduced-motion: reduce) { .mitra-track { animation: none; flex-wrap: wrap; justify-content: center; row-gap: 1.5rem; } }
