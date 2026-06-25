@@ -11,14 +11,16 @@
 @endsection
 
 @section('content')
-    {{-- Kartu statistik (bisa diklik) --}}
+    @php $isAdmin = auth()->user()->isAdmin(); @endphp
+
+    {{-- Kartu statistik utama (bisa diklik) --}}
     <div class="row row-deck row-cards">
         @php
             $cards = [
-                ['label' => 'Berita',  'value' => $stats['berita'],  'sub' => 'total post', 'icon' => 'ti-news',       'url' => route('admin.posts.index')],
-                ['label' => 'Dosen',   'value' => $stats['dosen'],   'sub' => 'terdaftar',  'icon' => 'ti-users',      'url' => route('admin.dosen.index')],
-                ['label' => 'Halaman', 'value' => $stats['halaman'], 'sub' => 'statis',     'icon' => 'ti-file-text',  'url' => route('admin.pages.index')],
-                ['label' => 'Galeri',  'value' => $stats['galeri'],  'sub' => 'media',      'icon' => 'ti-photo',      'url' => route('admin.gallery.index')],
+                ['label' => 'Berita',     'value' => $stats['berita'],     'icon' => 'ti-news',         'url' => route('admin.posts.index')],
+                ['label' => 'Pengumuman', 'value' => $stats['pengumuman'], 'icon' => 'ti-speakerphone', 'url' => route('admin.pengumuman.index')],
+                ['label' => 'Dosen',      'value' => $stats['dosen'],      'icon' => 'ti-users',        'url' => route('admin.dosen.index')],
+                ['label' => 'Prestasi',   'value' => $stats['prestasi'],   'icon' => 'ti-trophy',       'url' => route('admin.prestasi.index')],
             ];
         @endphp
         @foreach ($cards as $c)
@@ -29,7 +31,7 @@
                             <span class="bg-primary-lt rounded p-2 me-3 d-inline-flex"><i class="ti {{ $c['icon'] }} fs-2"></i></span>
                             <div>
                                 <div class="h1 mb-0 lh-1">{{ $c['value'] }}</div>
-                                <div class="text-secondary small">{{ $c['label'] }} · {{ $c['sub'] }}</div>
+                                <div class="text-secondary small">{{ $c['label'] }}</div>
                             </div>
                         </div>
                     </div>
@@ -47,21 +49,25 @@
                     <div class="row g-2">
                         @php
                             $actions = [
-                                ['Tulis Berita',   'ti-pencil-plus', route('admin.posts.create')],
-                                ['Tambah Dosen',   'ti-user-plus',   route('admin.dosen.create')],
-                                ['Susun Beranda',  'ti-layout-board', route('admin.home.edit')],
-                                ['Ubah Tampilan',  'ti-palette',     route('admin.appearance.edit')],
-                                ['Kelola Menu',    'ti-menu-2',      route('admin.menus.index')],
-                                ['Pengaturan',     'ti-settings',    route('admin.settings.edit')],
+                                ['Tulis Berita',      'ti-pencil-plus',  route('admin.posts.create'),      false],
+                                ['Tambah Pengumuman', 'ti-speakerphone', route('admin.pengumuman.create'), false],
+                                ['Tambah Dosen',      'ti-user-plus',    route('admin.dosen.create'),      false],
+                                ['Tambah Prestasi',   'ti-trophy',       route('admin.prestasi.create'),   false],
+                                ['Susun Beranda',     'ti-layout-board', route('admin.home.edit'),         true],
+                                ['Ubah Tampilan',     'ti-palette',      route('admin.appearance.edit'),   true],
+                                ['Kelola Menu',       'ti-menu-2',       route('admin.menus.index'),       true],
+                                ['Pengaturan',        'ti-settings',     route('admin.settings.edit'),     true],
                             ];
                         @endphp
-                        @foreach ($actions as [$label, $icon, $url])
-                            <div class="col-6 col-md-4">
-                                <a href="{{ $url }}" class="btn btn-outline-primary w-100 d-flex flex-column py-3">
-                                    <i class="ti {{ $icon }} fs-2 mb-1"></i>
-                                    <span class="small">{{ $label }}</span>
-                                </a>
-                            </div>
+                        @foreach ($actions as [$label, $icon, $url, $adminOnly])
+                            @if (! $adminOnly || $isAdmin)
+                                <div class="col-6 col-md-3">
+                                    <a href="{{ $url }}" class="btn btn-outline-primary w-100 d-flex flex-column py-3">
+                                        <i class="ti {{ $icon }} fs-2 mb-1"></i>
+                                        <span class="small">{{ $label }}</span>
+                                    </a>
+                                </div>
+                            @endif
                         @endforeach
                     </div>
                 </div>
@@ -94,6 +100,84 @@
                         <div class="list-group-item text-secondary text-center py-4">Belum ada pesan masuk.</div>
                     @endforelse
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row row-cards mt-1">
+        {{-- Berita terpopuler --}}
+        <div class="{{ $isAdmin ? 'col-lg-6' : 'col-lg-12' }}">
+            <div class="card h-100">
+                <div class="card-header"><h3 class="card-title"><i class="ti ti-flame me-2 text-orange"></i>Berita Terpopuler</h3></div>
+                <div class="list-group list-group-flush">
+                    @forelse ($popular as $p)
+                        <a href="{{ $p->url() }}" target="_blank" rel="noopener" class="list-group-item list-group-item-action d-flex align-items-center">
+                            <div class="flex-fill text-truncate pe-2">{{ $p->judul }}</div>
+                            <span class="badge bg-orange-lt flex-shrink-0"><i class="ti ti-eye me-1"></i>{{ number_format($p->dilihat, 0, ',', '.') }}</span>
+                        </a>
+                    @empty
+                        <div class="list-group-item text-secondary text-center py-4">Belum ada data kunjungan berita.</div>
+                    @endforelse
+                </div>
+            </div>
+        </div>
+
+        {{-- Aktivitas terbaru (admin) --}}
+        @if ($isAdmin)
+            <div class="col-lg-6">
+                <div class="card h-100">
+                    <div class="card-header">
+                        <h3 class="card-title"><i class="ti ti-history me-2"></i>Aktivitas Terbaru</h3>
+                        <div class="card-actions"><a href="{{ route('admin.activity.index') }}" class="btn btn-sm btn-link">Semua</a></div>
+                    </div>
+                    <div class="list-group list-group-flush">
+                        @forelse ($recentActivity as $log)
+                            @php $meta = $log->actionMeta(); @endphp
+                            <div class="list-group-item">
+                                <div class="d-flex align-items-center">
+                                    <span class="badge bg-{{ $meta['color'] }}-lt me-2 flex-shrink-0"><i class="ti {{ $meta['icon'] }}"></i></span>
+                                    <div class="flex-fill text-truncate">
+                                        <span class="text-secondary">{{ $log->user_name ?: 'Sistem' }}</span>
+                                        {{ \Illuminate\Support\Str::lower($meta['label']) }}
+                                        <span class="text-secondary">{{ $log->subjectLabelType() }}:</span>
+                                        <span class="fw-bold">{{ $log->subject_label }}</span>
+                                    </div>
+                                    <span class="text-secondary small flex-shrink-0 ms-2">{{ $log->created_at?->diffForHumans(short: true) }}</span>
+                                </div>
+                            </div>
+                        @empty
+                            <div class="list-group-item text-secondary text-center py-4">Belum ada aktivitas.</div>
+                        @endforelse
+                    </div>
+                </div>
+            </div>
+        @endif
+    </div>
+
+    {{-- Ringkasan seluruh modul konten --}}
+    <div class="card mt-3">
+        <div class="card-header"><h3 class="card-title">Ringkasan Konten</h3></div>
+        <div class="card-body">
+            <div class="row g-2">
+                @php
+                    $ringkasan = [
+                        ['Seminar', $stats['seminar'], 'ti-presentation', route('admin.seminar.index')],
+                        ['Dokumen', $stats['dokumen'], 'ti-download', route('admin.downloads.index')],
+                        ['Mitra', $stats['mitra'], 'ti-heart-handshake', route('admin.mitra.index')],
+                        ['Kegiatan', $stats['kegiatan'], 'ti-calendar-event', route('admin.kegiatan.index')],
+                        ['Galeri', $stats['galeri'], 'ti-photo', route('admin.gallery.index')],
+                        ['Halaman', $stats['halaman'], 'ti-file-text', route('admin.pages.index')],
+                    ];
+                @endphp
+                @foreach ($ringkasan as [$label, $value, $icon, $url])
+                    <div class="col-4 col-md-2">
+                        <a href="{{ $url }}" class="d-block text-reset text-decoration-none border rounded p-2 text-center card-link-pop">
+                            <i class="ti {{ $icon }} fs-2 text-secondary"></i>
+                            <div class="h3 mb-0">{{ $value }}</div>
+                            <div class="text-secondary small">{{ $label }}</div>
+                        </a>
+                    </div>
+                @endforeach
             </div>
         </div>
     </div>
