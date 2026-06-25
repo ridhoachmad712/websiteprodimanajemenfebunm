@@ -260,6 +260,13 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 .dosen-card-sm .dosen-konsentrasi i { font-size: .68rem; }
 .dosen-card-sm .dosen-photo .ph { font-size: 2rem; }
 
+/* Kartu profil dosen (halaman detail): offset sticky HANYA di desktop.
+   Di mobile .card tetap position:relative, jadi 'top' tak boleh diterapkan
+   (kalau diterapkan, kartu terdorong turun → muncul gap besar). */
+@media (min-width: 992px) {
+  .dosen-profile-sticky { top: 5.5rem; }
+}
+
 /* ---------- Footer ---------- */
 .footer a:hover { color: #fff !important; }
 

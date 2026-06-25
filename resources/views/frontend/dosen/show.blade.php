@@ -19,7 +19,7 @@
             <div class="row g-4">
                 {{-- ===== Kartu profil (kiri, sticky) ===== --}}
                 <div class="col-lg-4">
-                    <div class="card sticky-lg-top" style="top:5.5rem">
+                    <div class="card sticky-lg-top dosen-profile-sticky">
                         <div class="dosen-photo" style="aspect-ratio:1/1;border-radius:var(--tblr-border-radius) var(--tblr-border-radius) 0 0;overflow:hidden">
                             @if ($dosen->foto)
                                 <img src="{{ Storage::url($dosen->foto) }}" alt="Foto {{ $dosen->nama }}">
