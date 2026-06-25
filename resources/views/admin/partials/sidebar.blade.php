@@ -129,6 +129,12 @@
                             <span class="nav-link-title">Pengguna</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.media.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.media.index') }}">
+                            <span class="nav-link-icon"><i class="ti ti-photo"></i></span>
+                            <span class="nav-link-title">Manajer Media</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('admin.activity.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('admin.activity.index') }}">
                             <span class="nav-link-icon"><i class="ti ti-history"></i></span>

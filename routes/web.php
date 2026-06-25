@@ -9,6 +9,7 @@ use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
 use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController;
+use App\Http\Controllers\Admin\MediaController as AdminMediaController;
 use App\Http\Controllers\Admin\MenuController as AdminMenuController;
 use App\Http\Controllers\Admin\MitraController as AdminMitraController;
 use App\Http\Controllers\Admin\PageController as AdminPageController;
@@ -129,6 +130,8 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     // Konfigurasi situs & manajemen pengguna — khusus Administrator.
     Route::middleware('admin')->group(function () {
         Route::get('aktivitas', [AdminActivityLogController::class, 'index'])->name('admin.activity.index');
+        Route::get('media', [AdminMediaController::class, 'index'])->name('admin.media.index');
+        Route::delete('media', [AdminMediaController::class, 'destroy'])->name('admin.media.destroy');
         Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
         Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::get('users/create', [AdminUserController::class, 'create'])->name('admin.users.create');
