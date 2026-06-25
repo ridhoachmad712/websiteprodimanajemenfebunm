@@ -92,25 +92,27 @@
                     </a>
                 </li>
 
-                <li class="nav-section">Tampilan Situs</li>
-                <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.home.edit') }}">
-                        <span class="nav-link-icon"><i class="ti ti-layout-board"></i></span>
-                        <span class="nav-link-title">Beranda</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('admin.appearance.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.appearance.edit') }}">
-                        <span class="nav-link-icon"><i class="ti ti-palette"></i></span>
-                        <span class="nav-link-title">Tampilan</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.menus.index') }}">
-                        <span class="nav-link-icon"><i class="ti ti-menu-2"></i></span>
-                        <span class="nav-link-title">Menu</span>
-                    </a>
-                </li>
+                @if (auth()->user()->isAdmin())
+                    <li class="nav-section">Tampilan Situs</li>
+                    <li class="nav-item {{ request()->routeIs('admin.home.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.home.edit') }}">
+                            <span class="nav-link-icon"><i class="ti ti-layout-board"></i></span>
+                            <span class="nav-link-title">Beranda</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('admin.appearance.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.appearance.edit') }}">
+                            <span class="nav-link-icon"><i class="ti ti-palette"></i></span>
+                            <span class="nav-link-title">Tampilan</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.menus.index') }}">
+                            <span class="nav-link-icon"><i class="ti ti-menu-2"></i></span>
+                            <span class="nav-link-title">Menu</span>
+                        </a>
+                    </li>
+                @endif
 
                 <li class="nav-section">Sistem</li>
                 <li class="nav-item {{ request()->routeIs('admin.contacts.*') ? 'active' : '' }}">
@@ -120,18 +122,20 @@
                         @if ($unread > 0)<span class="badge bg-red text-white ms-auto">{{ $unread }}</span>@endif
                     </a>
                 </li>
-                <li class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.users.index') }}">
-                        <span class="nav-link-icon"><i class="ti ti-user-shield"></i></span>
-                        <span class="nav-link-title">Pengguna</span>
-                    </a>
-                </li>
-                <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
-                    <a class="nav-link" href="{{ route('admin.settings.edit') }}">
-                        <span class="nav-link-icon"><i class="ti ti-settings"></i></span>
-                        <span class="nav-link-title">Pengaturan</span>
-                    </a>
-                </li>
+                @if (auth()->user()->isAdmin())
+                    <li class="nav-item {{ request()->routeIs('admin.users.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.users.index') }}">
+                            <span class="nav-link-icon"><i class="ti ti-user-shield"></i></span>
+                            <span class="nav-link-title">Pengguna</span>
+                        </a>
+                    </li>
+                    <li class="nav-item {{ request()->routeIs('admin.settings.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.settings.edit') }}">
+                            <span class="nav-link-icon"><i class="ti ti-settings"></i></span>
+                            <span class="nav-link-title">Pengaturan</span>
+                        </a>
+                    </li>
+                @endif
             </ul>
         </div>
     </div>

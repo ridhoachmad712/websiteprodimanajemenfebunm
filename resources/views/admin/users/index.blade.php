@@ -33,6 +33,7 @@
                         <th class="w-1"></th>
                         <th>Nama</th>
                         <th>Email</th>
+                        <th class="w-1">Peran</th>
                         <th class="w-1">Dibuat</th>
                         <th class="w-1"></th>
                     </tr>
@@ -52,6 +53,9 @@
                                 </div>
                             </td>
                             <td class="text-secondary">{{ $u->email }}</td>
+                            <td>
+                                <span class="badge {{ $u->isAdmin() ? 'bg-primary-lt' : 'bg-secondary-lt' }}">{{ $u->roleLabel() }}</span>
+                            </td>
                             <td class="text-secondary">{{ $u->created_at?->translatedFormat('d M Y') ?? '—' }}</td>
                             <td>
                                 <div class="btn-list flex-nowrap">
@@ -68,7 +72,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="5" class="text-center text-secondary py-4">Belum ada pengguna.</td>
+                            <td colspan="6" class="text-center text-secondary py-4">Belum ada pengguna.</td>
                         </tr>
                     @endforelse
                 </tbody>

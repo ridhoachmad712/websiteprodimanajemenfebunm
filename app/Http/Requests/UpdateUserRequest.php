@@ -25,6 +25,8 @@ class UpdateUserRequest extends FormRequest
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', Rule::unique('users')->ignore($userId)],
             // Kosongkan untuk mempertahankan sandi lama.
             'password' => ['nullable', 'confirmed', Password::defaults()],
+            // Hanya admin yang boleh mengubah peran (diterapkan di controller).
+            'role' => ['nullable', 'in:admin,editor'],
         ];
     }
 

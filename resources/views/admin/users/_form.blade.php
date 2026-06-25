@@ -49,9 +49,29 @@
             </div>
         </div>
     </div>
+
+    <div class="col-lg-4">
+        @if (auth()->user()->isAdmin())
+            <div class="mb-3">
+                <label class="form-label required">Peran</label>
+                <select name="role" class="form-select @error('role') is-invalid @enderror">
+                    @foreach (\App\Models\User::ROLES as $val => $lbl)
+                        <option value="{{ $val }}" @selected(old('role', $u->role ?? 'editor') === $val)>{{ $lbl }}</option>
+                    @endforeach
+                </select>
+                @error('role') <div class="invalid-feedback">{{ $message }}</div> @enderror
+                <small class="form-hint">Editor hanya dapat mengelola konten. Administrator memiliki akses penuh.</small>
+            </div>
+        @elseif ($u)
+            <div class="mb-3">
+                <label class="form-label">Peran</label>
+                <div><span class="badge bg-secondary-lt">{{ $u->roleLabel() }}</span></div>
+            </div>
+        @endif
+    </div>
 </div>
 
 <div class="d-flex">
-    <a href="{{ route('admin.users.index') }}" class="btn btn-link">Batal</a>
+    <a href="{{ auth()->user()->isAdmin() ? route('admin.users.index') : url('/admin') }}" class="btn btn-link">Batal</a>
     <button type="submit" class="btn btn-primary ms-auto">Simpan</button>
 </div>

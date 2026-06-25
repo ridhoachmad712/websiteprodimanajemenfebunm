@@ -108,24 +108,37 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
     Route::resource('pengumuman', AdminPengumumanController::class)->except('show')->names('admin.pengumuman')->parameters(['pengumuman' => 'pengumuman']);
     Route::resource('pages', AdminPageController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])->names('admin.pages');
-    Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
     Route::resource('kegiatan', AdminKegiatanController::class)->except('show')->names('admin.kegiatan');
     Route::resource('prestasi', AdminPrestasiController::class)->except('show')->names('admin.prestasi')->parameters(['prestasi' => 'prestasi']);
     Route::resource('downloads', AdminDownloadController::class)->except('show')->names('admin.downloads');
     Route::resource('seminar', AdminSeminarController::class)->except('show')->names('admin.seminar')->parameters(['seminar' => 'seminar']);
     Route::resource('mitra', AdminMitraController::class)->except('show')->names('admin.mitra')->parameters(['mitra' => 'mitra']);
-    Route::resource('users', AdminUserController::class)->except('show')->names('admin.users');
-    Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
-    Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
-    Route::get('tampilan', [AdminAppearanceController::class, 'edit'])->name('admin.appearance.edit');
-    Route::put('tampilan', [AdminAppearanceController::class, 'update'])->name('admin.appearance.update');
-    Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
-    Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
     Route::post('uploads/image', [AdminUploadController::class, 'image'])->name('admin.uploads.image');
+
+    // Pesan masuk (form kontak) — editor & admin.
     Route::get('pesan', [AdminContactController::class, 'index'])->name('admin.contacts.index');
     Route::get('pesan/{contact}', [AdminContactController::class, 'show'])->name('admin.contacts.show');
     Route::delete('pesan/{contact}', [AdminContactController::class, 'destroy'])->name('admin.contacts.destroy');
+
+    // Akun sendiri: setiap pengguna boleh menyunting akunnya (dijaga di controller).
+    Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+
+    // Konfigurasi situs & manajemen pengguna — khusus Administrator.
+    Route::middleware('admin')->group(function () {
+        Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
+        Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
+        Route::get('users/create', [AdminUserController::class, 'create'])->name('admin.users.create');
+        Route::post('users', [AdminUserController::class, 'store'])->name('admin.users.store');
+        Route::delete('users/{user}', [AdminUserController::class, 'destroy'])->name('admin.users.destroy');
+        Route::get('beranda', [AdminHomeBuilderController::class, 'edit'])->name('admin.home.edit');
+        Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
+        Route::get('tampilan', [AdminAppearanceController::class, 'edit'])->name('admin.appearance.edit');
+        Route::put('tampilan', [AdminAppearanceController::class, 'update'])->name('admin.appearance.update');
+        Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
+        Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
+    });
 });
 
 require __DIR__.'/auth.php';
