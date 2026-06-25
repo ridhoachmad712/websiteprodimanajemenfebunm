@@ -56,7 +56,10 @@ class PostController extends Controller
             abort(404);
         }
 
-        $post->increment('dilihat');
+        // Tambah penghitung dilihat tanpa memicu event model (agar tidak masuk log aktivitas)
+        // dan tanpa mengubah updated_at.
+        Post::whereKey($post->getKey())->toBase()->update(['dilihat' => $post->dilihat + 1]);
+        $post->dilihat++;
 
         return view('frontend.posts.show', [
             'post' => $post->load('categories', 'user'),

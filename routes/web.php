@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
 use App\Http\Controllers\Admin\AppearanceController as AdminAppearanceController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
@@ -127,6 +128,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
 
     // Konfigurasi situs & manajemen pengguna — khusus Administrator.
     Route::middleware('admin')->group(function () {
+        Route::get('aktivitas', [AdminActivityLogController::class, 'index'])->name('admin.activity.index');
         Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
         Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::get('users/create', [AdminUserController::class, 'create'])->name('admin.users.create');

@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Prestasi extends Model
 {
+    use LogsActivity;
+
     protected $table = 'prestasi';
 
     protected $fillable = [

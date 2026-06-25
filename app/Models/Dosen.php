@@ -2,10 +2,13 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivity;
 use Illuminate\Database\Eloquent\Model;
 
 class Dosen extends Model
 {
+    use LogsActivity;
+
     /**
      * Nama tabel eksplisit (model singular "Dosen", tabel "dosen").
      */

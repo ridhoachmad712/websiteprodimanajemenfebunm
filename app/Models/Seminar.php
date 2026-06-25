@@ -2,11 +2,14 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\LogsActivity;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 
 class Seminar extends Model
 {
+    use LogsActivity;
+
     protected $fillable = [
         'nama',
         'nim',
