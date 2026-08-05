@@ -24,18 +24,12 @@ class DosenController extends Controller
 
             $subgroups = null;
             if (in_array($key, $subKonsentrasi, true)) {
-                // Sub-kelompok per konsentrasi; urutan konsentrasi mengikuti konsentrasiMap,
-                // item dalam tiap konsentrasi tetap mengikuti 'urutan' (drag-and-drop).
-                $order = Dosen::konsentrasiMap()[$key] ?? [];
+                // Sub-kelompok per konsentrasi. Urutan konsentrasi DIACAK setiap muat
+                // (berganti-ganti tiap refresh); item di dalamnya tetap mengikuti
+                // 'urutan' (drag-and-drop).
                 $byK = $items->groupBy(fn ($d) => $d->konsentrasi ?: 'Lainnya');
-
-                // Urutkan kunci konsentrasi: sesuai map dulu, sisanya (mis. 'Lainnya') di akhir.
-                $keys = collect($order)
-                    ->merge($byK->keys()->reject(fn ($k) => in_array($k, $order, true)))
-                    ->unique();
-
-                $subgroups = $keys
-                    ->mapWithKeys(fn ($k) => [$k => $byK->get($k, collect())])
+                $subgroups = $byK->keys()->shuffle()
+                    ->mapWithKeys(fn ($k) => [$k => $byK->get($k)])
                     ->filter(fn ($c) => $c->isNotEmpty());
             }
 
