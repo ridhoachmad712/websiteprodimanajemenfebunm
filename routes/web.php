@@ -139,6 +139,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::get('aktivitas', [AdminActivityLogController::class, 'index'])->name('admin.activity.index');
         Route::get('media', [AdminMediaController::class, 'index'])->name('admin.media.index');
         Route::delete('media', [AdminMediaController::class, 'destroy'])->name('admin.media.destroy');
+        Route::post('menus/reorder', [AdminMenuController::class, 'reorder'])->name('admin.menus.reorder');
         Route::resource('menus', AdminMenuController::class)->except('show')->names('admin.menus');
         Route::get('users', [AdminUserController::class, 'index'])->name('admin.users.index');
         Route::get('users/create', [AdminUserController::class, 'create'])->name('admin.users.create');

@@ -6,7 +6,10 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreMenuRequest;
 use App\Http\Requests\UpdateMenuRequest;
 use App\Models\Menu;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use Illuminate\View\View;
 
 class MenuController extends Controller
@@ -38,7 +41,7 @@ class MenuController extends Controller
     public function edit(Menu $menu): View
     {
         return view('admin.menus.edit', [
-            'menu'    => $menu,
+            'menu' => $menu,
             'parents' => $this->parentOptions($menu),
         ]);
     }
@@ -65,10 +68,28 @@ class MenuController extends Controller
     }
 
     /**
+     * Simpan urutan baru hasil drag-and-drop (per daftar saudara).
+     * Payload: items = [{id, urutan}, ...]. parent_id tidak diubah.
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        foreach ($request->input('items', []) as $row) {
+            if (empty($row['id'])) {
+                continue;
+            }
+
+            // toBase(): lewati event model (tanpa log aktivitas / updated_at).
+            Menu::whereKey((int) $row['id'])->toBase()->update(['urutan' => (int) ($row['urutan'] ?? 0)]);
+        }
+
+        return response()->json(['ok' => true]);
+    }
+
+    /**
      * Opsi induk: hanya item level atas (maks. 2 level induk → total 3 level),
      * mengecualikan menu yang sedang diedit.
      *
-     * @return \Illuminate\Support\Collection<int, Menu>
+     * @return Collection<int, Menu>
      */
     private function parentOptions(?Menu $except = null)
     {
