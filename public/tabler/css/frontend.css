@@ -121,6 +121,18 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
 .stat-value .plus { color: var(--brand-blue); }
 .section-dark .stat-value .plus { color: #fff; }
 
+/* Band statistik (blok beranda) */
+.stat-band .stat-icon {
+  width: 3.5rem; height: 3.5rem; margin: 0 auto .75rem;
+  display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 50%; font-size: 1.6rem;
+  background: rgba(var(--tblr-primary-rgb, 27,58,91), .12); color: var(--tblr-primary);
+}
+.stat-band.section-dark .stat-icon { background: rgba(255,255,255,.14); color: #fff; }
+.stat-band .stat-value { font-size: clamp(1.9rem, 3.6vw, 2.8rem); }
+.stat-band .stat-label { font-size: .9rem; margin-top: .15rem; }
+.stat-band.section-dark .stat-label { color: rgba(255,255,255,.8) !important; }
+
 /* ---------- Tombol ---------- */
 /* Tombol terang untuk dipakai di atas latar gelap (mis. hero/CTA navy) */
 .btn-gold {

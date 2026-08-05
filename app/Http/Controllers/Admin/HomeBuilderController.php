@@ -19,6 +19,7 @@ class HomeBuilderController extends Controller
     {
         return [
             'features' => ['label' => 'Fitur / Pilar', 'icon' => 'ti-layout-grid'],
+            'statistik' => ['label' => 'Statistik (Angka)', 'icon' => 'ti-chart-bar'],
             'about' => ['label' => 'Tentang / Sambutan', 'icon' => 'ti-article'],
             'posts' => ['label' => 'Daftar Postingan', 'icon' => 'ti-news'],
             'pengumuman' => ['label' => 'Pengumuman', 'icon' => 'ti-speakerphone'],
@@ -68,6 +69,15 @@ class HomeBuilderController extends Controller
                     ['icon' => 'ti-tools', 'title' => 'Build', 'desc' => 'Membangun fondasi keilmuan manajemen yang kuat dan aplikatif.'],
                     ['icon' => 'ti-adjustments', 'title' => 'Manage', 'desc' => 'Mengelola sumber daya secara efektif, efisien, dan beretika.'],
                     ['icon' => 'ti-affiliate', 'title' => 'Integrate', 'desc' => 'Mengintegrasikan teori, praktik, dan teknologi untuk daya saing global.'],
+                ],
+            ]],
+            ['type' => 'statistik', 'enabled' => true, 'data' => [
+                'eyebrow' => 'Dalam Angka', 'title' => 'Program Studi Manajemen', 'style' => 'dark',
+                'items' => [
+                    ['icon' => 'ti-users', 'value' => '1200', 'suffix' => '+', 'label' => 'Mahasiswa Aktif'],
+                    ['icon' => 'ti-user-star', 'value' => '30', 'suffix' => '+', 'label' => 'Dosen'],
+                    ['icon' => 'ti-award', 'value' => 'Unggul', 'suffix' => '', 'label' => 'Akreditasi'],
+                    ['icon' => 'ti-users-group', 'value' => '5000', 'suffix' => '+', 'label' => 'Alumni'],
                 ],
             ]],
             ['type' => 'about', 'enabled' => true, 'data' => [
