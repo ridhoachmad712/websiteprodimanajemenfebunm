@@ -20,6 +20,7 @@ class StoreDosenRequest extends FormRequest
     {
         return [
             'nama' => ['required', 'string', 'max:255'],
+            'jabatan' => ['nullable', 'string', 'max:255'],
             'nip' => ['nullable', 'string', 'max:50'],
             'kategori' => ['required', Rule::in(array_keys(Dosen::KATEGORI))],
             'konsentrasi' => ['nullable', 'string', 'max:255'],

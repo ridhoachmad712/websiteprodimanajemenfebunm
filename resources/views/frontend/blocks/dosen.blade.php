@@ -25,6 +25,9 @@
                             </div>
                             <div class="card-body">
                                 <h3 class="dosen-name fw-bold mb-1">{{ $dz->nama }}</h3>
+                                @if ($dz->jabatan)
+                                    <div class="dosen-jabatan small fw-semibold text-primary mb-1"><i class="ti ti-briefcase me-1"></i>{{ $dz->jabatan }}</div>
+                                @endif
                                 @if ($dz->konsentrasi)
                                     @php($km = \App\Models\Dosen::konsentrasiMeta($dz->konsentrasi))
                                     <span class="badge bg-{{ $km['color'] }}-lt dosen-konsentrasi"><i class="ti {{ $km['icon'] }} me-1"></i>{{ $dz->konsentrasi }}</span>

@@ -29,6 +29,9 @@
                         </div>
                         <div class="card-body text-center">
                             <h2 class="h3 mb-2">{{ $dosen->nama }}</h2>
+                            @if ($dosen->jabatan)
+                                <div class="mb-2"><span class="badge bg-primary"><i class="ti ti-briefcase me-1"></i>{{ $dosen->jabatan }}</span></div>
+                            @endif
                             <div class="d-flex flex-wrap justify-content-center gap-1">
                                 <span class="badge bg-primary-lt">{{ $dosen->kategori_label }}</span>
                                 @if ($km)
@@ -69,6 +72,12 @@
                         <div class="card-header"><h2 class="card-title">Informasi</h2></div>
                         <div class="card-body">
                             <div class="datagrid">
+                                @if ($dosen->jabatan)
+                                    <div class="datagrid-item">
+                                        <div class="datagrid-title">Jabatan</div>
+                                        <div class="datagrid-content">{{ $dosen->jabatan }}</div>
+                                    </div>
+                                @endif
                                 <div class="datagrid-item">
                                     <div class="datagrid-title">NIP</div>
                                     <div class="datagrid-content">{{ $dosen->nip ?: '—' }}</div>

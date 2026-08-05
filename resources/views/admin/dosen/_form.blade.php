@@ -22,6 +22,26 @@
             @error('nama') <div class="invalid-feedback">{{ $message }}</div> @enderror
         </div>
 
+        <div class="mb-3">
+            <label class="form-label">Jabatan</label>
+            <input type="text" name="jabatan" value="{{ old('jabatan', $d->jabatan ?? '') }}" list="jabatanList"
+                   class="form-control @error('jabatan') is-invalid @enderror"
+                   placeholder="mis. Ketua Program Studi">
+            <datalist id="jabatanList">
+                <option value="Ketua Program Studi">
+                <option value="Sekretaris Program Studi">
+                <option value="Dekan">
+                <option value="Wakil Dekan I">
+                <option value="Wakil Dekan II">
+                <option value="Wakil Dekan III">
+                <option value="Ketua Jurusan">
+                <option value="Sekretaris Jurusan">
+                <option value="Kepala Laboratorium">
+            </datalist>
+            <small class="form-hint">Opsional. Jabatan struktural/tambahan — tampil sebagai keterangan di halaman dosen.</small>
+            @error('jabatan') <div class="invalid-feedback">{{ $message }}</div> @enderror
+        </div>
+
         <div class="row">
             <div class="col-md-6 mb-3">
                 <label class="form-label required">Kategori</label>

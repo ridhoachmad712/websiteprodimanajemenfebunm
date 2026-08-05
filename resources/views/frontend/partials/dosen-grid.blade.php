@@ -12,6 +12,9 @@
                 </div>
                 <div class="card-body">
                     <h3 class="dosen-name fw-bold mb-1">{{ $d->nama }}</h3>
+                    @if ($d->jabatan)
+                        <div class="dosen-jabatan small fw-semibold text-primary mb-1"><i class="ti ti-briefcase me-1"></i>{{ $d->jabatan }}</div>
+                    @endif
                     @if ($d->nip)
                         <div class="text-secondary small mb-1">NIP. {{ $d->nip }}</div>
                     @endif
