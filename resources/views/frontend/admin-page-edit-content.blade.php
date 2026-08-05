@@ -25,6 +25,7 @@
                             <label class="form-label required">Judul</label>
                             <input type="text" name="title" value="{{ old('title', $page->title) }}" class="form-control" required>
                         </div>
+                        @include('frontend.admin-page-slug', ['page' => $page])
                         <label class="form-label">Konten</label>
                         <textarea id="editor-konten" name="content" rows="16" class="form-control">{{ old('content', $page->content) }}</textarea>
                     </div>

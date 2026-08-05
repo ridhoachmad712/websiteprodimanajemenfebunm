@@ -17,19 +17,32 @@ class UpdatePageRequest extends FormRequest
      */
     public function rules(): array
     {
+        $page = $this->route('page');
+        $slugRule = $page && $page->slugEditable()
+            ? ['required', 'string', 'max:120', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/', Rule::unique('pages', 'slug')->ignore($page->id)]
+            : ['nullable']; // halaman inti: slug diabaikan
+
         return [
-            'title'             => ['required', 'string', 'max:255'],
-            'status'            => ['nullable', Rule::in(['draft', 'published'])],
-            'meta_title'        => ['nullable', 'string', 'max:255'],
-            'meta_description'  => ['nullable', 'string', 'max:500'],
-            'og_image'          => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
-            'content'           => ['nullable', 'string'],
-            'sections'          => ['nullable', 'array'],
-            'sections.*.key'    => ['nullable', 'string', 'max:80', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
-            'sections.*.judul'  => ['nullable', 'string', 'max:255'],
-            'sections.*.isi'    => ['nullable', 'string'],
-            'template_data'     => ['nullable', 'array'],
+            'slug' => $slugRule,
+            'title' => ['required', 'string', 'max:255'],
+            'status' => ['nullable', Rule::in(['draft', 'published'])],
+            'meta_title' => ['nullable', 'string', 'max:255'],
+            'meta_description' => ['nullable', 'string', 'max:500'],
+            'og_image' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
+            'content' => ['nullable', 'string'],
+            'sections' => ['nullable', 'array'],
+            'sections.*.key' => ['nullable', 'string', 'max:80', 'regex:/^[a-z0-9]+(?:-[a-z0-9]+)*$/'],
+            'sections.*.judul' => ['nullable', 'string', 'max:255'],
+            'sections.*.isi' => ['nullable', 'string'],
+            'template_data' => ['nullable', 'array'],
             'template_data.items.*.file' => ['nullable', 'file', 'mimes:pdf,doc,docx,xls,xlsx,ppt,pptx,zip,jpg,jpeg,png,webp', 'max:10240'],
+        ];
+    }
+
+    public function messages(): array
+    {
+        return [
+            'slug.regex' => 'Slug hanya boleh memakai huruf kecil, angka, dan tanda hubung.',
         ];
     }
 }

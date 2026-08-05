@@ -17,6 +17,42 @@ class PageBuilderTest extends TestCase
         return User::factory()->create();
     }
 
+    public function test_admin_can_change_slug_of_custom_page(): void
+    {
+        $page = Page::create(['title' => 'Tentang', 'slug' => 'tentang', 'content' => '<p>x</p>', 'status' => 'published']);
+
+        $this->actingAs($this->admin())->put(route('admin.pages.update', $page), [
+            'title' => 'Tentang', 'slug' => 'tentang-kami', 'status' => 'published', 'content' => '<p>x</p>',
+        ])->assertRedirect(route('admin.pages.index'));
+
+        $this->assertDatabaseHas('pages', ['id' => $page->id, 'slug' => 'tentang-kami']);
+        $this->get('/halaman/tentang-kami')->assertOk();
+        $this->get('/halaman/tentang')->assertNotFound();
+    }
+
+    public function test_core_page_slug_cannot_be_changed(): void
+    {
+        $page = Page::create(['title' => 'Profil', 'slug' => 'profil', 'content' => '<p>x</p>', 'status' => 'published']);
+
+        $this->actingAs($this->admin())->put(route('admin.pages.update', $page), [
+            'title' => 'Profil', 'slug' => 'profil-baru', 'status' => 'published', 'content' => '<p>x</p>',
+        ])->assertRedirect();
+
+        $this->assertDatabaseHas('pages', ['id' => $page->id, 'slug' => 'profil']);
+    }
+
+    public function test_duplicate_slug_is_rejected(): void
+    {
+        Page::create(['title' => 'Satu', 'slug' => 'satu', 'content' => 'x', 'status' => 'published']);
+        $dua = Page::create(['title' => 'Dua', 'slug' => 'dua', 'content' => 'x', 'status' => 'published']);
+
+        $this->actingAs($this->admin())->put(route('admin.pages.update', $dua), [
+            'title' => 'Dua', 'slug' => 'satu', 'status' => 'published', 'content' => 'x',
+        ])->assertSessionHasErrors('slug');
+
+        $this->assertDatabaseHas('pages', ['id' => $dua->id, 'slug' => 'dua']);
+    }
+
     public function test_guest_cannot_open_the_page_builder(): void
     {
         $this->get('/admin/pages/create')->assertRedirect('/login');

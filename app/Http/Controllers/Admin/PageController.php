@@ -8,6 +8,7 @@ use App\Http\Requests\UpdatePageRequest;
 use App\Models\Menu;
 use App\Models\Page;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
@@ -79,6 +80,11 @@ class PageController extends Controller
             'meta_title' => $validated['meta_title'] ?? null,
             'meta_description' => $validated['meta_description'] ?? null,
         ];
+
+        // Slug hanya boleh diubah untuk halaman custom (bukan halaman inti/statis).
+        if ($page->slugEditable() && filled($validated['slug'] ?? null)) {
+            $data['slug'] = $validated['slug'];
+        }
 
         if ($request->hasFile('og_image')) {
             if ($page->og_image) {
@@ -161,18 +167,22 @@ class PageController extends Controller
     }
 
     /**
-     * @param array<string, mixed> $input
+     * @param  array<string, mixed>  $input
      * @return array<string, mixed>
      */
-    private function templateDataFromRequest(string $template, array $input, ?\Illuminate\Http\Request $request = null, array $existing = []): array
+    private function templateDataFromRequest(string $template, array $input, ?Request $request = null, array $existing = []): array
     {
         $data = ['_template' => $template, '_data' => []];
 
         if ($template === 'landing') {
             $items = [];
             foreach (($input['items'] ?? []) as $row) {
-                if (! is_array($row)) continue;
-                if (trim(($row['title'] ?? '').($row['body'] ?? '')) === '') continue;
+                if (! is_array($row)) {
+                    continue;
+                }
+                if (trim(($row['title'] ?? '').($row['body'] ?? '')) === '') {
+                    continue;
+                }
                 $items[] = ['title' => trim((string) ($row['title'] ?? '')), 'body' => trim((string) ($row['body'] ?? ''))];
             }
             $data['_data'] = [
@@ -191,7 +201,9 @@ class PageController extends Controller
         if ($template === 'documents') {
             $items = [];
             foreach (($input['items'] ?? []) as $i => $row) {
-                if (! is_array($row)) continue;
+                if (! is_array($row)) {
+                    continue;
+                }
                 $url = trim((string) ($row['url'] ?? ''));
                 if ($request?->hasFile("template_data.items.$i.file")) {
                     $path = $request->file("template_data.items.$i.file")->store('pages/documents', 'public');
@@ -199,7 +211,9 @@ class PageController extends Controller
                 } elseif ($url === '' && isset($existing['items'][$i]['url'])) {
                     $url = $existing['items'][$i]['url'];
                 }
-                if (trim(($row['label'] ?? '').$url) === '') continue;
+                if (trim(($row['label'] ?? '').$url) === '') {
+                    continue;
+                }
                 $items[] = [
                     'category' => trim((string) ($row['category'] ?? '')),
                     'label' => trim((string) ($row['label'] ?? '')),
@@ -213,8 +227,12 @@ class PageController extends Controller
         if ($template === 'faq') {
             $items = [];
             foreach (($input['items'] ?? []) as $row) {
-                if (! is_array($row)) continue;
-                if (trim(($row['question'] ?? '').($row['answer'] ?? '')) === '') continue;
+                if (! is_array($row)) {
+                    continue;
+                }
+                if (trim(($row['question'] ?? '').($row['answer'] ?? '')) === '') {
+                    continue;
+                }
                 $items[] = ['question' => trim((string) ($row['question'] ?? '')), 'answer' => clean($row['answer'] ?? '')];
             }
             $data['_data'] = ['intro' => clean($input['intro'] ?? ''), 'items' => $items];
@@ -223,8 +241,12 @@ class PageController extends Controller
         if ($template === 'timeline') {
             $items = [];
             foreach (($input['items'] ?? []) as $row) {
-                if (! is_array($row)) continue;
-                if (trim(($row['title'] ?? '').($row['body'] ?? '')) === '') continue;
+                if (! is_array($row)) {
+                    continue;
+                }
+                if (trim(($row['title'] ?? '').($row['body'] ?? '')) === '') {
+                    continue;
+                }
                 $items[] = [
                     'date' => trim((string) ($row['date'] ?? '')),
                     'title' => trim((string) ($row['title'] ?? '')),
@@ -246,7 +268,7 @@ class PageController extends Controller
     }
 
     /**
-     * @param array<int|string, mixed> $input
+     * @param  array<int|string, mixed>  $input
      * @return array<string, array{judul: string, isi: string}>
      */
     private function sectionsFromRequest(array $input): array

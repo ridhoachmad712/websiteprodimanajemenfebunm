@@ -26,8 +26,11 @@
             <div class="col-lg-8">
                 <div class="card mb-3">
                     <div class="card-body">
-                        <label class="form-label required">Judul Halaman</label>
-                        <input type="text" name="title" value="{{ old('title', $page->title) }}" class="form-control" required>
+                        <div class="mb-3">
+                            <label class="form-label required">Judul Halaman</label>
+                            <input type="text" name="title" value="{{ old('title', $page->title) }}" class="form-control" required>
+                        </div>
+                        @include('frontend.admin-page-slug', ['page' => $page])
                     </div>
                 </div>
 

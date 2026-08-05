@@ -24,9 +24,24 @@ class Page extends Model
         'sections' => 'array',
     ];
 
+    /**
+     * Slug yang terikat ke rute tetap (tidak boleh diubah, agar tidak 404).
+     * Halaman selain ini bebas mengubah slug (URL /halaman/{slug}).
+     */
+    public const FIXED_SLUGS = [
+        'profil', 'akreditasi', 'fasilitas', 'sop-petaprosesbisnis', 'kalender-akademik',
+        'kurikulum', 'hima', 'alumni', 'icoman2025', 'hubungi-kami',
+    ];
+
     public function getRouteKeyName(): string
     {
         return 'slug';
+    }
+
+    /** Slug hanya dapat diubah untuk halaman custom (bukan halaman inti/statis). */
+    public function slugEditable(): bool
+    {
+        return ! in_array($this->slug, self::FIXED_SLUGS, true);
     }
 
     public function isPublished(): bool
@@ -45,9 +60,7 @@ class Page extends Model
             return route('page.profil');
         }
 
-        $static = ['akreditasi', 'fasilitas', 'sop-petaprosesbisnis', 'kalender-akademik', 'kurikulum', 'hima', 'alumni', 'icoman2025', 'hubungi-kami'];
-
-        return in_array($this->slug, $static, true)
+        return in_array($this->slug, self::FIXED_SLUGS, true)
             ? route('page.'.$this->slug)
             : route('page.custom', $this);
     }
