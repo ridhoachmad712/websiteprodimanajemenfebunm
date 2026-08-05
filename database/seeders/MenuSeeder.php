@@ -15,6 +15,7 @@ class MenuSeeder extends Seeder
             ['Beranda', '/', '_self', []],
             ['Berita', '/berita', '_self', []],
             ['Pengumuman', '/pengumuman', '_self', []],
+            ['Berita Eksternal', '/berita-eksternal', '_self', []],
             ['Profil', null, '_self', [
                 ['Profil Program Studi', '/profil', '_self', []],
                 ['Daftar Dosen', '/daftar-dosen', '_self', []],

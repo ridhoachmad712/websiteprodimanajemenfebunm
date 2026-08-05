@@ -28,3 +28,7 @@ Thumbs.db
 
 # Tabler UI source (monorepo) — assets are copied into public/tabler/
 /tabler-dev
+
+# Berkas bantuan lokal (jangan di-commit)
+/media-upload.zip
+/storage/app/data-export.sql

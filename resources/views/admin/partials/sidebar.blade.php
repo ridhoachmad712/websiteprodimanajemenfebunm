@@ -91,6 +91,12 @@
                         <span class="nav-link-title">Mitra & Kerjasama</span>
                     </a>
                 </li>
+                <li class="nav-item {{ request()->routeIs('admin.berita-eksternal.*') ? 'active' : '' }}">
+                    <a class="nav-link" href="{{ route('admin.berita-eksternal.index') }}">
+                        <span class="nav-link-icon"><i class="ti ti-external-link"></i></span>
+                        <span class="nav-link-title">Berita Eksternal</span>
+                    </a>
+                </li>
 
                 @if (auth()->user()->isAdmin())
                     <li class="nav-section">Tampilan Situs</li>

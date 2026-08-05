@@ -27,6 +27,7 @@ class ActivityLog extends Model
         'Download' => 'Dokumen',
         'Seminar' => 'Seminar',
         'Mitra' => 'Mitra',
+        'BeritaEksternal' => 'Berita Eksternal',
         'Kegiatan' => 'Kegiatan',
         'Page' => 'Halaman',
         'Menu' => 'Menu',

@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\ActivityLogController as AdminActivityLogController;
 use App\Http\Controllers\Admin\AppearanceController as AdminAppearanceController;
+use App\Http\Controllers\Admin\BeritaEksternalController as AdminBeritaEksternalController;
 use App\Http\Controllers\Admin\ContactMessageController as AdminContactController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
@@ -20,6 +21,7 @@ use App\Http\Controllers\Admin\SeminarController as AdminSeminarController;
 use App\Http\Controllers\Admin\SettingController as AdminSettingController;
 use App\Http\Controllers\Admin\UploadController as AdminUploadController;
 use App\Http\Controllers\Admin\UserController as AdminUserController;
+use App\Http\Controllers\Frontend\BeritaEksternalController;
 use App\Http\Controllers\Frontend\ContactController;
 use App\Http\Controllers\Frontend\DosenController;
 use App\Http\Controllers\Frontend\DownloadController;
@@ -54,6 +56,9 @@ Route::get('/dosen/{dosen}', [DosenController::class, 'show'])->name('dosen.show
 // Berita
 Route::get('/berita', [PostController::class, 'index'])->name('post.index');
 Route::get('/category/{category}', [PostController::class, 'byCategory'])->name('post.category');
+
+// Berita eksternal (liputan media) — tabel
+Route::get('/berita-eksternal', [BeritaEksternalController::class, 'index'])->name('berita-eksternal.index');
 
 // Pengumuman (modul mandiri, terpisah dari Berita)
 Route::get('/pengumuman', [PengumumanController::class, 'index'])->name('pengumuman.index');
@@ -116,6 +121,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::resource('downloads', AdminDownloadController::class)->except('show')->names('admin.downloads');
     Route::resource('seminar', AdminSeminarController::class)->except('show')->names('admin.seminar')->parameters(['seminar' => 'seminar']);
     Route::resource('mitra', AdminMitraController::class)->except('show')->names('admin.mitra')->parameters(['mitra' => 'mitra']);
+    Route::resource('berita-eksternal', AdminBeritaEksternalController::class)->except('show')->names('admin.berita-eksternal')->parameters(['berita-eksternal' => 'berita_eksternal']);
     Route::post('uploads/image', [AdminUploadController::class, 'image'])->name('admin.uploads.image');
 
     // Pesan masuk (form kontak) — editor & admin.

@@ -35,6 +35,7 @@ class DatabaseSeeder extends Seeder
             DownloadSeeder::class,
             SeminarSeeder::class,
             MitraSeeder::class,
+            BeritaEksternalSeeder::class,
         ]);
     }
 }
