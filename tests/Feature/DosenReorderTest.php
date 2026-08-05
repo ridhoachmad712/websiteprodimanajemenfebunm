@@ -54,4 +54,19 @@ class DosenReorderTest extends TestCase
     {
         $this->post(route('admin.dosen.reorder'), ['ids' => []])->assertRedirect('/login');
     }
+
+    public function test_new_dosen_is_placed_at_the_bottom(): void
+    {
+        Dosen::create(['nama' => 'Lama 1', 'slug' => 'lama-1', 'kategori' => 'guru_besar', 'urutan' => 4]);
+        Dosen::create(['nama' => 'Lama 2', 'slug' => 'lama-2', 'kategori' => 'tetap_prodi', 'urutan' => 7]);
+
+        $this->actingAs(User::factory()->create())->post('/admin/dosen', [
+            'nama' => 'Dosen Baru',
+            'kategori' => 'tetap_prodi',
+        ])->assertRedirect(route('admin.dosen.index'));
+
+        $baru = Dosen::where('nama', 'Dosen Baru')->firstOrFail();
+        // Harus mendapat urutan tertinggi (di bawah semua yang ada).
+        $this->assertSame(8, (int) $baru->urutan);
+    }
 }

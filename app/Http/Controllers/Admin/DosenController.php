@@ -63,6 +63,9 @@ class DosenController extends Controller
         $data['slug'] = $this->uniqueSlug($data['nama']);
         $data['biografi'] = filled($data['biografi'] ?? null) ? clean($data['biografi']) : null;
         $data['tautan'] = $this->cleanTautan($request->input('tautan', []));
+        // Dosen baru diletakkan di urutan paling bawah (nilai 'urutan' tertinggi),
+        // sehingga tampil terakhir di kategorinya pada halaman depan.
+        $data['urutan'] = (Dosen::max('urutan') ?? 0) + 1;
 
         if ($request->hasFile('foto')) {
             $data['foto'] = $request->file('foto')->store('dosen', 'public');
