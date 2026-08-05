@@ -112,6 +112,12 @@
                             <span class="nav-link-title">Tampilan</span>
                         </a>
                     </li>
+                    <li class="nav-item {{ request()->routeIs('admin.hero-slides.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.hero-slides.index') }}">
+                            <span class="nav-link-icon"><i class="ti ti-slideshow"></i></span>
+                            <span class="nav-link-title">Hero Slider</span>
+                        </a>
+                    </li>
                     <li class="nav-item {{ request()->routeIs('admin.menus.*') ? 'active' : '' }}">
                         <a class="nav-link" href="{{ route('admin.menus.index') }}">
                             <span class="nav-link-icon"><i class="ti ti-menu-2"></i></span>

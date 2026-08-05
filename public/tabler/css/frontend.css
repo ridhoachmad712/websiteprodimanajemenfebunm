@@ -59,6 +59,26 @@ h1, h2, h3, h4, .h1, .h2, .h3, .h4 {
   pointer-events: none;
 }
 .hero > .container-xl { position: relative; z-index: 1; width: 100%; }
+
+/* ---------- Hero Slider (carousel) ---------- */
+.hero-carousel-wrap { position: relative; }
+.hero-slide {
+  min-height: clamp(360px, 56vh, 600px);
+  background-size: cover; background-position: center;
+  display: flex; align-items: center;
+  color: #fff;
+}
+.hero-slide-content { max-width: 46rem; }
+.hero-slide h1 { color: #fff; font-weight: 700; font-size: clamp(1.9rem, 4.4vw, 3.1rem); line-height: 1.12; }
+.hero-slide .hero-lead { color: rgba(255,255,255,.9); font-size: 1.15rem; max-width: 40rem; }
+.hero-carousel-wrap .carousel-indicators { margin-bottom: 1.25rem; }
+.hero-carousel-wrap .carousel-control-prev,
+.hero-carousel-wrap .carousel-control-next { width: 5%; opacity: .7; }
+.hero-carousel-wrap .carousel-control-prev:hover,
+.hero-carousel-wrap .carousel-control-next:hover { opacity: 1; }
+@media (max-width: 575.98px) {
+  .hero-slide { min-height: 340px; }
+}
 .hero h1 { color: #fff; font-weight: 700; font-size: clamp(2rem, 4.6vw, 3.2rem); line-height: 1.1; }
 .hero .hero-lead { color: rgba(255,255,255,.82); font-size: 1.15rem; max-width: 38rem; }
 .hero .eyebrow { color: rgba(255,255,255,.75); }

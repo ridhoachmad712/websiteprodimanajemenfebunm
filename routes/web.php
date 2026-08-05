@@ -8,6 +8,7 @@ use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
+use App\Http\Controllers\Admin\HeroSlideController as AdminHeroSlideController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
 use App\Http\Controllers\Admin\KegiatanController as AdminKegiatanController;
 use App\Http\Controllers\Admin\MediaController as AdminMediaController;
@@ -149,6 +150,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::put('beranda', [AdminHomeBuilderController::class, 'update'])->name('admin.home.update');
         Route::get('tampilan', [AdminAppearanceController::class, 'edit'])->name('admin.appearance.edit');
         Route::put('tampilan', [AdminAppearanceController::class, 'update'])->name('admin.appearance.update');
+        Route::resource('hero-slides', AdminHeroSlideController::class)->except('show')->names('admin.hero-slides')->parameters(['hero-slides' => 'hero_slide']);
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
         Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
     });

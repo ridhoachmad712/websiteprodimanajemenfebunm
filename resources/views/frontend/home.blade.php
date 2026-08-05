@@ -32,8 +32,48 @@
 @endphp
 
 @section('content')
-    {{-- ===== HERO ===== --}}
-    @if ($heroShow)
+    @php($heroSlides = \App\Models\HeroSlide::aktif()->orderBy('urutan')->orderBy('id')->get())
+
+    {{-- ===== HERO SLIDER (bila ada slide aktif) ===== --}}
+    @if ($heroSlides->isNotEmpty())
+        <section class="hero-carousel-wrap">
+            <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
+                @if ($heroSlides->count() > 1)
+                    <div class="carousel-indicators">
+                        @foreach ($heroSlides as $i => $s)
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $i }}" @class(['active' => $loop->first]) aria-label="Slide {{ $i + 1 }}"></button>
+                        @endforeach
+                    </div>
+                @endif
+                <div class="carousel-inner">
+                    @foreach ($heroSlides as $s)
+                        <div class="carousel-item @if ($loop->first) active @endif">
+                            <div class="hero-slide" style="background-image:linear-gradient(rgba(14,34,56,.55),rgba(14,34,56,.65)),url('{{ Storage::url($s->gambar) }}')">
+                                <div class="container-xl">
+                                    <div class="hero-slide-content" data-reveal>
+                                        @if ($s->judul)<h1 class="mb-3">{{ $s->judul }}</h1>@endif
+                                        @if ($s->subjudul)<p class="hero-lead mb-4">{{ $s->subjudul }}</p>@endif
+                                        @if ($s->btn_label)
+                                            <a href="{{ $s->btn_url ?: '#' }}" class="btn btn-light btn-lg">{{ $s->btn_label }}</a>
+                                        @endif
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+                @if ($heroSlides->count() > 1)
+                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
+                        <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Sebelumnya</span>
+                    </button>
+                    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
+                        <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Berikutnya</span>
+                    </button>
+                @endif
+            </div>
+        </section>
+    @elseif ($heroShow)
+    {{-- ===== HERO (statis, dari pengaturan Tampilan) ===== --}}
     <section class="hero" style="{{ $heroStyle }}">
         <div class="container-xl">
             <div class="row align-items-center g-4 g-lg-5">
