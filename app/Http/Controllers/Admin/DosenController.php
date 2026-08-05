@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDosenRequest;
 use App\Http\Requests\UpdateDosenRequest;
 use App\Models\Dosen;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
@@ -14,24 +15,39 @@ use Illuminate\View\View;
 
 class DosenController extends Controller
 {
-    public function index(Request $request): View
+    public function index(): View
     {
-        $query = Dosen::query();
+        // Semua dosen (urut sesuai 'urutan'), dikelompokkan per kategori seperti
+        // di halaman depan — supaya bisa disusun ulang via drag-and-drop.
+        $semua = Dosen::orderBy('urutan')->orderBy('nama')->get();
 
-        if ($kategori = $request->query('kategori')) {
-            $query->where('kategori', $kategori);
-        }
-
-        if ($cari = $request->query('cari')) {
-            $query->where('nama', 'like', "%{$cari}%");
-        }
-
-        $dosen = $query->orderBy('kategori')->orderBy('urutan')->paginate(15)->withQueryString();
+        $grup = collect(Dosen::KATEGORI)->mapWithKeys(fn ($label, $key) => [
+            $key => ['label' => $label, 'items' => $semua->where('kategori', $key)->values()],
+        ])->filter(fn ($g) => $g['items']->isNotEmpty());
 
         return view('admin.dosen.index', [
-            'dosen' => $dosen,
+            'grup' => $grup,
             'kategori' => Dosen::KATEGORI,
+            'total' => $semua->count(),
         ]);
+    }
+
+    /**
+     * Simpan urutan baru hasil drag-and-drop (daftar ID sesuai urutan tampil).
+     */
+    public function reorder(Request $request): JsonResponse
+    {
+        $ids = collect($request->input('ids', []))
+            ->filter(fn ($v) => is_numeric($v))
+            ->map(fn ($v) => (int) $v)
+            ->values();
+
+        // toBase(): update langsung tanpa memicu event model / mengubah updated_at.
+        foreach ($ids as $i => $id) {
+            Dosen::whereKey($id)->toBase()->update(['urutan' => $i + 1]);
+        }
+
+        return response()->json(['ok' => true, 'count' => $ids->count()]);
     }
 
     public function create(): View
