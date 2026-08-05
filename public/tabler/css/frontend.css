@@ -546,3 +546,45 @@ html.a11y-reduce-motion [data-reveal] {
 .mitra-marquee.is-grayscale .mitra-item:hover img { filter: grayscale(0); opacity: 1; }
 @keyframes mitra-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
 @media (prefers-reduced-motion: reduce) { .mitra-track { animation: none; flex-wrap: wrap; justify-content: center; row-gap: 1.5rem; } }
+
+/* =========================================================
+   Paket Poles Visual (aksen, hover kartu, page-hero, wave)
+   ========================================================= */
+:root { --brand-accent: #f5a623; }
+
+/* Aksen warna sekunder pada eyebrow + garis di bawah judul section */
+.eyebrow { color: var(--brand-accent); }
+.section-dark .eyebrow { color: rgba(255,255,255,.82); }
+.section-title { position: relative; }
+.section-title::after {
+  content: ""; display: block; width: 46px; height: 3px; border-radius: 2px;
+  background: var(--brand-accent); margin-top: .7rem;
+}
+.section-header.text-center .section-title::after,
+.text-center > .section-title::after { margin-left: auto; margin-right: auto; }
+.section-dark .section-title::after { background: var(--brand-accent); opacity: .9; }
+
+/* Kartu: angkat lebih halus + gambar sedikit zoom saat hover */
+.card-hover { overflow: hidden; }
+.card-hover:hover { box-shadow: 0 1rem 2rem rgba(24,36,64,.12); }
+.card-hover img { transition: transform .45s ease; }
+.card-hover:hover img { transform: scale(1.05); }
+
+/* Page-hero: pola titik halus agar tidak polos */
+.page-hero { position: relative; overflow: hidden; }
+.page-hero::after {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .6;
+  background-image: radial-gradient(rgba(var(--tblr-primary-rgb, 27,58,91), .07) 1.5px, transparent 1.5px);
+  background-size: 22px 22px;
+}
+.page-hero > .container-xl { position: relative; z-index: 1; }
+
+/* Wave divider di atas section gelap (transisi lembut dari area terang) */
+.section-dark { position: relative; }
+.section-dark::before {
+  content: ""; position: absolute; top: -1px; left: 0; right: 0; height: 38px;
+  pointer-events: none;
+  background: no-repeat top center / 100% 38px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C300,0 900,0 1200,40 L1200,0 L0,0 Z' fill='%23f6f7fb'/%3E%3C/svg%3E");
+}
+.section-dark > .container-xl { position: relative; z-index: 1; }
