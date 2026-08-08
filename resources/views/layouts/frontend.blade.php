@@ -11,10 +11,12 @@
     @include('frontend.partials.seo')
 
     {{-- Tabler core + icons + brand override + tema landing --}}
+    {{-- ?v=filemtime = cache-busting: browser ambil ulang CSS tiap file berubah --}}
+    @php($cssVer = fn ($p) => file_exists(public_path($p)) ? filemtime(public_path($p)) : '1')
     <link href="{{ asset('tabler/css/tabler.min.css') }}" rel="stylesheet">
     <link href="{{ asset('tabler/icons/tabler-icons.min.css') }}" rel="stylesheet">
-    <link href="{{ asset('tabler/css/brand.css') }}" rel="stylesheet">
-    <link href="{{ asset('tabler/css/frontend.css') }}" rel="stylesheet">
+    <link href="{{ asset('tabler/css/brand.css') }}?v={{ $cssVer('tabler/css/brand.css') }}" rel="stylesheet">
+    <link href="{{ asset('tabler/css/frontend.css') }}?v={{ $cssVer('tabler/css/frontend.css') }}" rel="stylesheet">
     @include('partials.theme')
     @include('frontend.partials.analytics')
 
