@@ -50,7 +50,7 @@
 </div>
 @endif
 
-<div class="site-header {{ $navSticky ? 'sticky-top' : '' }}">
+<div class="site-header {{ $navSticky ? 'sticky-top' : '' }} {{ request()->routeIs('home') ? 'site-header--overlay' : '' }}">
     {{-- Baris 1: brand + aksi --}}
     <header class="navbar navbar-expand-xl d-print-none site-navbar">
         <div class="container-xl">

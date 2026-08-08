@@ -704,3 +704,37 @@ body { color: #3b4453; }
   .btn-primary:hover, .btn-light:hover, .btn-outline-primary:hover { transform: none; }
   .row > [data-reveal] { transition-delay: 0s !important; }
 }
+
+/* =========================================================
+   HERO IMMERSIVE — menu transparan menimpa hero (hanya beranda)
+   ========================================================= */
+.site-header--overlay { background: transparent; box-shadow: none; z-index: 1030; }
+.site-header--overlay .site-navbar { background: transparent; }
+.site-header--overlay .navbar-brand .fw-bold { color: #fff; }
+.site-header--overlay .navbar-brand .text-secondary { color: rgba(255,255,255,.72) !important; }
+.site-header--overlay .navbar-toggler { color: #fff; border-color: rgba(255,255,255,.5); }
+
+/* Saat di-scroll: header jadi solid navy agar tetap terbaca di atas konten terang */
+.site-header--overlay.is-scrolled { background: var(--brand-navy); box-shadow: 0 .3rem 1rem rgba(0,0,0,.25); }
+
+/* Menu row transparan + teks terang — HANYA desktop (di mobile menu jadi panel putih) */
+@media (min-width: 1200px) {
+  .site-header--overlay .site-navmenu .navbar { background: transparent; border: 0; }
+  .site-header--overlay .site-navmenu .nav-link { color: rgba(255,255,255,.9); }
+  .site-header--overlay .site-navmenu .nav-link:hover { color: #fff; }
+  .site-header--overlay .site-navmenu .navbar-nav .nav-item.active > .nav-link,
+  .site-header--overlay .site-navmenu .navbar-nav .nav-item.active > .nav-link:hover {
+    color: #fff; background: rgba(255,255,255,.16);
+  }
+  .site-header--overlay .site-search .form-control {
+    background: rgba(255,255,255,.14); border-color: rgba(255,255,255,.28); color: #fff;
+  }
+  .site-header--overlay .site-search .form-control::placeholder { color: rgba(255,255,255,.7); }
+  .site-header--overlay .site-search .input-icon-addon { color: rgba(255,255,255,.75); }
+}
+
+/* Hero ditarik ke atas hingga berada di belakang menu (full-bleed) */
+.page-hero-overlay .hero,
+.page-hero-overlay .hero-carousel-wrap { margin-top: calc(-1 * var(--site-header-h, 118px)); }
+.page-hero-overlay .hero { padding-top: calc(var(--site-header-h, 118px) + 2.5rem); }
+.page-hero-overlay .hero-slide { padding-top: calc(var(--site-header-h, 118px) + 1rem); }

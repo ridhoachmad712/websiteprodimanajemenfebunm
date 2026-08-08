@@ -27,7 +27,7 @@
 
     @stack('styles')
 </head>
-<body>
+<body class="{{ request()->routeIs('home') ? 'page-hero-overlay' : '' }}">
     {{-- Theme bootstrap (light/dark, sebelum render body) --}}
     <script src="{{ asset('tabler/js/tabler-theme.min.js') }}"></script>
 
@@ -188,6 +188,7 @@
             var setStickyHeaderOffset = function () {
                 var height = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;
                 document.documentElement.style.setProperty('--sticky-header-offset', (height + 24) + 'px');
+                document.documentElement.style.setProperty('--site-header-h', height + 'px');
             };
             var onScroll = function () {
                 if (nav) nav.classList.toggle('is-scrolled', window.scrollY > 8);
