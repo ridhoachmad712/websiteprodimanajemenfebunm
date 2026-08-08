@@ -588,3 +588,74 @@ html.a11y-reduce-motion [data-reveal] {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 40' preserveAspectRatio='none'%3E%3Cpath d='M0,40 C300,0 900,0 1200,40 L1200,0 L0,0 Z' fill='%23f6f7fb'/%3E%3C/svg%3E");
 }
 .section-dark > .container-xl { position: relative; z-index: 1; }
+
+/* =========================================================
+   REFRESH VISUAL — tipografi display, warna hidup, kartu, tekstur
+   ========================================================= */
+
+/* Tipografi: heading pakai font display (Plus Jakarta Sans), body tetap Geist */
+h1, h2, h3, h4, .h1, .h2, .h3, .h4,
+.section-title, .card-title,
+.hero h1, .hero-slide h1, .page-hero h1 {
+  font-family: 'Plus Jakarta Sans', var(--tblr-font-sans-serif, 'Geist'), sans-serif;
+  letter-spacing: -0.02em;
+}
+body { color: #3b4453; }
+.section { padding: 4.25rem 0; }
+.section-title { font-size: clamp(1.65rem, 3vw, 2.35rem); font-weight: 800; }
+.section-title::after { width: 52px; height: 3px; margin-top: .85rem; }
+.section-subtitle { font-size: 1.05rem; line-height: 1.65; color: #5b6472; }
+
+/* Eyebrow: garis aksen kecil sebelum teks */
+.eyebrow::before {
+  content: ""; width: 1.6rem; height: 2px; border-radius: 2px;
+  background: var(--brand-accent); display: inline-block;
+}
+.hero .eyebrow::before, .section-dark .eyebrow::before { background: rgba(255,255,255,.6); }
+
+/* Warna & ikon hidup: feature-icon lebih besar + varian gradient warna-warni */
+.feature-icon {
+  width: 3.5rem; height: 3.5rem; border-radius: 1rem; font-size: 1.5rem;
+  box-shadow: 0 .5rem 1rem rgba(24,36,64,.10);
+}
+.feature-icon.fi-1 { background: linear-gradient(135deg, #4dabf7, #1c7ed6); color: #fff; }
+.feature-icon.fi-2 { background: linear-gradient(135deg, #38d9a9, #0ca678); color: #fff; }
+.feature-icon.fi-3 { background: linear-gradient(135deg, #ffc078, #f76707); color: #fff; }
+.feature-icon.fi-4 { background: linear-gradient(135deg, #b197fc, #7048e8); color: #fff; }
+
+/* Kartu: radius lebih besar + bayangan berlapis lembut */
+.card { border-radius: .9rem; }
+.section .card { box-shadow: 0 1px 2px rgba(24,36,64,.04), 0 .6rem 1.6rem rgba(24,36,64,.06); }
+.card-hover:hover { box-shadow: 0 1.1rem 2.5rem rgba(24,36,64,.15); }
+
+/* Link "Lihat Semua": panah bergeser saat hover */
+.section-header a.btn i.ti-arrow-right { transition: transform .2s ease; }
+.section-header a.btn:hover i.ti-arrow-right { transform: translateX(4px); }
+
+/* Tekstur: pola titik halus pada section putih (section-tint) */
+.section-tint { position: relative; }
+.section-tint::before {
+  content: ""; position: absolute; inset: 0; pointer-events: none; opacity: .5;
+  background-image: radial-gradient(rgba(var(--tblr-primary-rgb, 27,58,91), .05) 1.5px, transparent 1.5px);
+  background-size: 24px 24px;
+}
+.section-tint > .container-xl { position: relative; z-index: 1; }
+
+/* Post-card modern: thumbnail + badge kategori overlay */
+.post-card .post-thumb {
+  position: relative; display: block; aspect-ratio: 16/9; overflow: hidden;
+  border-top-left-radius: .9rem; border-top-right-radius: .9rem;
+}
+.post-card .post-thumb img { width: 100%; height: 100%; object-fit: cover; transition: transform .5s ease; }
+.post-card:hover .post-thumb img { transform: scale(1.06); }
+.post-card .post-thumb-ph {
+  width: 100%; height: 100%; font-size: 2.5rem; opacity: .85;
+  background: linear-gradient(135deg, var(--brand-blue), var(--brand-navy));
+}
+.post-card .post-cat { position: absolute; top: .65rem; left: .65rem; z-index: 2; box-shadow: 0 .25rem .75rem rgba(0,0,0,.25); }
+.post-card .card-title a:hover { color: var(--brand-blue); }
+
+/* Reduce motion: nonaktifkan zoom gambar */
+@media (prefers-reduced-motion: reduce) {
+  .post-card:hover .post-thumb img, .card-hover:hover img { transform: none; }
+}

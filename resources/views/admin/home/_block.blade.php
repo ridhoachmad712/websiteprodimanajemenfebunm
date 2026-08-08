@@ -15,6 +15,6 @@
         </div>
     </div>
     <div class="card-body">
-        @include('admin.home.fields.'.$type, ['i' => $i, 'd' => $d])
+        @includeIf('admin.home.fields.'.$type, ['i' => $i, 'd' => $d])
     </div>
 </div>

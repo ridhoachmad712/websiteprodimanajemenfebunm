@@ -33,6 +33,22 @@ class PostExtrasTest extends TestCase
         $this->assertSame(1, (int) $post->fresh()->dilihat);
     }
 
+    public function test_modern_post_card_renders(): void
+    {
+        // Perlu >1 post: yang pertama jadi "featured", sisanya render sebagai kartu.
+        $uid = User::factory()->create()->id;
+        foreach (range(1, 3) as $i) {
+            Post::create([
+                'judul' => "Berita {$i}", 'slug' => "berita-{$i}", 'konten' => '<p>x</p>',
+                'user_id' => $uid, 'status' => 'published', 'published_at' => now()->subDays($i),
+            ]);
+        }
+
+        $this->get('/berita')
+            ->assertOk()
+            ->assertSee('post-thumb', false); // markup kartu berita baru
+    }
+
     public function test_post_page_shows_view_count_and_share_buttons(): void
     {
         $post = $this->buatPost();
