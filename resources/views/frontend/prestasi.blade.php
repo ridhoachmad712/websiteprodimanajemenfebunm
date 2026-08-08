@@ -28,7 +28,7 @@
                 @forelse ($prestasi as $p)
                     @php($meta = \App\Models\Prestasi::tingkatMeta($p->tingkat))
                     <div class="col-sm-6 col-lg-4">
-                        <div class="card h-100">
+                        <div class="card card-hover h-100">
                             @if ($p->gambar)
                                 <img src="{{ Storage::url($p->gambar) }}" alt="{{ $p->judul }}" class="card-img-top" style="aspect-ratio:16/9;object-fit:cover" loading="lazy">
                             @else
