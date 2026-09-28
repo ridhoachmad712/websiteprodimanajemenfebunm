@@ -11,13 +11,14 @@ class StatBandTest extends TestCase
 {
     use RefreshDatabase;
 
-    public function test_homepage_renders_animated_stats_band_from_defaults(): void
+    public function test_homepage_renders_readable_stats_band_from_defaults(): void
     {
         $this->get('/')
             ->assertOk()
             ->assertSee('stat-band', false)
             ->assertSee('Mahasiswa Aktif')
-            ->assertSee('data-count="1200"', false) // angka → dianimasikan
+            ->assertSee('1.200')
+            ->assertDontSee('data-count=', false)
             ->assertSee('Unggul');                  // teks → tampil apa adanya
     }
 
@@ -36,6 +37,6 @@ class StatBandTest extends TestCase
             ],
         ])->assertRedirect();
 
-        $this->get('/')->assertOk()->assertSee('Capaian Kami')->assertSee('data-count="900"', false);
+        $this->get('/')->assertOk()->assertSee('Capaian Kami')->assertSee('>900</span>', false);
     }
 }

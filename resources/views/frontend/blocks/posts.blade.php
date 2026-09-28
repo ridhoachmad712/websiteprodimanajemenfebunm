@@ -42,7 +42,7 @@
             </div>
         </section>
     @else
-        <section class="section {{ $style === 'tint' ? 'section-tint' : '' }} {{ $style === 'dark' ? 'section-dark' : '' }}">
+        <section class="section home-posts {{ $style === 'tint' ? 'section-tint' : '' }} {{ $style === 'dark' ? 'section-dark' : '' }}">
             <div class="container-xl">
                 @include('frontend.partials.section-header', [
                     'eyebrow' => $d['eyebrow'] ?? null,
@@ -51,7 +51,7 @@
                 ])
                 <div class="row row-cards">
                     @foreach ($posts as $post)
-                        <div class="col-md-6 col-lg-4" data-reveal>
+                        <div class="col-md-6 {{ $style === 'normal' && $posts->count() === 3 ? ($loop->first ? 'col-lg-12 home-posts-lead' : 'col-lg-6') : 'col-lg-4' }}">
                             @include('frontend.partials.post-card')
                         </div>
                     @endforeach

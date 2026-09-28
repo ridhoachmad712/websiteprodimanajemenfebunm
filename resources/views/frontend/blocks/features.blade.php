@@ -1,25 +1,24 @@
 {{-- Blok: Fitur / Pilar. $block --}}
 @php($d = $block['data'] ?? [])
-<section class="section">
+<section class="section home-pillars">
     <div class="container-xl">
-        @include('frontend.partials.section-header', [
-            'eyebrow'  => $d['eyebrow'] ?? null,
-            'title'    => $d['title'] ?? '',
-            'subtitle' => $d['subtitle'] ?? null,
-            'center'   => (($d['center'] ?? false) == true) || (($d['center'] ?? '') === '1'),
-        ])
-        <div class="row row-cards justify-content-center">
-            @foreach ($d['items'] ?? [] as $it)
-                <div class="col-md-4" data-reveal>
-                    <div class="card card-hover h-100">
-                        <div class="card-body p-4">
-                            @if (!empty($it['icon']))<span class="feature-icon fi-{{ ($loop->index % 4) + 1 }} mb-3"><i class="ti {{ $it['icon'] }}"></i></span>@endif
-                            <h3 class="mb-1">{{ $it['title'] ?? '' }}</h3>
-                            <p class="text-secondary mb-0">{{ $it['desc'] ?? '' }}</p>
+        <div class="home-pillars-layout">
+            <div class="home-pillars-intro">
+                @if (!empty($d['eyebrow']))<span class="eyebrow">{{ $d['eyebrow'] }}</span>@endif
+                <h2 class="section-title">{{ $d['title'] ?? '' }}</h2>
+                @if (!empty($d['subtitle']))<p class="section-subtitle mb-0">{{ $d['subtitle'] }}</p>@endif
+            </div>
+            <div class="home-pillars-list">
+                @foreach ($d['items'] ?? [] as $it)
+                    <div class="home-pillar">
+                        @if (!empty($it['icon']))<span class="feature-icon" aria-hidden="true"><i class="ti {{ $it['icon'] }}"></i></span>@endif
+                        <div>
+                            <h3 class="home-pillar-title">{{ $it['title'] ?? '' }}</h3>
+                            <p class="mb-0">{{ $it['desc'] ?? '' }}</p>
                         </div>
                     </div>
-                </div>
-            @endforeach
+                @endforeach
+            </div>
         </div>
     </div>
 </section>

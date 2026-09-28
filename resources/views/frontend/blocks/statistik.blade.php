@@ -22,7 +22,7 @@
                             <div class="stat-icon"><i class="ti {{ $it['icon'] ?? 'ti-chart-bar' }}"></i></div>
                             <div class="stat-value">
                                 @if (is_numeric($it['value']))
-                                    <span data-count="{{ (int) $it['value'] }}">0</span><span class="plus">{{ $it['suffix'] ?? '' }}</span>
+                                    <span>{{ number_format((int) $it['value'], 0, ',', '.') }}</span><span class="plus">{{ $it['suffix'] ?? '' }}</span>
                                 @else
                                     {{ $it['value'] }}<span class="plus">{{ $it['suffix'] ?? '' }}</span>
                                 @endif

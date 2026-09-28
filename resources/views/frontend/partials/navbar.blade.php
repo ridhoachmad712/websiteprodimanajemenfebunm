@@ -76,8 +76,9 @@
                 </div>
             @endif
 
-            <button class="navbar-toggler ms-auto" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Buka menu">
-                <span class="navbar-toggler-icon"></span>
+            <button class="navbar-toggler ms-auto site-menu-toggle" type="button" data-bs-toggle="collapse" data-bs-target="#navbar-menu" aria-controls="navbar-menu" aria-expanded="false" aria-label="Buka menu">
+                <i class="ti ti-menu-2 fs-3" aria-hidden="true"></i>
+                <span aria-hidden="true">Menu</span>
             </button>
         </div>
     </header>

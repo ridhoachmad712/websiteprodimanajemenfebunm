@@ -202,40 +202,6 @@
                 window.scrollTo({ top: 0, behavior: html.classList.contains('a11y-reduce-motion') ? 'auto' : 'smooth' });
             });
 
-            // Reveal-on-scroll
-            var reveals = document.querySelectorAll('[data-reveal]');
-            if ('IntersectionObserver' in window && reveals.length) {
-                var io = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (e) {
-                        if (e.isIntersecting) { e.target.classList.add('is-visible'); io.unobserve(e.target); }
-                    });
-                }, { threshold: 0.12 });
-                reveals.forEach(function (el) { io.observe(el); });
-            } else {
-                reveals.forEach(function (el) { el.classList.add('is-visible'); });
-            }
-
-            // Counter angka beranimasi
-            var counters = document.querySelectorAll('[data-count]');
-            var animate = function (el) {
-                var target = parseFloat(el.getAttribute('data-count')) || 0;
-                var dur = 1200, start = null;
-                var step = function (ts) {
-                    if (!start) start = ts;
-                    var p = Math.min((ts - start) / dur, 1);
-                    el.textContent = Math.floor(p * target).toLocaleString('id-ID');
-                    if (p < 1) requestAnimationFrame(step);
-                };
-                requestAnimationFrame(step);
-            };
-            if ('IntersectionObserver' in window && counters.length) {
-                var io2 = new IntersectionObserver(function (entries) {
-                    entries.forEach(function (e) {
-                        if (e.isIntersecting) { animate(e.target); io2.unobserve(e.target); }
-                    });
-                }, { threshold: 0.5 });
-                counters.forEach(function (el) { io2.observe(el); });
-            }
         })();
     </script>
 

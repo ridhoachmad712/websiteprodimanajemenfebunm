@@ -22,7 +22,7 @@
     // Tinggi hero: 0 = otomatis (padding bawaan); >0 = kunci tinggi minimum + pusatkan vertikal.
     $heroHeight = (int) ($h('hero.height') ?: 0);
     if ($heroHeight > 0) {
-        $heroStyle .= "min-height:{$heroHeight}px;display:flex;align-items:center;";
+        $heroStyle .= "--hero-min-height:{$heroHeight}px;display:flex;align-items:center;";
     }
 
     $btn1 = $h('hero.btn1_label'); $btn1url = $h('hero.btn1_url') ?: '#';
@@ -101,11 +101,11 @@
                             </div>
                             <div class="row text-center g-0">
                                 <div class="col-4 py-2">
-                                    <div class="stat-value"><span data-count="{{ (int) $stats['mahasiswa'] }}">0</span><span class="plus">+</span></div>
+                                    <div class="stat-value"><span>{{ number_format((int) $stats['mahasiswa'], 0, ',', '.') }}</span><span class="plus">+</span></div>
                                     <div class="small text-secondary">Mahasiswa</div>
                                 </div>
                                 <div class="col-4 py-2 border-start border-end">
-                                    <div class="stat-value"><span data-count="{{ (int) $stats['dosen'] }}">0</span><span class="plus">+</span></div>
+                                    <div class="stat-value"><span>{{ number_format((int) $stats['dosen'], 0, ',', '.') }}</span><span class="plus">+</span></div>
                                     <div class="small text-secondary">Dosen</div>
                                 </div>
                                 <div class="col-4 py-2">
