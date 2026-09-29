@@ -6,26 +6,23 @@ use App\Http\Controllers\Controller;
 use App\Models\Category;
 use App\Models\Post;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
     /**
      * Daftar berita terbit (terbaru lebih dulu).
      */
-    public function index(): View
+    public function index(Request $request): View
     {
-        // Post unggulan = terbaru, hanya tampil di halaman pertama.
-        $featured = request('page', 1) == 1
-            ? Post::published()->with('categories')->latest('published_at')->first()
-            : null;
-
+        $filters = $request->validate(['q' => 'nullable|string|max:200', 'category' => 'nullable|string|max:200']);
         $posts = Post::published()->with('categories')
-            ->when($featured, fn ($q) => $q->where('id', '!=', $featured->id))
+            ->when($filters['q'] ?? null, fn ($query, $term) => $query->where('judul', 'like', '%'.$term.'%'))
+            ->when($filters['category'] ?? null, fn ($query, $slug) => $query->whereHas('categories', fn ($category) => $category->where('slug', $slug)))
             ->latest('published_at')
-            ->paginate(8);
+            ->paginate(9)->withQueryString();
 
         return view('frontend.posts.index', [
-            'featured' => $featured,
             'posts' => $posts,
             'categories' => Category::orderBy('nama')->get(),
         ]);

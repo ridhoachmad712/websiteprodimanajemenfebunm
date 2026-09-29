@@ -93,6 +93,7 @@ Route::get('/halaman/{page}', [PageController::class, 'custom'])->name('page.cus
 
 // Halaman statis
 Route::get('/profil', [PageController::class, 'profil'])->name('page.profil');
+Route::view('/akademik', 'frontend.pages.akademik')->name('page.akademik');
 
 $staticPages = [
     'akreditasi', 'fasilitas', 'sop-petaprosesbisnis',

@@ -6,7 +6,7 @@
 @section('content')
     @include('frontend.partials.page-hero', [
         'title' => $pengumuman->judul,
-        'crumbs' => ['Beranda' => url('/'), 'Pengumuman' => route('pengumuman.index'), $pengumuman->judul => null],
+        'crumbs' => ['Beranda' => url('/'), 'Pengumuman' => route('pengumuman.index'), 'Detail' => null],
     ])
 
     <section class="section">

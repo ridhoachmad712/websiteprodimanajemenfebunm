@@ -3,12 +3,36 @@
 namespace Tests\Feature;
 
 use App\Models\Setting;
+use App\Models\Dosen;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
 class HomepageLayoutTest extends TestCase
 {
     use RefreshDatabase;
+
+    public function test_lecturer_carousel_contains_every_lecturer_in_one_track(): void
+    {
+        Setting::set('home.blocks', json_encode([
+            ['type' => 'dosen', 'enabled' => true, 'data' => ['title' => 'Dosen', 'count' => '2']],
+        ]), 'home');
+        foreach (range(1, 5) as $number) {
+            Dosen::create([
+                'nama' => 'Dosen '.$number,
+                'slug' => 'dosen-'.$number,
+                'kategori' => 'tetap_prodi',
+                'urutan' => $number,
+            ]);
+        }
+
+        $response = $this->get('/')->assertOk()
+            ->assertSee('dosen-marquee', false)
+            ->assertSee('dosen-track', false)
+            ->assertDontSee('data-dosen-next', false);
+        foreach (range(1, 5) as $number) {
+            $response->assertSee('Dosen '.$number);
+        }
+    }
 
     public function test_homepage_composition_uses_admin_content_and_links(): void
     {

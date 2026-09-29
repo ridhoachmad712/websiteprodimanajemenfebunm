@@ -10,15 +10,11 @@
     </div>
 </div>
 <div class="row">
-    <div class="col-md-4 mb-2">
-        <label class="form-label">Jumlah dosen</label>
-        <input type="number" min="1" max="12" class="form-control" name="blocks[{{ $i }}][data][count]" value="{{ $d['count'] ?? '6' }}">
-    </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-md-6 mb-2">
         <label class="form-label">Label Tautan</label>
         <input class="form-control" name="blocks[{{ $i }}][data][link_label]" value="{{ $d['link_label'] ?? '' }}">
     </div>
-    <div class="col-md-4 mb-2">
+    <div class="col-md-6 mb-2">
         <label class="form-label">URL Tautan</label>
         <input class="form-control" name="blocks[{{ $i }}][data][link_url]" value="{{ $d['link_url'] ?? '' }}">
     </div>

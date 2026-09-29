@@ -6,24 +6,22 @@
 @section('content')
     @include('frontend.partials.page-hero', [
         'title'  => $post->judul,
-        'crumbs' => ['Beranda' => url('/'), 'Berita' => route('post.index'), Str::limit($post->judul, 40) => null],
+        'variant' => 'article',
+        'crumbs' => ['Beranda' => url('/'), 'Berita' => route('post.index'), 'Artikel' => null],
     ])
 
     <section class="section">
         <div class="container-xl">
-            <div class="row justify-content-center">
-                <article class="col-lg-8">
+            <article class="article-shell">
                     <div class="mb-2">
                         @foreach ($post->categories as $c)
                             <a href="{{ route('post.category', $c) }}" class="badge bg-primary-lt text-decoration-none">{{ $c->nama }}</a>
                         @endforeach
                     </div>
-                    <div class="text-secondary mb-4">
-                        <i class="ti ti-user me-1"></i>{{ $post->user->name }}
-                        <span class="mx-2">·</span>
-                        <i class="ti ti-calendar me-1"></i>{{ $post->published_at?->translatedFormat('d F Y') }}
-                        <span class="mx-2">·</span>
-                        <i class="ti ti-eye me-1"></i>{{ number_format($post->dilihat, 0, ',', '.') }} dilihat
+                    <div class="article-meta text-secondary">
+                        <span><i class="ti ti-user" aria-hidden="true"></i>{{ $post->user->name }}</span>
+                        <span><i class="ti ti-calendar" aria-hidden="true"></i><time datetime="{{ $post->published_at?->toDateString() }}">{{ $post->published_at?->translatedFormat('d F Y') }}</time></span>
+                        <span><i class="ti ti-eye" aria-hidden="true"></i>{{ number_format($post->dilihat, 0, ',', '.') }} dilihat</span>
                     </div>
 
                     @if ($post->featured_image)
@@ -39,8 +37,7 @@
 
                     <hr class="my-4">
                     <a href="{{ route('post.index') }}" class="btn btn-link px-0"><i class="ti ti-arrow-left me-1"></i> Semua berita</a>
-                </article>
-            </div>
+            </article>
 
             @if ($terkait->isNotEmpty())
                 <div class="row justify-content-center mt-5">

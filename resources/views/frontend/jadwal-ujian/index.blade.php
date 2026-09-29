@@ -18,7 +18,7 @@
                 </div>
             @endif
 
-            <div class="card">
+            <div class="card schedule-surface">
                 <div class="card-header">
                     <div>
                         <h2 class="card-title mb-1">Daftar Jadwal Ujian</h2>
@@ -30,11 +30,11 @@
                         <div class="col-md-8">
                             <div class="input-icon">
                                 <span class="input-icon-addon"><i class="ti ti-search"></i></span>
-                                <input type="search" class="form-control" id="jadwalSearch" placeholder="Cari nama, jenis ujian, pembimbing, atau penguji">
+                                <input type="search" class="form-control" id="jadwalSearch" aria-label="Cari jadwal ujian" placeholder="Cari nama, jenis ujian, pembimbing, atau penguji">
                             </div>
                         </div>
                         <div class="col-md-4">
-                            <select class="form-select" id="jadwalFilter">
+                            <select class="form-select" id="jadwalFilter" aria-label="Jenis ujian">
                                 <option value="">Semua jenis ujian</option>
                                 @foreach (collect($jadwal)->pluck('Ujian')->filter()->unique()->sort() as $ujian)
                                     <option value="{{ Str::lower($ujian) }}">{{ $ujian }}</option>
@@ -44,12 +44,12 @@
                     </div>
                 </div>
 
-                <div class="table-responsive">
+                <div class="table-responsive" tabindex="0" role="region" aria-label="Jadwal ujian mahasiswa">
                     <table class="table table-vcenter table-mobile-md mb-0" id="jadwalTable">
                         <thead>
                             <tr>
                                 @foreach ($columns as $column)
-                                    <th>{{ $column }}</th>
+                                    <th scope="col">{{ $column }}</th>
                                 @endforeach
                             </tr>
                         </thead>
@@ -77,6 +77,7 @@
                     </table>
                 </div>
             </div>
+            <p id="jadwalEmpty" class="text-secondary py-4" role="status" hidden>Tidak ada jadwal yang sesuai dengan pencarian.</p>
         </div>
     </section>
 @endsection
@@ -97,6 +98,7 @@
                 var matchUjian = !ujian || row.getAttribute('data-ujian') === ujian;
                 row.hidden = !(matchText && matchUjian);
             });
+            document.getElementById('jadwalEmpty').hidden = !rows.length || rows.some(function (row) { return !row.hidden; });
         };
 
         if (search) search.addEventListener('input', apply);

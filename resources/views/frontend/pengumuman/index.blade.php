@@ -1,46 +1,22 @@
 @extends('layouts.frontend')
-
 @section('title', 'Pengumuman')
 @section('meta_description', 'Pengumuman resmi Program Studi Manajemen FEB UNM.')
-
 @section('content')
-    @include('frontend.partials.page-hero', [
-        'title' => 'Pengumuman',
-        'subtitle' => 'Informasi dan pengumuman resmi Program Studi Manajemen FEB UNM.',
-        'crumbs' => ['Beranda' => url('/'), 'Pengumuman' => null],
-    ])
-
-    <section class="section">
-        <div class="container-xl">
-            <div class="row justify-content-center">
-                <div class="col-lg-9">
-                    @forelse ($pengumuman as $p)
-                        <a href="{{ $p->url() }}" class="card card-hover mb-3 d-block text-reset text-decoration-none">
-                            <div class="card-body d-flex align-items-start gap-3">
-                                <div class="text-center flex-shrink-0" style="width:64px">
-                                    <div class="fw-bold lh-1 text-primary" style="font-size:1.8rem">{{ $p->published_at?->translatedFormat('d') }}</div>
-                                    <div class="small text-uppercase text-secondary">{{ $p->published_at?->translatedFormat('M Y') }}</div>
-                                </div>
-                                <div class="min-w-0">
-                                    <h3 class="h4 mb-1">{{ $p->judul }}</h3>
-                                    <p class="text-secondary mb-0 excerpt-clamp">{{ $p->ringkasan(160) }}</p>
-                                </div>
-                                <i class="ti ti-chevron-right ms-auto text-muted flex-shrink-0 align-self-center"></i>
-                            </div>
-                        </a>
-                    @empty
-                        <div class="empty">
-                            <div class="empty-icon"><i class="ti ti-speakerphone fs-1"></i></div>
-                            <p class="empty-title">Belum ada pengumuman</p>
-                            <p class="empty-subtitle text-secondary">Pengumuman terbaru akan ditampilkan di sini.</p>
-                        </div>
-                    @endforelse
-
-                    @if ($pengumuman->hasPages())
-                        <div class="mt-4">{{ $pengumuman->links() }}</div>
-                    @endif
-                </div>
-            </div>
+    @include('frontend.partials.page-hero', ['title' => 'Pengumuman', 'subtitle' => 'Informasi perkuliahan dan administrasi mahasiswa.', 'crumbs' => ['Beranda' => url('/'), 'Pengumuman' => null]])
+    <section class="section"><div class="container-xl">
+        <form class="modern-filter" method="GET" action="{{ route('pengumuman.index') }}" role="search">
+            <label>Cari pengumuman<input class="form-control" name="q" type="search" maxlength="200" value="{{ request('q') }}" placeholder="Ketik kata kunci"></label>
+            <button class="btn btn-primary" type="submit"><i class="ti ti-search me-2" aria-hidden="true"></i>Cari</button>
+            <a class="btn btn-icon" href="{{ route('pengumuman.index') }}" aria-label="Reset pencarian" title="Reset pencarian"><i class="ti ti-filter-off" aria-hidden="true"></i></a>
+        </form>
+        <p class="text-secondary small">{{ $pengumuman->total() }} pengumuman</p>
+        <div class="modern-notices">
+            @forelse ($pengumuman as $p)
+                <a class="modern-notice" href="{{ $p->url() }}"><time datetime="{{ $p->published_at?->toDateString() }}">{{ $p->published_at?->translatedFormat('d M Y') }}</time><div><h2>{{ $p->judul }}</h2><p>{{ $p->ringkasan(160) }}</p></div><i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+            @empty
+                <div class="empty"><p class="empty-title">Tidak ada pengumuman</p><p class="text-secondary">Belum ada pengumuman atau tidak ada hasil yang sesuai dengan pencarian Anda.</p></div>
+            @endforelse
         </div>
-    </section>
+        <div class="mt-4">{{ $pengumuman->links() }}</div>
+    </div></section>
 @endsection

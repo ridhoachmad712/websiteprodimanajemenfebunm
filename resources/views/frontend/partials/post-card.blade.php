@@ -6,11 +6,11 @@
         @else
             <span class="post-thumb-ph d-flex align-items-center justify-content-center text-white"><i class="ti ti-news"></i></span>
         @endif
-        @if ($post->categories->isNotEmpty())
-            <span class="badge bg-primary post-cat">{{ $post->categories->first()->nama }}</span>
-        @endif
     </a>
     <div class="card-body d-flex flex-column">
+        @if ($post->categories->isNotEmpty())
+            <span class="badge bg-primary post-cat align-self-start">{{ $post->categories->first()->nama }}</span>
+        @endif
         <div class="text-secondary small mb-2">
             <i class="ti ti-calendar me-1"></i>{{ $post->published_at?->translatedFormat('d F Y') }}
         </div>

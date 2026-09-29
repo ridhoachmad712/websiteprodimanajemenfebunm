@@ -4,125 +4,126 @@
 @section('meta_description', 'Website resmi Program Studi Manajemen, Fakultas Ekonomi dan Bisnis, Universitas Negeri Makassar.')
 
 @php
-    // Pengaturan tampilan hero (dengan default dari AppearanceController).
-    $hd = \App\Http\Controllers\Admin\AppearanceController::defaults();
-    $h  = fn ($k) => \App\Models\Setting::get($k, $hd[$k] ?? null);
-
-    $heroShow    = $h('hero.show') === '1';
-    $heroImg     = $h('hero.bg_image');
-    $heroColor   = $h('hero.bg_color') ?: '#1b3a5b';
-    $heroOverlay = round(((int) ($h('hero.overlay') ?: 55)) / 100, 2);
-
-    if ($h('hero.bg_style') === 'image' && $heroImg) {
-        $heroStyle = "background-image:linear-gradient(rgba(14,34,56,{$heroOverlay}),rgba(14,34,56,{$heroOverlay})),url('".Storage::url($heroImg)."');background-size:cover;background-position:center;";
-    } else {
-        $heroStyle = "background-image:linear-gradient(135deg, {$heroColor} 0%, color-mix(in srgb, {$heroColor}, #000 35%) 100%);";
-    }
-
-    // Tinggi hero: 0 = otomatis (padding bawaan); >0 = kunci tinggi minimum + pusatkan vertikal.
-    $heroHeight = (int) ($h('hero.height') ?: 0);
-    if ($heroHeight > 0) {
-        $heroStyle .= "--hero-min-height:{$heroHeight}px;display:flex;align-items:center;";
-    }
-
-    $btn1 = $h('hero.btn1_label'); $btn1url = $h('hero.btn1_url') ?: '#';
-    $btn2 = $h('hero.btn2_label'); $btn2url = $h('hero.btn2_url') ?: '#';
-    $heroMark  = $h('navbar.brand_mark');
-    $heroBrand = trim(($h('navbar.brand_text') ?? '').' '.($h('navbar.brand_subtext') ?? ''));
+    $appearanceDefaults = \App\Http\Controllers\Admin\AppearanceController::defaults();
+    $setting = fn ($key) => \App\Models\Setting::get($key, $appearanceDefaults[$key] ?? null);
+    $heroSlides = \App\Models\HeroSlide::aktif()->orderBy('urutan')->orderBy('id')->get();
+    $firstSlide = $heroSlides->first();
+    $heroEnabled = $setting('hero.show') === '1';
+    $heroHeight = (int) $setting('hero.height');
+    $heroTitle = $firstSlide?->judul ?: $setting('hero.title');
+    $heroAccent = $firstSlide ? null : $setting('hero.title_accent');
+    $heroSubtitle = $firstSlide?->subjudul ?: $setting('hero.subtitle');
+    $heroButton = $firstSlide?->btn_label ?: $setting('hero.btn1_label');
+    $heroButtonUrl = $firstSlide?->btn_url ?: $setting('hero.btn1_url');
+    $fallbackImage = $berita->first()?->featured_image;
+    $configuredHeroImage = $setting('hero.bg_style') === 'image' ? $setting('hero.bg_image') : null;
+    $heroImage = $firstSlide?->gambar ?: $configuredHeroImage ?: $fallbackImage;
+    $heroButton2 = $firstSlide ? null : $setting('hero.btn2_label');
+    $heroButton2Url = $setting('hero.btn2_url');
+    $heroImageAlt = $firstSlide?->judul ?: $heroTitle ?: 'Kegiatan Program Studi Manajemen';
+    $heroMark = $setting('navbar.brand_text') ?: 'Manajemen';
+    $heroSubmark = $setting('navbar.brand_subtext') ?: 'FEB UNM';
+    $menuLinks = collect($mainMenu ?? [])
+        ->flatMap(fn ($item) => $item->activeChildren->isNotEmpty() ? $item->activeChildren : collect([$item]))
+        ->filter(fn ($item) => filled($item->href) && $item->href !== '#' && trim(parse_url($item->href, PHP_URL_PATH) ?: '', '/') !== '')
+        ->unique('href');
+    $quickLinks = collect([
+        ['title' => 'Kurikulum', 'href' => route('page.kurikulum')],
+        ['title' => 'Jadwal Ujian', 'href' => route('page.jadwal-ujian')],
+        ['title' => 'Daftar Dosen', 'href' => route('dosen.index')],
+        ['title' => 'Unduhan', 'href' => route('unduhan.index')],
+    ])->map(function ($link) use ($menuLinks) {
+        return $menuLinks->first(fn ($item) => parse_url($item->href, PHP_URL_PATH) === parse_url($link['href'], PHP_URL_PATH))
+            ?? (object) ($link + ['target' => '_self']);
+    });
 @endphp
 
 @section('content')
-    @php($heroSlides = \App\Models\HeroSlide::aktif()->orderBy('urutan')->orderBy('id')->get())
-
-    {{-- ===== HERO SLIDER (bila ada slide aktif) ===== --}}
-    @if ($heroSlides->isNotEmpty())
-        <section class="hero-carousel-wrap">
-            <div id="heroCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="6000">
-                @if ($heroSlides->count() > 1)
-                    <div class="carousel-indicators">
-                        @foreach ($heroSlides as $i => $s)
-                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $i }}" @class(['active' => $loop->first]) aria-label="Slide {{ $i + 1 }}"></button>
-                        @endforeach
-                    </div>
-                @endif
-                <div class="carousel-inner">
-                    @foreach ($heroSlides as $s)
-                        <div class="carousel-item @if ($loop->first) active @endif">
-                            <div class="hero-slide" style="background-image:linear-gradient(rgba(14,34,56,.55),rgba(14,34,56,.65)),url('{{ Storage::url($s->gambar) }}')">
-                                <div class="container-xl">
-                                    <div class="hero-slide-content" data-reveal>
-                                        @if ($s->judul)<h1 class="mb-3">{{ $s->judul }}</h1>@endif
-                                        @if ($s->subjudul)<p class="hero-lead mb-4">{{ $s->subjudul }}</p>@endif
-                                        @if ($s->btn_label)
-                                            <a href="{{ $s->btn_url ?: '#' }}" class="btn btn-light btn-lg">{{ $s->btn_label }}</a>
+    @if ($heroSlides->isNotEmpty() || $heroEnabled)
+        <section class="home-hero" @if ($heroHeight > 0) style="--home-hero-min-height: {{ $heroHeight }}px" @endif aria-label="{{ $heroMark }} {{ $heroSubmark }}">
+            @if ($heroSlides->isNotEmpty())
+                <div id="heroCarousel" class="carousel slide">
+                    @if ($heroSlides->count() > 1)
+                        <div class="carousel-indicators home-hero-indicators">
+                            @foreach ($heroSlides as $index => $slide)
+                                <button type="button" data-bs-target="#heroCarousel" data-bs-slide-to="{{ $index }}" @class(['active' => $loop->first]) aria-label="Slide {{ $index + 1 }}" @if ($loop->first) aria-current="true" @endif></button>
+                            @endforeach
+                        </div>
+                    @endif
+                    <div class="carousel-inner">
+                        @foreach ($heroSlides as $slide)
+                            <article class="carousel-item @if ($loop->first) active @endif">
+                                <div class="home-hero-layout">
+                                    <div class="home-hero-copy">
+                                        @if ($setting('hero.eyebrow'))<p class="home-eyebrow">{{ $setting('hero.eyebrow') }}</p>@endif
+                                        @if ($slide->judul)<h1>{{ $slide->judul }}</h1>@endif
+                                        @if ($slide->subjudul)<p class="home-hero-lead">{{ $slide->subjudul }}</p>@endif
+                                        @if ($slide->btn_label)
+                                            <a class="home-primary-link" href="{{ $slide->btn_url ?: '#' }}">{{ $slide->btn_label }} <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
                                         @endif
+                                        <p class="home-hero-meta"><span></span> {{ $heroMark }} · {{ $heroSubmark }}</p>
+                                    </div>
+                                    <div class="home-hero-image">
+                                        <img src="{{ \Illuminate\Support\Facades\Storage::url($slide->gambar) }}" alt="{{ $slide->judul ?: 'Kegiatan Program Studi Manajemen' }}" fetchpriority="high">
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-                    @endforeach
-                </div>
-                @if ($heroSlides->count() > 1)
-                    <button class="carousel-control-prev" type="button" data-bs-target="#heroCarousel" data-bs-slide="prev">
-                        <span class="carousel-control-prev-icon" aria-hidden="true"></span><span class="visually-hidden">Sebelumnya</span>
-                    </button>
-                    <button class="carousel-control-next" type="button" data-bs-target="#heroCarousel" data-bs-slide="next">
-                        <span class="carousel-control-next-icon" aria-hidden="true"></span><span class="visually-hidden">Berikutnya</span>
-                    </button>
-                @endif
-            </div>
-        </section>
-    @elseif ($heroShow)
-    {{-- ===== HERO (statis, dari pengaturan Tampilan) ===== --}}
-    <section class="hero" style="{{ $heroStyle }}">
-        <div class="container-xl">
-            <div class="row align-items-center g-4 g-lg-5">
-                <div class="{{ $h('hero.stats_show') === '1' ? 'col-lg-7' : 'col-lg-9' }}" data-reveal>
-                    @if ($h('hero.eyebrow'))<span class="eyebrow">{{ $h('hero.eyebrow') }}</span>@endif
-                    <h1 class="mb-3">{{ $h('hero.title') }} @if ($h('hero.title_accent'))<span class="text-accent">{{ $h('hero.title_accent') }}</span>@endif</h1>
-                    @if ($h('hero.subtitle'))<p class="hero-lead mb-4">{{ $h('hero.subtitle') }}</p>@endif
-                    @if ($btn1 || $btn2)
-                        <div class="d-flex flex-wrap gap-2">
-                            @if ($btn1)<a href="{{ $btn1url }}" class="btn btn-light btn-lg">{{ $btn1 }}</a>@endif
-                            @if ($btn2)<a href="{{ $btn2url }}" class="btn btn-outline-light btn-lg">{{ $btn2 }}</a>@endif
+                            </article>
+                        @endforeach
+                    </div>
+                    @if ($heroSlides->count() > 1)
+                        <div class="home-hero-controls" aria-label="Kontrol slide beranda">
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide="prev" aria-label="Slide sebelumnya"><i class="ti ti-arrow-left" aria-hidden="true"></i></button>
+                            <button type="button" data-bs-target="#heroCarousel" data-bs-slide="next" aria-label="Slide berikutnya"><i class="ti ti-arrow-right" aria-hidden="true"></i></button>
                         </div>
                     @endif
                 </div>
-                @if ($h('hero.stats_show') === '1')
-                <div class="col-lg-5" data-reveal>
-                    <div class="card">
-                        <div class="card-body">
-                            <div class="d-flex align-items-center mb-3">
-                                @if ($heroMark)<span class="brand-mark me-3" style="width:2.75rem;height:2.75rem;font-size:1.25rem">{{ $heroMark }}</span>@endif
-                                <div>
-                                    <div class="fw-bold fs-3">{{ $heroBrand }}</div>
-                                    @if ($h('hero.accreditation'))<div class="text-secondary small">{{ $h('hero.accreditation') }}</div>@endif
-                                </div>
+            @else
+                <div class="home-hero-layout">
+                    <div class="home-hero-copy">
+                        @if ($setting('hero.eyebrow'))<p class="home-eyebrow">{{ $setting('hero.eyebrow') }}</p>@endif
+                        <h1>{{ $heroTitle }} @if ($heroAccent)<span>{{ $heroAccent }}</span>@endif</h1>
+                        @if ($heroSubtitle)<p class="home-hero-lead">{{ $heroSubtitle }}</p>@endif
+                        @if ($heroButton || $heroButton2)
+                            <div class="home-hero-actions">
+                                @if ($heroButton)<a class="home-primary-link" href="{{ $heroButtonUrl ?: '/profil' }}">{{ $heroButton }} <i class="ti ti-arrow-right" aria-hidden="true"></i></a>@endif
+                                @if ($heroButton2)<a class="home-secondary-link" href="{{ $heroButton2Url ?: '/berita' }}">{{ $heroButton2 }}</a>@endif
                             </div>
-                            <div class="row text-center g-0">
-                                <div class="col-4 py-2">
-                                    <div class="stat-value"><span>{{ number_format((int) $stats['mahasiswa'], 0, ',', '.') }}</span><span class="plus">+</span></div>
-                                    <div class="small text-secondary">Mahasiswa</div>
-                                </div>
-                                <div class="col-4 py-2 border-start border-end">
-                                    <div class="stat-value"><span>{{ number_format((int) $stats['dosen'], 0, ',', '.') }}</span><span class="plus">+</span></div>
-                                    <div class="small text-secondary">Dosen</div>
-                                </div>
-                                <div class="col-4 py-2">
-                                    <div class="stat-value">{{ $h('statistik.konsentrasi') ?: '3' }}</div>
-                                    <div class="small text-secondary">Konsentrasi</div>
-                                </div>
+                        @endif
+                        @if ($setting('hero.stats_show') === '1')
+                            <div class="home-hero-stats" aria-label="Informasi program studi">
+                                <div><strong>{{ number_format((int) ($stats['mahasiswa'] ?? 0), 0, ',', '.') }}</strong><span>Mahasiswa</span></div>
+                                <div><strong>{{ number_format((int) ($stats['dosen'] ?? 0), 0, ',', '.') }}</strong><span>Dosen</span></div>
+                                @if ($setting('hero.accreditation'))<div class="home-hero-accreditation"><strong>{{ $setting('statistik.konsentrasi') }}</strong><span>{{ $setting('hero.accreditation') }}</span></div>@endif
                             </div>
-                        </div>
+                        @else
+                            <p class="home-hero-meta"><span></span> {{ $heroMark }} · {{ $heroSubmark }}</p>
+                        @endif
+                    </div>
+                    <div class="home-hero-image {{ $heroImage ? '' : 'is-empty' }}">
+                        @if ($heroImage)
+                            <img src="{{ \Illuminate\Support\Facades\Storage::url($heroImage) }}" alt="{{ $heroImageAlt }}" fetchpriority="high">
+                        @else
+                            <div class="home-hero-image-placeholder" aria-hidden="true"><span>{{ $heroMark }}</span></div>
+                        @endif
                     </div>
                 </div>
-                @endif
-            </div>
-        </div>
-    </section>
+            @endif
+        </section>
     @endif
 
-    {{-- ===== BLOK BERANDA (dikelola via admin → Beranda) ===== --}}
+    @if ($quickLinks->isNotEmpty())
+        <nav class="home-quicklinks" aria-label="Jelajahi situs">
+            <div class="container-xl home-quicklinks-inner">
+                <span class="home-quicklinks-label">Akses cepat</span>
+                @foreach ($quickLinks as $item)
+                    <a href="{{ $item->href }}" @if ($item->target === '_blank') target="_blank" rel="noopener" @endif>
+                        <span>{{ $item->title }}</span><i class="ti ti-arrow-up-right" aria-hidden="true"></i>
+                    </a>
+                @endforeach
+            </div>
+        </nav>
+    @endif
+
     @foreach (\App\Http\Controllers\Admin\HomeBuilderController::resolveBlocks() as $block)
         @continue(! ($block['enabled'] ?? true))
         @includeIf('frontend.blocks.'.($block['type'] ?? ''), ['block' => $block])

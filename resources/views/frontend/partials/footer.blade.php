@@ -18,18 +18,7 @@
         <div class="row g-4">
             {{-- Kolom 1: Identitas & kontak --}}
             <div class="col-12 col-md-6 col-lg-3">
-                <div class="mb-3">
-                    @if ($logo)
-                        <span class="d-inline-block bg-white rounded p-2">
-                            <img src="{{ Storage::url($logo) }}" alt="{{ $namaSitus }}" style="height:42px;width:auto;display:block">
-                        </span>
-                    @else
-                        <div class="d-flex align-items-center">
-                            <span class="avatar avatar-sm bg-primary text-white me-2">M</span>
-                            <span class="fw-bold text-white">{{ $namaSitus }}</span>
-                        </div>
-                    @endif
-                </div>
+                <p class="footer-name">{{ $namaSitus }}</p>
                 @if ($footerAbout) <p class="mb-3">{{ $footerAbout }}</p> @endif
                 @if ($kontakAlamat) <p class="mb-2">{{ $kontakAlamat }}</p> @endif
                 @if ($kontakTelepon) <p class="mb-1"><i class="ti ti-phone me-1"></i> {{ $kontakTelepon }}</p> @endif

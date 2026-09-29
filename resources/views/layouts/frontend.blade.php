@@ -18,16 +18,16 @@
     <link href="{{ asset('tabler/css/brand.css') }}?v={{ $cssVer('tabler/css/brand.css') }}" rel="stylesheet">
     <link href="{{ asset('tabler/css/frontend.css') }}?v={{ $cssVer('tabler/css/frontend.css') }}" rel="stylesheet">
     @include('partials.theme')
+    <link href="{{ asset('tabler/css/frontend-modern.css') }}?v={{ $cssVer('tabler/css/frontend-modern.css') }}" rel="stylesheet">
     @include('frontend.partials.analytics')
 
-    {{-- Font default Tabler: Geist --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&family=Plus+Jakarta+Sans:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 
     @stack('styles')
 </head>
-<body class="{{ request()->routeIs('home') ? 'page-hero-overlay' : '' }}">
+<body class="frontend-modern {{ request()->routeIs('home') ? 'page-home' : '' }}">
     {{-- Theme bootstrap (light/dark, sebelum render body) --}}
     <script src="{{ asset('tabler/js/tabler-theme.min.js') }}"></script>
 
@@ -104,6 +104,7 @@
     </div>
 
     <script src="{{ asset('tabler/js/tabler.min.js') }}" defer></script>
+    <script src="{{ asset('tabler/js/frontend-modern.js') }}?v={{ $cssVer('tabler/js/frontend-modern.js') }}" defer></script>
 
     {{-- Interaksi landing: reveal-on-scroll, animasi counter, navbar saat scroll --}}
     <script>
@@ -183,7 +184,7 @@
             });
 
             // Header: tambah bayangan saat halaman di-scroll + tombol kembali ke atas
-            var nav = document.querySelector('.site-header');
+            var nav = document.querySelector('.site-navmenu-shell');
             var btt = document.getElementById('backToTop');
             var setStickyHeaderOffset = function () {
                 var height = nav ? Math.ceil(nav.getBoundingClientRect().height) : 0;

@@ -1,7 +1,7 @@
 {{-- Grid kartu dosen. Variabel: $items (Collection<Dosen>) --}}
-<div class="row row-cards row-cols-2 row-cols-md-3 row-cols-lg-4 row-cols-xl-5">
+<div class="row row-cards row-cols-2 row-cols-md-3 row-cols-lg-4">
     @foreach ($items as $d)
-        <div class="col" data-reveal>
+        <div class="col" data-reveal data-collection-item data-category="{{ $d->kategori }}">
             <a href="{{ route('dosen.show', $d) }}" class="card card-hover dosen-card h-100 text-reset text-decoration-none">
                 <div class="dosen-photo">
                     @if ($d->foto)

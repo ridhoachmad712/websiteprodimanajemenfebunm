@@ -7,20 +7,20 @@
     @include('frontend.partials.page-hero', [
         'title'    => $dosen->nama,
         'subtitle' => $dosen->kategori_label.($dosen->konsentrasi ? ' · '.$dosen->konsentrasi : ''),
-        'crumbs'   => ['Beranda' => url('/'), 'Daftar Dosen' => route('dosen.index'), $dosen->nama => null],
+        'crumbs'   => ['Beranda' => url('/'), 'Daftar Dosen' => route('dosen.index'), 'Profil Dosen' => null],
     ])
 
     @php($km = $dosen->konsentrasi ? \App\Models\Dosen::konsentrasiMeta($dosen->konsentrasi) : null)
     @php($profil = \App\Models\Dosen::profilLinks())
     @php($adaProfil = collect($profil)->keys()->first(fn ($f) => filled($dosen->$f)) !== null)
 
-    <section class="section">
+    <section class="section dosen-detail">
         <div class="container-xl">
             <div class="row g-4">
                 {{-- ===== Kartu profil (kiri, sticky) ===== --}}
                 <div class="col-lg-4">
                     <div class="card sticky-lg-top dosen-profile-sticky">
-                        <div class="dosen-photo" style="aspect-ratio:1/1;border-radius:var(--tblr-border-radius) var(--tblr-border-radius) 0 0;overflow:hidden">
+                        <div class="dosen-photo">
                             @if ($dosen->foto)
                                 <img src="{{ Storage::url($dosen->foto) }}" alt="Foto {{ $dosen->nama }}">
                             @else

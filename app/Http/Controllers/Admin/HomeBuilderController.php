@@ -97,7 +97,7 @@ class HomeBuilderController extends Controller
             ]],
             ['type' => 'dosen', 'enabled' => true, 'data' => [
                 'eyebrow' => 'Tenaga Pengajar', 'title' => 'Dosen & Tendik',
-                'count' => '6', 'link_label' => 'Semua Dosen', 'link_url' => '/daftar-dosen',
+                'link_label' => 'Semua Dosen', 'link_url' => '/daftar-dosen',
             ]],
             ['type' => 'posts', 'enabled' => true, 'data' => [
                 'eyebrow' => 'Capaian', 'title' => 'Prestasi', 'category' => 'prestasi',
