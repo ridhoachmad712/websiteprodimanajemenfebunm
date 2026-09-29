@@ -93,6 +93,7 @@
 .frontend-modern .post-card .card-title { font-family: inherit; font-size: .9375rem; line-height: 1.7; }
 .frontend-modern .post-card .post-cat { position: static; background: transparent !important; color: var(--brand-blue); padding: 0; margin-bottom: 8px; border-radius: 0; }
 .frontend-modern .post-card .excerpt-clamp { font-size: .9375rem; }
+.frontend-modern .pengumuman-card { border-top: 1px solid var(--modern-line); }
 .frontend-modern .dosen-card { border: 0; border-radius: 0; background: transparent; }
 .frontend-modern .dosen-card .card-body { padding: 16px 0; text-align: left; }
 .frontend-modern .dosen-card .dosen-name { font-size: .9375rem; line-height: 1.7; }
@@ -106,6 +107,7 @@
 .frontend-modern .profil-nav { border: 0; padding: 0; }
 .frontend-modern .profil-nav-select { display: none; }
 .frontend-modern .profil-nav-link { padding: 12px 0; font-size: .875rem; }
+.frontend-modern .profil-nav-link:hover { text-decoration: none; }
 .frontend-modern .profil-nav-link::before { display: none; }
 .frontend-modern .profil-section { border-top: 1px solid var(--modern-line); padding-top: 30px; scroll-margin-top: var(--sticky-header-offset, 104px); }
 .frontend-modern .profil-section h2 { font-size: 1.75rem; }
@@ -176,11 +178,6 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
 .modern-filter label:first-child { flex: 1; max-width: 480px; }
 .modern-filter .btn { min-height: 48px; }
 .modern-filter .form-select { max-width: 100%; }
-.modern-notices { border-top: 1px solid var(--modern-line); }
-.modern-notice { display: grid; grid-template-columns: 100px minmax(0,1fr) 20px; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--modern-line); color: var(--modern-ink); text-decoration: none; align-items: center; }
-.modern-notice time { font-size: .8125rem; color: var(--modern-muted); }
-.modern-notice h2 { font-size: .9375rem; line-height: 1.7; margin: 0; }
-.modern-notice p { margin: 6px 0 0; color: var(--modern-muted); }
 .modern-document { display: grid; grid-template-columns: 32px minmax(0,1fr) auto; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--modern-line); align-items: center; }
 .modern-document > .ti { font-size: 28px; color: var(--brand-blue); }
 .modern-document h2 { font-size: .9375rem; margin: 0 0 6px; line-height: 1.7; }
@@ -271,8 +268,6 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
   .modern-filter .btn-icon { min-width: 44px; }
   .modern-filter label:first-child { flex: 1 0 100%; max-width: none; }
   .modern-filter label { flex: 1; }
-  .modern-notice { grid-template-columns: minmax(0,1fr) 20px; gap: 6px 12px; }
-  .modern-notice time { grid-column: 1 / -1; }
   .modern-document { grid-template-columns: 28px minmax(0,1fr); gap: 12px; }
   .modern-document > :last-child { grid-column: 2; }
 }
@@ -292,7 +287,7 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
   html.a11y-large-text .frontend-modern .floating-actions .floating-action-text { display: none; }
 }
 html.a11y-readable-font .frontend-modern { --tblr-font-sans-serif: Arial, Verdana, sans-serif; }
-html.a11y-high-contrast .frontend-modern :is(.page-hero,.site-brandbar,.site-navmenu,.home-about,.modern-notice,.modern-document,.form-control,.form-select) { background: #000 !important; color: #fff !important; }
+html.a11y-high-contrast .frontend-modern :is(.page-hero,.site-brandbar,.site-navmenu,.home-about,.modern-document,.form-control,.form-select) { background: #000 !important; color: #fff !important; }
 html.a11y-high-contrast .frontend-modern :is(p,time,.text-secondary,.section-title) { color: #fff !important; }
 
 /* Tabler utilities use !important; keep the approved square geometry in every state. */

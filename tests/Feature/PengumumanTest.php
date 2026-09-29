@@ -29,6 +29,7 @@ class PengumumanTest extends TestCase
 
         $this->get('/pengumuman')
             ->assertOk()
+            ->assertSee('pengumuman-card')
             ->assertSee('Terbit')
             ->assertDontSee('Draf');
     }
@@ -36,10 +37,15 @@ class PengumumanTest extends TestCase
     public function test_detail_page_renders_published(): void
     {
         $p = $this->buat(['judul' => 'Detail Pengumuman', 'slug' => 'detail-pengumuman']);
+        $this->buat(['judul' => 'Pengumuman Lain', 'slug' => 'pengumuman-lain']);
 
         $this->get('/pengumuman/detail-pengumuman')
             ->assertOk()
+            ->assertSee('article-shell')
+            ->assertSee('Bagikan:')
             ->assertSee('Detail Pengumuman')
+            ->assertSee('Pengumuman lainnya')
+            ->assertSee('Pengumuman Lain')
             ->assertSee('Isi pengumuman.', false);
     }
 
