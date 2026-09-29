@@ -220,13 +220,17 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
     right: 0;
     bottom: 0;
     left: 0;
-    min-height: calc(64px + env(safe-area-inset-bottom));
-    align-items: center;
-    padding: 8px 18px calc(8px + env(safe-area-inset-bottom));
+    min-height: calc(56px + env(safe-area-inset-bottom));
+    gap: 8px;
+    padding: 6px 18px calc(6px + env(safe-area-inset-bottom));
     border-top: 1px solid var(--modern-line);
     background: #fff;
   }
-  .frontend-modern .back-to-top { right: 142px; bottom: calc(8px + env(safe-area-inset-bottom)); z-index: 1033; }
+  .frontend-modern .floating-actions :is(.accessibility-toggle, .lang-fab-btn, .accessibility-toggle:hover, .accessibility-toggle:focus-visible, .lang-fab-btn:hover, .lang-fab-btn:focus-visible) { width: auto; min-width: 44px; height: 44px; padding: 0 8px; font-size: .8125rem; }
+  .frontend-modern .floating-actions .floating-action-text { max-width: none; opacity: 1; margin-left: 6px; }
+  .frontend-modern .floating-actions .btn { box-shadow: none; }
+  .frontend-modern .accessibility-panel { position: fixed; right: 18px; bottom: calc(64px + env(safe-area-inset-bottom)); left: 18px; width: auto; max-height: calc(100dvh - 80px - env(safe-area-inset-bottom)); overflow-y: auto; }
+  .frontend-modern .back-to-top { right: auto; left: 18px; bottom: calc(6px + env(safe-area-inset-bottom)); z-index: 1033; width: 44px; height: 44px; box-shadow: none; }
   .frontend-modern .dosen-marquee-group { gap: 14px; padding-right: 14px; }
   .frontend-modern .dosen-slide { flex-basis: 100cqw; }
   .frontend-modern .home-dosen .dosen-card { display: grid; grid-template-columns: 112px minmax(0, 1fr); min-height: 150px; }
@@ -234,19 +238,22 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
   .frontend-modern .home-dosen .dosen-card .card-body { padding: 14px; }
   .frontend-modern .home-dosen .dosen-card .dosen-name { font-size: .9375rem; }
   .home-about-layout { grid-template-columns: 1fr; }
-  .home-about-copy { padding: 50px 18px; }
+  .home-about-copy { padding: 40px 18px; }
   .home-about-media img { min-height: 250px; height: 270px; }
   .frontend-modern .home-hero-meta { display: none; }
   .frontend-modern .container-xl { width: calc(100% - 36px); }
-  .frontend-modern .site-navbar-inner { min-height: 72px; flex-wrap: wrap; gap: 0; }
-  .frontend-modern .site-brandbar .navbar-brand img { width: 184px; }
-  .frontend-modern .site-header-actions { width: 100%; justify-content: flex-start; padding-bottom: 12px; }
-  .frontend-modern .site-header-actions .btn { min-height: 44px; padding: 8px 12px; }
+  .frontend-modern .site-navbar-inner { min-height: 64px; flex-wrap: wrap; gap: 8px; }
+  .frontend-modern .site-brandbar .navbar-brand img { width: clamp(135px, calc(100vw - 222px), 160px); }
+  .frontend-modern .site-header-actions { flex: 0 1 auto; max-width: 100%; justify-content: flex-end; gap: 6px; }
+  .frontend-modern .site-header-actions .btn { min-height: 44px; padding: 8px 9px; font-size: .75rem; }
   .frontend-modern .section, .frontend-modern.page-home .section { padding: 48px 0; }
   .frontend-modern .section-title { font-size: 1.5rem; }
-  .frontend-modern .home-hero-layout { min-height: clamp(460px, 58dvh, 500px); }
-  .frontend-modern .home-hero-copy { padding: 40px 18px 60px; }
+  .frontend-modern .home-hero-layout { min-height: clamp(440px, 56dvh, 480px); }
+  .frontend-modern .home-hero-copy { padding: 32px 18px; }
   .frontend-modern .home-hero h1 { font-size: 2.5rem; }
+  .frontend-modern .home-hero-actions { gap: 8px; margin-top: 20px; }
+  .frontend-modern .home-hero-actions > a { min-height: 44px; margin-top: 0; padding: 10px 12px; font-size: .8125rem; }
+  .frontend-modern .home-hero-actions > .home-primary-link { gap: 10px; }
   .frontend-modern .home-hero-image img { object-position: 58% center; }
   .frontend-modern .home-quicklinks-inner { grid-template-columns: repeat(2,minmax(0,1fr)); }
   .frontend-modern .home-quicklinks a { min-height: 68px; border-bottom: 1px solid var(--modern-line); }
@@ -256,14 +263,33 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
   .frontend-modern .page-hero--article h1 { font-size: 1.75rem; }
   .frontend-modern main > .page-hero + .section { padding-top: 32px; }
   .frontend-modern main > .page-hero--article + .section { padding-top: 24px; }
-  .frontend-modern .page-hero-photo { min-height: 280px; }
+  .frontend-modern .page-hero-photo { min-height: 250px; }
   .frontend-modern .profil-section h2 { font-size: 1.375rem; }
+  .modern-filter { gap: 12px; margin-bottom: 18px; }
+  .modern-filter label { gap: 6px; }
+  .modern-filter :is(.form-control, .form-select, .btn) { min-height: 44px; }
+  .modern-filter .btn-icon { min-width: 44px; }
   .modern-filter label:first-child { flex: 1 0 100%; max-width: none; }
   .modern-filter label { flex: 1; }
   .modern-notice { grid-template-columns: minmax(0,1fr) 20px; gap: 6px 12px; }
   .modern-notice time { grid-column: 1 / -1; }
   .modern-document { grid-template-columns: 28px minmax(0,1fr); gap: 12px; }
   .modern-document > :last-child { grid-column: 2; }
+}
+@media (max-width: 359.98px) {
+  .frontend-modern .site-navbar-inner { padding-block: 6px; }
+  .frontend-modern .site-brandbar .navbar-brand img { width: 168px; }
+  .frontend-modern .site-header-actions { width: 100%; justify-content: flex-start; }
+  .frontend-modern .home-hero h1 { font-size: 2.25rem; }
+  .frontend-modern .home-quicklinks-inner { grid-template-columns: 1fr; }
+  .frontend-modern .home-quicklinks-label { grid-column: auto; }
+  .frontend-modern .home-quicklinks a { min-height: 52px; border-left: 0; padding-inline: 0; }
+  .frontend-modern .modern-filter-submit { min-width: 44px; width: 44px; padding: 0; justify-content: center; }
+  .frontend-modern .modern-filter-submit .ti { margin-right: 0 !important; }
+  .frontend-modern .modern-filter-submit span { display: none; }
+  .frontend-modern .modern-filter .form-select { padding-right: 1.75rem; padding-left: .6rem; background-position: right .5rem center; font-size: .875rem; }
+  .frontend-modern .profil-nav-select { font-size: .8125rem; }
+  html.a11y-large-text .frontend-modern .floating-actions .floating-action-text { display: none; }
 }
 html.a11y-readable-font .frontend-modern { --tblr-font-sans-serif: Arial, Verdana, sans-serif; }
 html.a11y-high-contrast .frontend-modern :is(.page-hero,.site-brandbar,.site-navmenu,.home-about,.modern-notice,.modern-document,.form-control,.form-select) { background: #000 !important; color: #fff !important; }

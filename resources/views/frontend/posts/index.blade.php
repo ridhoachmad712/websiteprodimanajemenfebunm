@@ -7,7 +7,7 @@
         <form class="modern-filter" method="GET" action="{{ route('post.index') }}" role="search">
             <label>Cari berita<input class="form-control" name="q" type="search" maxlength="200" value="{{ request('q') }}" placeholder="Ketik kata kunci"></label>
             <label>Kategori<select class="form-select" name="category"><option value="">Semua kategori</option>@foreach ($categories as $category)<option value="{{ $category->slug }}" @selected(request('category') === $category->slug)>{{ $category->nama }}</option>@endforeach</select></label>
-            <button class="btn btn-primary" type="submit"><i class="ti ti-search me-2" aria-hidden="true"></i>Cari</button>
+            <button class="btn btn-primary modern-filter-submit" type="submit" aria-label="Cari berita"><i class="ti ti-search me-2" aria-hidden="true"></i><span>Cari</span></button>
             <a class="btn btn-icon" href="{{ route('post.index') }}" aria-label="Reset pencarian" title="Reset pencarian"><i class="ti ti-filter-off" aria-hidden="true"></i></a>
         </form>
         <p class="text-secondary small">{{ $posts->total() }} berita</p>
