@@ -6,7 +6,8 @@
     <form class="card card-md" method="POST" action="{{ route('login') }}">
         @csrf
         <div class="card-body">
-            <h2 class="h2 text-center mb-4">Masuk ke akun Anda</h2>
+            <div class="admin-login-eyebrow">Panel Admin</div>
+            <h2 class="h2 mb-4">Masuk ke akun Anda</h2>
 
             @if (session('status'))
                 <div class="alert alert-success">{{ session('status') }}</div>

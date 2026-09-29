@@ -10,11 +10,12 @@
     <link href="{{ asset('tabler/icons/tabler-icons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('tabler/css/brand.css') }}" rel="stylesheet">
     @include('partials.theme')
+    <link href="{{ asset('tabler/css/admin-modern.css') }}" rel="stylesheet">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
-<body class="d-flex flex-column bg-light">
+<body class="d-flex flex-column admin-modern admin-login">
     <script src="{{ asset('tabler/js/tabler-theme.min.js') }}"></script>
 
     <div class="page page-center">
@@ -23,7 +24,7 @@
                 <a href="{{ url('/') }}" class="navbar-brand navbar-brand-autodark d-inline-flex align-items-center text-decoration-none">
                     @php($loginLogo = \App\Models\Setting::get('navbar.logo'))
                     @if ($loginLogo)
-                        <img src="{{ Storage::url($loginLogo) }}" alt="{{ config('app.name') }}" style="height:52px;width:auto">
+                        <img src="{{ Storage::url($loginLogo) }}" alt="{{ config('app.name') }}">
                     @else
                         <span class="avatar bg-primary text-white me-2">M</span>
                         <span class="fs-3 fw-bold">Admin Manajemen FEB UNM</span>

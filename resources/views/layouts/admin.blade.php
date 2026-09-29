@@ -11,55 +11,23 @@
     <link href="{{ asset('tabler/icons/tabler-icons.min.css') }}" rel="stylesheet">
     <link href="{{ asset('tabler/css/brand.css') }}" rel="stylesheet">
     @include('partials.theme')
+    <link href="{{ asset('tabler/css/admin-modern.css') }}" rel="stylesheet">
 
-    {{-- Font default Tabler: Geist --}}
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Geist:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        body { background-color: #f6f7fb; }
-
-        /* ---------- Sidebar minimalis ---------- */
-        .navbar-vertical .navbar-brand { padding: 1rem; }
-        .navbar-vertical .navbar-nav { gap: 1px; }
-        .navbar-vertical .nav-section {
-            list-style: none;
-            padding: 1rem 1.1rem .35rem;
-            font-size: .68rem; font-weight: 600; letter-spacing: .07em;
-            text-transform: uppercase; color: #9aa4b2;
-        }
-        .navbar-vertical .nav-section:first-of-type { padding-top: .5rem; }
-        .navbar-vertical .nav-link {
-            border-radius: .5rem; margin: 0 .6rem; padding: .5rem .65rem;
-            color: #51596b; font-weight: 500;
-        }
-        .navbar-vertical .nav-link .nav-link-icon { color: #9aa4b2; opacity: 1; transition: color .15s; }
-        .navbar-vertical .nav-link:hover { background: #f1f3f7; color: #1d273b; }
-        .navbar-vertical .nav-link:hover .nav-link-icon { color: #51596b; }
-        .navbar-vertical .nav-item.active > .nav-link {
-            background: rgba(var(--tblr-primary-rgb), .1);
-            color: var(--tblr-primary); font-weight: 600;
-        }
-        .navbar-vertical .nav-item.active > .nav-link .nav-link-icon { color: var(--tblr-primary); }
-        /* Matikan garis aksen default Tabler agar tidak bentrok dengan pill */
-        .navbar-vertical .nav-item.active > .nav-link::after { display: none; }
-
-        /* ---------- Kartu admin lebih bersih & rata ---------- */
-        .page-body .card { border: 1px solid var(--tblr-border-color, #e6e7e9); box-shadow: none; }
-        .card.card-link-pop { transition: transform .15s ease, box-shadow .15s ease; }
-        .card.card-link-pop:hover { transform: translateY(-2px); box-shadow: 0 .5rem 1rem rgba(24,36,64,.08); }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
     @stack('styles')
 </head>
-<body>
+<body class="admin-modern">
     <script src="{{ asset('tabler/js/tabler-theme.min.js') }}"></script>
 
     <div class="page">
         @include('admin.partials.sidebar')
 
         {{-- Topbar --}}
-        <header class="navbar navbar-expand-md d-print-none">
+        <header class="navbar navbar-expand-md admin-topbar d-print-none">
             <div class="container-xl">
+                <span class="admin-topbar-label d-none d-md-inline">Prodi Manajemen FEB UNM</span>
                 <div class="navbar-nav flex-row order-md-last ms-auto">
                     @php($topUnread = \App\Models\ContactMessage::unread()->count())
                     <div class="nav-item me-2">
@@ -71,7 +39,7 @@
                         </a>
                     </div>
                     <div class="nav-item dropdown">
-                        <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Open user menu">
+                        <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Menu pengguna">
                             <span class="avatar avatar-sm bg-primary text-white">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</span>
                             <div class="d-none d-xl-block ps-2">
                                 <div>{{ auth()->user()->name ?? 'Admin' }}</div>

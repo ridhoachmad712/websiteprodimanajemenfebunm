@@ -28,7 +28,7 @@
                 <a href="{{ $c['url'] }}" class="card card-link-pop text-reset text-decoration-none h-100">
                     <div class="card-body">
                         <div class="d-flex align-items-center">
-                            <span class="bg-primary-lt rounded p-2 me-3 d-inline-flex"><i class="ti {{ $c['icon'] }} fs-2"></i></span>
+                            <span class="bg-primary-lt p-2 me-3 d-inline-flex"><i class="ti {{ $c['icon'] }} fs-2"></i></span>
                             <div>
                                 <div class="h1 mb-0 lh-1">{{ $c['value'] }}</div>
                                 <div class="text-secondary small">{{ $c['label'] }}</div>
@@ -46,7 +46,7 @@
             <div class="card h-100">
                 <div class="card-header"><h3 class="card-title">Aksi Cepat</h3></div>
                 <div class="card-body">
-                    <div class="row g-2">
+                    <div class="row g-2 admin-quick-actions">
                         @php
                             $actions = [
                                 ['Tulis Berita',      'ti-pencil-plus',  route('admin.posts.create'),      false],
@@ -61,10 +61,10 @@
                         @endphp
                         @foreach ($actions as [$label, $icon, $url, $adminOnly])
                             @if (! $adminOnly || $isAdmin)
-                                <div class="col-6 col-md-3">
-                                    <a href="{{ $url }}" class="btn btn-outline-primary w-100 d-flex flex-column py-3">
-                                        <i class="ti {{ $icon }} fs-2 mb-1"></i>
-                                        <span class="small">{{ $label }}</span>
+                                <div class="col-12 col-sm-6">
+                                    <a href="{{ $url }}" class="btn btn-outline-primary w-100 d-flex align-items-center text-start">
+                                        <i class="ti {{ $icon }} fs-2 me-2" aria-hidden="true"></i>
+                                        <span>{{ $label }}</span>
                                     </a>
                                 </div>
                             @endif
@@ -155,9 +155,8 @@
     </div>
 
     {{-- Ringkasan seluruh modul konten --}}
-    <div class="card mt-3">
-        <div class="card-header"><h3 class="card-title">Ringkasan Konten</h3></div>
-        <div class="card-body">
+    <section class="admin-summary mt-4" aria-labelledby="admin-summary-title">
+        <h3 class="admin-summary-title" id="admin-summary-title">Ringkasan Konten</h3>
             <div class="row g-2">
                 @php
                     $ringkasan = [
@@ -171,7 +170,7 @@
                 @endphp
                 @foreach ($ringkasan as [$label, $value, $icon, $url])
                     <div class="col-4 col-md-2">
-                        <a href="{{ $url }}" class="d-block text-reset text-decoration-none border rounded p-2 text-center card-link-pop">
+                        <a href="{{ $url }}" class="d-block text-reset text-decoration-none border p-2 text-center card-link-pop admin-summary-link">
                             <i class="ti {{ $icon }} fs-2 text-secondary"></i>
                             <div class="h3 mb-0">{{ $value }}</div>
                             <div class="text-secondary small">{{ $label }}</div>
@@ -179,6 +178,5 @@
                     </div>
                 @endforeach
             </div>
-        </div>
-    </div>
+    </section>
 @endsection

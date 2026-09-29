@@ -1,9 +1,5 @@
-{{--
-    Sidebar admin (navbar-vertical Tabler, gaya terang).
-    Menu dikelompokkan: Konten · Tampilan Situs · Sistem.
---}}
 @php($unread = \App\Models\ContactMessage::unread()->count())
-<aside class="navbar navbar-vertical navbar-expand-lg bg-white border-end">
+<aside class="navbar navbar-vertical navbar-expand-lg admin-sidebar">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
             <span class="navbar-toggler-icon"></span>
@@ -13,7 +9,7 @@
         <div class="navbar-brand">
             <a href="{{ url('/admin') }}" class="d-flex align-items-center text-reset text-decoration-none">
                 @if ($adminLogo)
-                    <img src="{{ Storage::url($adminLogo) }}" alt="Admin" style="height:38px;width:auto">
+                    <img src="{{ Storage::url($adminLogo) }}" alt="Prodi Manajemen FEB UNM">
                 @else
                     <span class="avatar avatar-sm bg-primary text-white me-2">M</span>
                     <span class="fw-bold">Admin Manajemen</span>

@@ -25,18 +25,18 @@
                 <div class="card">
                     <div class="card-header"><h3 class="card-title"><i class="ti ti-palette me-2"></i>Warna Tema</h3></div>
                     <div class="card-body">
-                        <div class="row align-items-end g-3">
-                            <div class="col-auto">
+                        <div class="row align-items-start g-3">
+                            <div class="col-6 col-md-auto">
                                 <label class="form-label">Warna Utama</label>
                                 <input type="color" id="themePrimary" name="theme_primary" value="{{ $val('theme.primary') ?: '#1b3a5b' }}" class="form-control form-control-color">
                                 <div class="form-hint">Tombol, tautan, aksen.</div>
                             </div>
-                            <div class="col-auto">
+                            <div class="col-6 col-md-auto">
                                 <label class="form-label">Warna Gelap</label>
                                 <input type="color" id="themeDark" name="theme_dark" value="{{ $val('theme.dark') ?: '#0e2238' }}" class="form-control form-control-color">
                                 <div class="form-hint">Latar gelap: gradien hero, blok pengumuman.</div>
                             </div>
-                            <div class="col">
+                            <div class="col-12 col-md">
                                 <label class="form-label">Preset cepat</label>
                                 <div class="d-flex flex-wrap gap-2">
                                     @foreach ([
