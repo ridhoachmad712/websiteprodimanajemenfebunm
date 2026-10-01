@@ -29,7 +29,9 @@ class DosenJabatanTest extends TestCase
             'jabatan' => 'Wakil Dekan I', 'urutan' => 1,
         ]);
 
-        $this->get('/daftar-dosen')->assertOk()->assertSee('Wakil Dekan I');
+        $this->get('/daftar-dosen')->assertOk()
+            ->assertSee('Wakil Dekan I')
+            ->assertSeeInOrder(['class="dosen-photo"', 'class="dosen-role-overlay"', 'class="card-body"'], false);
         $this->get(route('dosen.show', $dosen))->assertOk()->assertSee('Wakil Dekan I');
     }
 

@@ -21,6 +21,7 @@ class HomepageLayoutTest extends TestCase
                 'nama' => 'Dosen '.$number,
                 'slug' => 'dosen-'.$number,
                 'kategori' => 'tetap_prodi',
+                'jabatan' => $number === 1 ? 'Ketua Program Studi' : null,
                 'urutan' => $number,
             ]);
         }
@@ -28,6 +29,7 @@ class HomepageLayoutTest extends TestCase
         $response = $this->get('/')->assertOk()
             ->assertSee('dosen-marquee', false)
             ->assertSee('dosen-track', false)
+            ->assertSee('dosen-role-overlay', false)
             ->assertDontSee('data-dosen-next', false);
         foreach (range(1, 5) as $number) {
             $response->assertSee('Dosen '.$number);

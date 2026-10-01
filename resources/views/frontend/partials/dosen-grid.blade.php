@@ -9,12 +9,15 @@
                     @else
                         <span class="ph">{{ Str::of($d->nama)->substr(0, 1)->upper() }}</span>
                     @endif
+                    @if ($d->jabatan)
+                        <span class="dosen-role-overlay" aria-label="Jabatan: {{ $d->jabatan }}">
+                            <i class="ti ti-briefcase" aria-hidden="true"></i>
+                            <span class="dosen-role-overlay-text">{{ $d->jabatan }}</span>
+                        </span>
+                    @endif
                 </div>
                 <div class="card-body">
                     <h3 class="dosen-name fw-bold mb-1">{{ $d->nama }}</h3>
-                    @if ($d->jabatan)
-                        <div class="dosen-jabatan small fw-semibold text-primary mb-1"><i class="ti ti-briefcase me-1"></i>{{ $d->jabatan }}</div>
-                    @endif
                     @if ($d->konsentrasi)
                         @php($km = \App\Models\Dosen::konsentrasiMeta($d->konsentrasi))
                         <span class="dosen-konsentrasi">
