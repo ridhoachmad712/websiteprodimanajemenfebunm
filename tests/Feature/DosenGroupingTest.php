@@ -3,6 +3,8 @@
 namespace Tests\Feature;
 
 use App\Models\Dosen;
+use App\Models\Setting;
+use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
@@ -23,25 +25,16 @@ class DosenGroupingTest extends TestCase
             ->assertSee('Dosen Keuangan');
     }
 
-    public function test_konsentrasi_subgroup_order_is_randomized_across_refreshes(): void
+    public function test_konsentrasi_subgroup_order_is_consistent_across_refreshes(): void
     {
-        // Banyak konsentrasi supaya peluang urutan berbeda antar-muat tinggi.
-        foreach (['Manajemen SDM', 'Manajemen Pemasaran', 'Manajemen Keuangan'] as $i => $k) {
+        foreach (['Manajemen Keuangan', 'Manajemen SDM', 'Manajemen Pemasaran'] as $i => $k) {
             Dosen::create(['nama' => "Dosen {$i}", 'slug' => "dosen-{$i}", 'kategori' => 'tetap_prodi', 'konsentrasi' => $k, 'urutan' => $i + 1]);
         }
 
-        // Ambil urutan kemunculan sub-judul konsentrasi pada beberapa kali muat.
-        $urutan = collect(range(1, 12))->map(function () {
-            $html = $this->get('/daftar-dosen')->getContent();
-            $pos = collect(['Manajemen SDM', 'Manajemen Pemasaran', 'Manajemen Keuangan'])
-                ->mapWithKeys(fn ($k) => [$k => strpos($html, $k)])
-                ->sort()->keys()->implode('|');
-
-            return $pos;
-        })->unique();
-
-        // Diacak → mustahil (praktis) semua 12 muat menghasilkan urutan yang sama.
-        $this->assertGreaterThan(1, $urutan->count(), 'Urutan konsentrasi seharusnya berubah-ubah antar refresh');
+        foreach (range(1, 3) as $refresh) {
+            $this->get('/daftar-dosen')->assertOk()
+                ->assertSeeInOrder(['Manajemen SDM', 'Manajemen Pemasaran', 'Manajemen Keuangan']);
+        }
     }
 
     public function test_luar_biasa_is_subgrouped_by_konsentrasi(): void
@@ -53,5 +46,26 @@ class DosenGroupingTest extends TestCase
             ->assertSee('Dosen Luar Biasa')
             ->assertSee('Manajemen Pemasaran')
             ->assertSee('LB Pemasaran');
+    }
+
+    public function test_admin_can_toggle_public_concentration_grouping(): void
+    {
+        Dosen::create(['nama' => 'Dosen SDM', 'slug' => 'sdm', 'kategori' => 'tetap_prodi', 'konsentrasi' => 'Manajemen SDM', 'urutan' => 1]);
+        $admin = User::factory()->create();
+
+        $this->actingAs($admin)->put(route('admin.dosen.grouping'), ['enabled' => '0'])
+            ->assertRedirect(route('admin.dosen.index'));
+        $this->assertSame('0', Setting::get('dosen.group_by_concentration'));
+        $this->get('/daftar-dosen')->assertOk()->assertSee('Dosen SDM')
+            ->assertDontSee('dosen-subgroup-title');
+
+        $this->put(route('admin.dosen.grouping'), ['enabled' => '1'])
+            ->assertRedirect(route('admin.dosen.index'));
+        $this->get('/daftar-dosen')->assertOk()->assertSee('dosen-subgroup-title');
+    }
+
+    public function test_guest_cannot_change_concentration_grouping(): void
+    {
+        $this->put(route('admin.dosen.grouping'), ['enabled' => '0'])->assertRedirect('/login');
     }
 }

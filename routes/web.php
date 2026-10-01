@@ -114,6 +114,7 @@ foreach ($staticPages as $slug) {
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
     Route::post('dosen/reorder', [AdminDosenController::class, 'reorder'])->name('admin.dosen.reorder');
+    Route::put('dosen/grouping', [AdminDosenController::class, 'updateGrouping'])->name('admin.dosen.grouping');
     Route::resource('dosen', AdminDosenController::class)->except('show')->names('admin.dosen');
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
     Route::resource('pengumuman', AdminPengumumanController::class)->except('show')->names('admin.pengumuman')->parameters(['pengumuman' => 'pengumuman']);

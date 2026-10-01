@@ -173,6 +173,18 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
 .frontend-modern .home-dosen .dosen-card .dosen-jabatan { margin-bottom: 8px !important; line-height: 1.45; }
 .frontend-modern .home-dosen .dosen-card .dosen-konsentrasi { display: inline-flex; align-items: flex-start; font-size: .875rem; line-height: 1.5; }
 .frontend-modern .home-dosen .dosen-card .dosen-konsentrasi .ti { flex: 0 0 auto; margin-top: 3px; }
+.frontend-modern .dosen-directory .dosen-subgroup-title { color: var(--modern-ink); font-size: 1.125rem; line-height: 1.4; }
+.frontend-modern .dosen-directory .dosen-subgroup-title > .ti { color: var(--brand-blue); }
+.frontend-modern .dosen-directory .dosen-subgroup-count { color: var(--modern-muted); font-size: .8125rem; font-weight: 600; }
+.frontend-modern .dosen-directory .dosen-card { overflow: hidden; border: 1px solid var(--modern-line); background: #fff; transition: border-color .18s ease, background-color .18s ease; }
+.frontend-modern .dosen-directory .dosen-card:is(:hover, :focus-visible) { border-color: var(--brand-blue); background: #f8faff; }
+.frontend-modern .dosen-directory .dosen-card .dosen-photo { overflow: hidden; background: var(--modern-wash); }
+.frontend-modern .dosen-directory .dosen-card .card-body { min-width: 0; padding: 16px; }
+.frontend-modern .dosen-directory .dosen-card .dosen-name { margin-bottom: 8px !important; font-size: 1rem; line-height: 1.4; overflow-wrap: anywhere; }
+.frontend-modern .dosen-directory .dosen-card:hover .dosen-name { text-decoration: none; }
+.frontend-modern .dosen-directory .dosen-card .dosen-jabatan { margin-bottom: 8px !important; line-height: 1.45; }
+.frontend-modern .dosen-directory .dosen-card .dosen-konsentrasi { display: inline-flex; align-items: flex-start; font-size: .875rem; line-height: 1.45; overflow-wrap: anywhere; }
+.frontend-modern .dosen-directory .dosen-card .dosen-konsentrasi .ti { flex: 0 0 auto; margin-top: 3px; }
 .modern-filter { display: flex; flex-wrap: wrap; align-items: end; gap: 16px; margin-bottom: 32px; }
 .modern-filter label { display: grid; gap: 8px; font-size: .875rem; font-weight: 600; min-width: 0; }
 .modern-filter label:first-child { flex: 1; max-width: 480px; }
@@ -270,6 +282,11 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
   .modern-filter label { flex: 1; }
   .modern-document { grid-template-columns: 28px minmax(0,1fr); gap: 12px; }
   .modern-document > :last-child { grid-column: 2; }
+}
+@media (max-width: 575.98px) {
+  .frontend-modern .dosen-directory .dosen-card { display: grid; grid-template-columns: 108px minmax(0, 1fr); min-height: 152px; }
+  .frontend-modern .dosen-directory .dosen-card .dosen-photo { width: 108px; height: 100%; aspect-ratio: auto; }
+  .frontend-modern .dosen-directory .dosen-card .card-body { padding: 14px; }
 }
 @media (max-width: 359.98px) {
   .frontend-modern .site-navbar-inner { padding-block: 6px; }

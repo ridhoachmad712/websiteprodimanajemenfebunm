@@ -10,9 +10,9 @@
         'crumbs'   => ['Beranda' => url('/'), 'Daftar Dosen' => null],
     ])
 
-    <section class="section">
+    <section class="section dosen-directory">
         <div class="container-xl" data-local-collection>
-            @include('frontend.partials.collection-filter', ['searchLabel' => 'Cari nama atau konsentrasi', 'filterCategories' => $grup->map(fn ($g) => $g['label'])])
+            @include('frontend.partials.collection-filter', ['searchLabel' => 'Cari dosen', 'filterCategories' => $grup->map(fn ($g) => $g['label'])])
 
             @forelse ($grup as $key => $g)
                 <div class="dosen-group mb-5" data-group="{{ $key }}" data-collection-group>
@@ -26,9 +26,9 @@
                         @foreach ($g['subgroups'] as $konsentrasi => $items)
                             @php($km = \App\Models\Dosen::konsentrasiMeta($konsentrasi))
                             <div class="mb-4" data-collection-group>
-                                <h3 class="h4 d-flex align-items-center gap-2 mb-3 text-{{ $km['color'] }}">
-                                    <i class="ti {{ $km['icon'] }}"></i>{{ $konsentrasi }}
-                                    <span class="badge bg-{{ $km['color'] }}-lt ms-1">{{ $items->count() }}</span>
+                                <h3 class="dosen-subgroup-title h4 d-flex align-items-center gap-2 mb-3">
+                                    <i class="ti {{ $km['icon'] }}" aria-hidden="true"></i>{{ $konsentrasi }}
+                                    <span class="dosen-subgroup-count">{{ $items->count() }}</span>
                                 </h3>
                                 @include('frontend.partials.dosen-grid', ['items' => $items])
                             </div>

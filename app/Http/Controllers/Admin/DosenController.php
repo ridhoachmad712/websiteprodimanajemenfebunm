@@ -6,20 +6,38 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreDosenRequest;
 use App\Http\Requests\UpdateDosenRequest;
 use App\Models\Dosen;
+use App\Models\Setting;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\View\View;
 
 class DosenController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        // Semua dosen (urut sesuai 'urutan'), dikelompokkan per kategori seperti
-        // di halaman depan — supaya bisa disusun ulang via drag-and-drop.
-        $semua = Dosen::orderBy('urutan')->orderBy('nama')->get();
+        $konsentrasi = Dosen::query()->whereNotNull('konsentrasi')->where('konsentrasi', '!=', '')
+            ->distinct()->orderBy('konsentrasi')->pluck('konsentrasi')->all();
+        $rawQ = $request->query('q');
+        $q = is_string($rawQ) ? Str::substr(trim($rawQ), 0, 100) : '';
+        $selectedKategori = $request->query('kategori');
+        $selectedKategori = is_string($selectedKategori) && array_key_exists($selectedKategori, Dosen::KATEGORI) ? $selectedKategori : '';
+        $selectedKonsentrasi = $request->query('konsentrasi');
+        $selectedKonsentrasi = is_string($selectedKonsentrasi) && in_array($selectedKonsentrasi, $konsentrasi, true) ? $selectedKonsentrasi : '';
+        $isFiltered = $q !== '' || $selectedKategori !== '' || $selectedKonsentrasi !== '';
+
+        $semua = Dosen::query()
+            ->when($q !== '', fn ($query) => $query->where(fn ($match) => $match
+                ->where('nama', 'like', "%{$q}%")
+                ->orWhere('nip', 'like', "%{$q}%")
+                ->orWhere('jabatan', 'like', "%{$q}%")
+                ->orWhere('konsentrasi', 'like', "%{$q}%")))
+            ->when($selectedKategori !== '', fn ($query) => $query->where('kategori', $selectedKategori))
+            ->when($selectedKonsentrasi !== '', fn ($query) => $query->where('konsentrasi', $selectedKonsentrasi))
+            ->orderBy('urutan')->orderBy('nama')->get();
 
         $grup = collect(Dosen::KATEGORI)->mapWithKeys(fn ($label, $key) => [
             $key => ['label' => $label, 'items' => $semua->where('kategori', $key)->values()],
@@ -29,7 +47,21 @@ class DosenController extends Controller
             'grup' => $grup,
             'kategori' => Dosen::KATEGORI,
             'total' => $semua->count(),
+            'totalAll' => Dosen::count(),
+            'konsentrasiOptions' => $konsentrasi,
+            'filters' => ['q' => $q, 'kategori' => $selectedKategori, 'konsentrasi' => $selectedKonsentrasi],
+            'isFiltered' => $isFiltered,
+            'groupByConcentration' => Setting::get('dosen.group_by_concentration', '1') === '1',
         ]);
+    }
+
+    public function updateGrouping(Request $request): RedirectResponse
+    {
+        $data = $request->validate(['enabled' => ['required', 'boolean']]);
+        Setting::set('dosen.group_by_concentration', $data['enabled'] ? '1' : '0', 'dosen');
+
+        return redirect()->route('admin.dosen.index')
+            ->with('status', 'Pengelompokan konsentrasi pada halaman publik berhasil diperbarui.');
     }
 
     /**
@@ -37,15 +69,19 @@ class DosenController extends Controller
      */
     public function reorder(Request $request): JsonResponse
     {
-        $ids = collect($request->input('ids', []))
-            ->filter(fn ($v) => is_numeric($v))
-            ->map(fn ($v) => (int) $v)
-            ->values();
+        $data = $request->validate(['ids' => ['required', 'array'], 'ids.*' => ['required', 'integer', 'min:1']]);
+        $ids = collect($data['ids'])->map(fn ($id) => (int) $id);
+        $savedIds = Dosen::query()->pluck('id');
 
-        // toBase(): update langsung tanpa memicu event model / mengubah updated_at.
-        foreach ($ids as $i => $id) {
-            Dosen::whereKey($id)->toBase()->update(['urutan' => $i + 1]);
+        if ($ids->count() !== $savedIds->count() || $ids->sort()->values()->all() !== $savedIds->sort()->values()->all()) {
+            return response()->json(['message' => 'Daftar dosen berubah. Muat ulang halaman sebelum menyusun urutan.'], 422);
         }
+
+        DB::transaction(function () use ($ids) {
+            foreach ($ids->values() as $i => $id) {
+                Dosen::whereKey($id)->toBase()->update(['urutan' => $i + 1]);
+            }
+        });
 
         return response()->json(['ok' => true, 'count' => $ids->count()]);
     }

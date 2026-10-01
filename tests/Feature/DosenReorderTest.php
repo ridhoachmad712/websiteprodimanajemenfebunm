@@ -50,6 +50,27 @@ class DosenReorderTest extends TestCase
             ->assertSee('Dosen X');
     }
 
+    public function test_admin_can_search_and_filter_dosen_without_reordering_a_subset(): void
+    {
+        $a = Dosen::create(['nama' => 'Anita Dosen', 'slug' => 'anita', 'kategori' => 'tetap_prodi', 'konsentrasi' => 'Manajemen Keuangan', 'nip' => '111', 'urutan' => 1]);
+        Dosen::create(['nama' => 'Budi Dosen', 'slug' => 'budi', 'kategori' => 'tetap_prodi', 'konsentrasi' => 'Manajemen Pemasaran', 'nip' => '222', 'urutan' => 2]);
+        Dosen::create(['nama' => 'Citra Dosen', 'slug' => 'citra', 'kategori' => 'guru_besar', 'konsentrasi' => 'Manajemen SDM', 'nip' => '333', 'urutan' => 3]);
+
+        $this->actingAs(User::factory()->create())
+            ->get('/admin/dosen?q=222')->assertOk()
+            ->assertSee('Budi Dosen')->assertDontSee('Anita Dosen')->assertDontSee('Citra Dosen')
+            ->assertSee('Pengurutan dinonaktifkan')->assertDontSee('class="dosen-sortable"', false);
+
+        $this->get('/admin/dosen?kategori=guru_besar')->assertOk()
+            ->assertSee('Citra Dosen')->assertDontSee('Anita Dosen');
+
+        $this->get('/admin/dosen?konsentrasi=Manajemen%20Keuangan')->assertOk()
+            ->assertSee('Anita Dosen')->assertDontSee('Budi Dosen');
+
+        $this->postJson(route('admin.dosen.reorder'), ['ids' => [$a->id]])->assertUnprocessable();
+        $this->assertSame(1, (int) $a->fresh()->urutan);
+    }
+
     public function test_guest_cannot_reorder(): void
     {
         $this->post(route('admin.dosen.reorder'), ['ids' => []])->assertRedirect('/login');

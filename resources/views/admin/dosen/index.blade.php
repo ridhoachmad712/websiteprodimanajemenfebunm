@@ -11,10 +11,70 @@
 @endsection
 
 @section('content')
+    <div class="card mb-3">
+        <div class="card-body">
+            <form method="GET" action="{{ route('admin.dosen.index') }}" class="row g-3 align-items-end">
+                <div class="col-12 col-lg-5">
+                    <label for="dosenSearch" class="form-label">Cari dosen</label>
+                    <input id="dosenSearch" type="search" name="q" value="{{ $filters['q'] }}" class="form-control" placeholder="Nama, NIP, jabatan, atau konsentrasi">
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label for="dosenKategori" class="form-label">Kategori</label>
+                    <select id="dosenKategori" name="kategori" class="form-select">
+                        <option value="">Semua kategori</option>
+                        @foreach ($kategori as $value => $label)
+                            <option value="{{ $value }}" @selected($filters['kategori'] === $value)>{{ $label }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-sm-6 col-lg-3">
+                    <label for="dosenKonsentrasi" class="form-label">Konsentrasi</label>
+                    <select id="dosenKonsentrasi" name="konsentrasi" class="form-select">
+                        <option value="">Semua konsentrasi</option>
+                        @foreach ($konsentrasiOptions as $value)
+                            <option value="{{ $value }}" @selected($filters['konsentrasi'] === $value)>{{ $value }}</option>
+                        @endforeach
+                    </select>
+                </div>
+                <div class="col-12 col-lg-1">
+                    <button type="submit" class="btn btn-primary w-100" title="Terapkan filter" aria-label="Terapkan filter"><i class="ti ti-search" aria-hidden="true"></i></button>
+                </div>
+            </form>
+            <div class="d-flex flex-wrap align-items-center gap-3 mt-3 small text-secondary" role="status">
+                <span>{{ $total }} dari {{ $totalAll }} dosen</span>
+                @if ($isFiltered)
+                    <a href="{{ route('admin.dosen.index') }}" class="link-primary">Reset filter</a>
+                @endif
+            </div>
+        </div>
+    </div>
+
+    <div class="card mb-3">
+        <div class="card-body d-flex align-items-center justify-content-between flex-wrap gap-3">
+            <div>
+                <div class="fw-bold">Pengelompokan konsentrasi</div>
+                <div class="text-secondary small">Tampilkan subbagian konsentrasi pada daftar dosen di halaman publik.</div>
+            </div>
+            <form method="POST" action="{{ route('admin.dosen.grouping') }}" class="d-flex align-items-center gap-3 flex-wrap">
+                @csrf @method('PUT')
+                <input type="hidden" name="enabled" value="0">
+                <label class="form-check form-switch m-0">
+                    <input class="form-check-input" type="checkbox" name="enabled" value="1" @checked($groupByConcentration)>
+                    <span class="form-check-label">Aktif</span>
+                </label>
+                <button type="submit" class="btn btn-outline-primary"><i class="ti ti-device-floppy me-1" aria-hidden="true"></i>Simpan</button>
+            </form>
+        </div>
+    </div>
+
     <div class="alert alert-info d-flex align-items-center">
-        <i class="ti ti-arrows-move me-2"></i>
-        <div>Seret ikon <i class="ti ti-grip-vertical"></i> untuk menyusun urutan tampil dosen di halaman depan. Urutan tersimpan otomatis. Pindah kategori dilakukan lewat tombol <strong>Edit</strong>.</div>
-        <span id="reorderStatus" class="badge bg-green-lt ms-auto" style="display:none"><i class="ti ti-check me-1"></i>Tersimpan</span>
+        <i class="ti {{ $isFiltered ? 'ti-filter' : 'ti-arrows-move' }} me-2" aria-hidden="true"></i>
+        @if ($isFiltered)
+            <div>Pengurutan dinonaktifkan saat hasil difilter. Reset filter untuk menyusun semua dosen.</div>
+        @else
+            <div>Seret ikon <i class="ti ti-grip-vertical" aria-hidden="true"></i> untuk menyusun urutan tampil dosen di halaman depan. Urutan tersimpan otomatis. Pindah kategori dilakukan lewat tombol <strong>Edit</strong>.</div>
+            <span id="reorderStatus" class="badge bg-green-lt ms-auto" style="display:none"><i class="ti ti-check me-1" aria-hidden="true"></i>Tersimpan</span>
+        @endif
     </div>
 
     @forelse ($grup as $key => $g)
@@ -35,10 +95,12 @@
                             <th class="w-1"></th>
                         </tr>
                     </thead>
-                    <tbody class="dosen-sortable">
+                    <tbody @class(['dosen-sortable' => ! $isFiltered])>
                         @foreach ($g['items'] as $d)
                             <tr data-id="{{ $d->id }}">
-                                <td class="text-secondary drag-handle" style="cursor:grab" title="Seret untuk menyusun"><i class="ti ti-grip-vertical"></i></td>
+                                <td class="text-secondary" @unless ($isFiltered) title="Seret untuk menyusun" @endunless>
+                                    @unless ($isFiltered)<span class="drag-handle" style="cursor:grab" aria-label="Seret untuk menyusun"><i class="ti ti-grip-vertical" aria-hidden="true"></i></span>@endunless
+                                </td>
                                 <td>
                                     <span class="avatar" @if ($d->foto) style="background-image: url('{{ Storage::url($d->foto) }}')" @endif>
                                         @unless ($d->foto) {{ Str::of($d->nama)->substr(0, 1)->upper() }} @endunless
@@ -64,7 +126,7 @@
             </div>
         </div>
     @empty
-        <div class="card"><div class="card-body text-center text-secondary py-5">Belum ada data dosen.</div></div>
+        <div class="card"><div class="card-body text-center text-secondary py-5">{{ $isFiltered ? 'Tidak ada dosen yang cocok dengan filter.' : 'Belum ada data dosen.' }}</div></div>
     @endforelse
 @endsection
 
