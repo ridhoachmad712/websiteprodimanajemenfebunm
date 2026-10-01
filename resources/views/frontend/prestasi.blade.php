@@ -12,17 +12,28 @@
 
     <section class="section">
         <div class="container-xl">
-            {{-- Filter --}}
-            <div class="d-flex flex-wrap gap-2 mb-4">
-                <a href="{{ route('prestasi.index') }}" class="btn btn-sm {{ ! $kategoriAktif && ! $tingkatAktif ? 'btn-primary' : 'btn-outline-primary' }}">Semua</a>
-                @foreach (\App\Models\Prestasi::kategoriOptions() as $val => $lbl)
-                    <a href="{{ route('prestasi.index', ['kategori' => $val]) }}" class="btn btn-sm {{ $kategoriAktif === $val ? 'btn-primary' : 'btn-outline-primary' }}">{{ $lbl }}</a>
-                @endforeach
-                <span class="vr d-none d-sm-block mx-1"></span>
-                @foreach (\App\Models\Prestasi::tingkatOptions() as $val => $lbl)
-                    <a href="{{ route('prestasi.index', ['tingkat' => $val]) }}" class="btn btn-sm {{ $tingkatAktif === $val ? 'btn-primary' : 'btn-outline-secondary' }}">{{ $lbl }}</a>
-                @endforeach
-            </div>
+            <form action="{{ route('prestasi.index') }}" method="GET" class="modern-filter prestasi-filter">
+                <label for="prestasiKategori">Kategori
+                    <select id="prestasiKategori" name="kategori" class="form-select">
+                        <option value="">Semua kategori</option>
+                        @foreach (\App\Models\Prestasi::kategoriOptions() as $val => $lbl)
+                            <option value="{{ $val }}" @selected($kategoriAktif === $val)>{{ $lbl }}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <label for="prestasiTingkat">Tingkat
+                    <select id="prestasiTingkat" name="tingkat" class="form-select">
+                        <option value="">Semua tingkat</option>
+                        @foreach (\App\Models\Prestasi::tingkatOptions() as $val => $lbl)
+                            <option value="{{ $val }}" @selected($tingkatAktif === $val)>{{ $lbl }}</option>
+                        @endforeach
+                    </select>
+                </label>
+                <div class="prestasi-filter-actions">
+                    <button class="btn btn-primary" type="submit">Terapkan</button>
+                    @if ($kategoriAktif || $tingkatAktif)<a href="{{ route('prestasi.index') }}" class="btn btn-outline-secondary">Reset</a>@endif
+                </div>
+            </form>
 
             <div class="row row-cards">
                 @forelse ($prestasi as $p)
@@ -31,10 +42,6 @@
                         <div class="card card-hover h-100">
                             @if ($p->gambar)
                                 <img src="{{ Storage::url($p->gambar) }}" alt="{{ $p->judul }}" class="card-img-top" style="aspect-ratio:16/9;object-fit:cover" loading="lazy">
-                            @else
-                                <div class="d-flex align-items-center justify-content-center bg-{{ $meta['color'] }}-lt" style="aspect-ratio:16/9">
-                                    <i class="ti ti-trophy fs-1 text-{{ $meta['color'] }}"></i>
-                                </div>
                             @endif
                             <div class="card-body d-flex flex-column">
                                 <div class="d-flex flex-wrap gap-1 mb-2">

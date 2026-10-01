@@ -33,6 +33,20 @@ class PrestasiTest extends TestCase
             ->assertDontSee('Prestasi Mahasiswa');
     }
 
+    public function test_public_page_combines_category_and_level_filters(): void
+    {
+        Prestasi::create(['judul' => 'Mahasiswa Nasional', 'kategori' => 'mahasiswa', 'tingkat' => 'nasional', 'tanggal' => '2026-01-01', 'status' => 'published']);
+        Prestasi::create(['judul' => 'Mahasiswa Lokal', 'kategori' => 'mahasiswa', 'tingkat' => 'lokal', 'tanggal' => '2026-01-02', 'status' => 'published']);
+        Prestasi::create(['judul' => 'Dosen Nasional', 'kategori' => 'dosen', 'tingkat' => 'nasional', 'tanggal' => '2026-01-03', 'status' => 'published']);
+
+        $this->get('/prestasi?kategori=mahasiswa&tingkat=nasional')->assertOk()
+            ->assertSee('Mahasiswa Nasional')
+            ->assertDontSee('Mahasiswa Lokal')
+            ->assertDontSee('Dosen Nasional')
+            ->assertSee('value="mahasiswa" selected', false)
+            ->assertSee('value="nasional" selected', false);
+    }
+
     public function test_guest_cannot_access_admin_prestasi(): void
     {
         $this->get('/admin/prestasi')->assertRedirect('/login');

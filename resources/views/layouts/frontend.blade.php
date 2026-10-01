@@ -5,8 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    {{-- Title tab selalu tetap (tidak berubah per halaman). --}}
-    <title>{{ \App\Models\Setting::get('site.nama') ?: config('app.name') }}</title>
+    <title>@yield('title', 'Beranda') — {{ \App\Models\Setting::get('site.nama') ?: config('app.name') }}</title>
 
     @include('frontend.partials.seo')
 

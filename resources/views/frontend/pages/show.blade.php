@@ -1,7 +1,11 @@
 @extends('layouts.frontend')
 
+@php
+    $isContactPlaceholder = $page->slug === 'hubungi-kami'
+        && trim(strip_tags($page->content ?? '')) === 'Konten halaman Hubungi Kami akan diisi melalui panel admin.';
+@endphp
 @section('title', $page->meta_title ?: $page->title)
-@section('meta_description', $page->meta_description ?: Str::limit(strip_tags($page->content ?: $page->title), 155))
+@section('meta_description', $page->meta_description ?: ($isContactPlaceholder ? 'Kontak Program Studi Manajemen FEB UNM.' : Str::limit(strip_tags($page->content ?: $page->title), 155)))
 @if ($page->og_image)
     @section('og_image', url(Storage::url($page->og_image)))
 @endif
@@ -26,8 +30,8 @@
                     <h2 class="section-title">{{ $templateData['hero_title'] ?: $page->title }}</h2>
                     @if (!empty($templateData['hero_subtitle']))<p class="section-subtitle">{{ $templateData['hero_subtitle'] }}</p>@endif
                     <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
-                        @if (!empty($templateData['primary_label']))<a href="{{ $templateData['primary_url'] ?: '#' }}" class="btn btn-primary btn-lg">{{ $templateData['primary_label'] }}</a>@endif
-                        @if (!empty($templateData['secondary_label']))<a href="{{ $templateData['secondary_url'] ?: '#' }}" class="btn btn-outline-primary btn-lg">{{ $templateData['secondary_label'] }}</a>@endif
+                        @if (!empty($templateData['primary_label']) && !empty($templateData['primary_url']) && trim($templateData['primary_url']) !== '#')<a href="{{ $templateData['primary_url'] }}" class="btn btn-primary btn-lg">{{ $templateData['primary_label'] }}</a>@endif
+                        @if (!empty($templateData['secondary_label']) && !empty($templateData['secondary_url']) && trim($templateData['secondary_url']) !== '#')<a href="{{ $templateData['secondary_url'] }}" class="btn btn-outline-primary btn-lg">{{ $templateData['secondary_label'] }}</a>@endif
                     </div>
                 </div>
                 @if (!empty($templateData['items']))
@@ -48,7 +52,7 @@
                                     @if (!empty($item['category']))<span class="badge bg-primary-lt mb-2">{{ $item['category'] }}</span>@endif
                                     <h3 class="h4">{{ $item['label'] }}</h3>
                                     @if (!empty($item['description']))<p class="text-secondary">{{ $item['description'] }}</p>@endif
-                                    <a href="{{ $item['url'] ?: '#' }}" target="_blank" rel="noopener" class="btn btn-outline-primary mt-auto"><i class="ti ti-download me-1"></i>Buka / Unduh</a>
+                                    @if (!empty($item['url']) && trim($item['url']) !== '#')<a href="{{ $item['url'] }}" target="_blank" rel="noopener" class="btn btn-outline-primary mt-auto"><i class="ti ti-download me-1"></i>Buka / Unduh</a>@endif
                                 </div>
                             </div>
                         </div>
@@ -112,31 +116,24 @@
                     </div>
                 </div>
             @else
-                <div class="row">
-                    <div class="col-lg-9">
-                        <div class="markdown">
-                            {!! $page->content !!}
-                        </div>
-                    </div>
-                </div>
+                @unless ($isContactPlaceholder)
+                    <div class="row"><div class="col-lg-9"><div class="markdown">{!! $page->content !!}</div></div></div>
+                @endunless
             @endif
 
             @if ($page->slug === 'hubungi-kami')
                 <div class="row g-4 mt-1">
                     {{-- Info kontak --}}
                     <div class="col-lg-5">
-                        <div class="d-flex mb-3">
-                            <span class="feature-icon me-3"><i class="ti ti-map-pin"></i></span>
-                            <div><div class="fw-bold">Alamat</div><div class="text-secondary">{{ \App\Models\Setting::get('kontak.alamat') }}</div></div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <span class="feature-icon me-3"><i class="ti ti-phone"></i></span>
-                            <div><div class="fw-bold">Telepon</div><div class="text-secondary">{{ \App\Models\Setting::get('kontak.telepon') }}</div></div>
-                        </div>
-                        <div class="d-flex mb-3">
-                            <span class="feature-icon me-3"><i class="ti ti-mail"></i></span>
-                            <div><div class="fw-bold">Email</div><div class="text-secondary">{{ \App\Models\Setting::get('kontak.email') }}</div></div>
-                        </div>
+                        @if (filled(\App\Models\Setting::get('kontak.alamat')))
+                            <div class="d-flex mb-3"><span class="feature-icon me-3"><i class="ti ti-map-pin"></i></span><div><div class="fw-bold">Alamat</div><div class="text-secondary">{{ \App\Models\Setting::get('kontak.alamat') }}</div></div></div>
+                        @endif
+                        @if (filled(\App\Models\Setting::get('kontak.telepon')))
+                            <div class="d-flex mb-3"><span class="feature-icon me-3"><i class="ti ti-phone"></i></span><div><div class="fw-bold">Telepon</div><div class="text-secondary">{{ \App\Models\Setting::get('kontak.telepon') }}</div></div></div>
+                        @endif
+                        @if (filled(\App\Models\Setting::get('kontak.email')))
+                            <div class="d-flex mb-3"><span class="feature-icon me-3"><i class="ti ti-mail"></i></span><div><div class="fw-bold">Email</div><div class="text-secondary">{{ \App\Models\Setting::get('kontak.email') }}</div></div></div>
+                        @endif
                     </div>
 
                     {{-- Form kontak --}}
@@ -162,21 +159,21 @@
 
                                     <div class="row">
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label required">Nama</label>
-                                            <input type="text" name="nama" value="{{ old('nama') }}" class="form-control" required>
+                                            <label for="contactNama" class="form-label required">Nama</label>
+                                            <input id="contactNama" type="text" name="nama" value="{{ old('nama') }}" class="form-control" autocomplete="name" required>
                                         </div>
                                         <div class="col-md-6 mb-3">
-                                            <label class="form-label required">Email</label>
-                                            <input type="email" name="email" value="{{ old('email') }}" class="form-control" required>
+                                            <label for="contactEmail" class="form-label required">Email</label>
+                                            <input id="contactEmail" type="email" name="email" value="{{ old('email') }}" class="form-control" autocomplete="email" required>
                                         </div>
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label">Subjek</label>
-                                        <input type="text" name="subjek" value="{{ old('subjek') }}" class="form-control">
+                                        <label for="contactSubjek" class="form-label">Subjek</label>
+                                        <input id="contactSubjek" type="text" name="subjek" value="{{ old('subjek') }}" class="form-control">
                                     </div>
                                     <div class="mb-3">
-                                        <label class="form-label required">Pesan</label>
-                                        <textarea name="pesan" rows="5" class="form-control" required>{{ old('pesan') }}</textarea>
+                                        <label for="contactPesan" class="form-label required">Pesan</label>
+                                        <textarea id="contactPesan" name="pesan" rows="5" class="form-control" required>{{ old('pesan') }}</textarea>
                                     </div>
                                     <button class="btn btn-primary"><i class="ti ti-send me-1"></i> Kirim Pesan</button>
                                 </form>

@@ -3,6 +3,7 @@
 namespace Tests\Feature;
 
 use App\Models\Setting;
+use Carbon\CarbonImmutable;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Http;
@@ -17,6 +18,7 @@ class JadwalUjianTest extends TestCase
     {
         parent::setUp();
         Cache::flush();
+        $this->travelTo(CarbonImmutable::parse('2026-10-02 00:30:00', 'Asia/Makassar'));
     }
 
     public function test_it_renders_parsed_schedule_from_the_configured_sheet(): void
@@ -26,8 +28,8 @@ class JadwalUjianTest extends TestCase
 
         Http::fake([
             'drive.google.com/*' => Http::response($this->buildXlsx([
-                1 => ['A' => 'Hari', 'B' => 'Nama', 'C' => 'Ujian'],
-                2 => ['A' => 'Senin', 'B' => 'Budi Santoso', 'C' => 'Skripsi'],
+                1 => ['A' => 'Hari', 'B' => 'Tanggal', 'C' => 'Nama', 'D' => 'Ujian'],
+                2 => ['A' => 'Jumat', 'B' => '2026-10-02', 'C' => 'Budi Santoso', 'D' => 'Skripsi'],
             ])),
         ]);
 
@@ -51,8 +53,103 @@ class JadwalUjianTest extends TestCase
         $response->assertSee('belum dapat dimuat');
     }
 
+    public function test_it_displays_excel_serial_dates_as_readable_dates(): void
+    {
+        Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/DATES/edit', 'jadwal');
+        Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
+
+        Http::fake([
+            'drive.google.com/*' => Http::response($this->buildXlsx([
+                1 => ['A' => 'Tanggal', 'B' => 'Nama', 'C' => 'NO. HANDPHONE'],
+                2 => ['A' => 46315.0, 'B' => 'Budi Santoso', 'C' => '081234567890'],
+            ])),
+        ]);
+
+        $this->get('/jadwal-ujian')->assertOk()
+            ->assertSee('20 Okt 2026')
+            ->assertDontSee('46315')
+            ->assertDontSee('NO. HANDPHONE')
+            ->assertDontSee('081234567890');
+    }
+
+    public function test_it_shows_only_today_and_future_schedules_nearest_first(): void
+    {
+        Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/UPCOMING/edit', 'jadwal');
+        Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
+
+        Http::fake([
+            'drive.google.com/*' => Http::response($this->buildXlsx([
+                1 => ['A' => 'TANGGAL', 'B' => 'NAMA', 'C' => 'UJIAN'],
+                2 => ['A' => 46298, 'B' => 'Jadwal mendatang', 'C' => 'Skripsi'],
+                3 => ['A' => 46296, 'B' => 'Jadwal kemarin', 'C' => 'Proposal'],
+                4 => ['A' => 46297, 'B' => 'Jadwal hari ini', 'C' => 'Skripsi'],
+                5 => ['A' => '', 'B' => 'Tanpa tanggal', 'C' => 'Skripsi'],
+                6 => ['A' => '04 Okt 2026', 'B' => 'Tanggal tertulis', 'C' => 'Proposal'],
+            ])),
+        ]);
+
+        $this->get('/jadwal-ujian')->assertOk()
+            ->assertSeeInOrder(['Jadwal hari ini', 'Jadwal mendatang', 'Tanggal tertulis'])
+            ->assertDontSee('Jadwal kemarin')
+            ->assertDontSee('Tanpa tanggal')
+            ->assertSee('value="skripsi"', false)
+            ->assertDontSee('belum dapat dimuat');
+    }
+
+    public function test_date_filter_updates_at_midnight_without_refreshing_the_sheet_cache(): void
+    {
+        Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/MIDNIGHT/edit', 'jadwal');
+        Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
+
+        Http::fake([
+            'drive.google.com/*' => Http::response($this->buildXlsx([
+                1 => ['A' => 'Tanggal', 'B' => 'Nama'],
+                2 => ['A' => '02/10/2026', 'B' => 'Ujian Jumat'],
+            ])),
+        ]);
+
+        $this->travelTo(CarbonImmutable::parse('2026-10-02 23:59:00', 'Asia/Makassar'));
+        $this->get('/jadwal-ujian')->assertOk()->assertSee('Ujian Jumat');
+
+        $this->travelTo(CarbonImmutable::parse('2026-10-03 00:01:00', 'Asia/Makassar'));
+        $this->get('/jadwal-ujian')->assertOk()
+            ->assertDontSee('Ujian Jumat')
+            ->assertSee('Belum ada jadwal ujian hari ini atau mendatang.');
+
+        Http::assertSentCount(1);
+    }
+
+    public function test_it_formats_uppercase_schedule_text_without_changing_sheet_data(): void
+    {
+        Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/FORMAT/edit', 'jadwal');
+        Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
+
+        Http::fake([
+            'drive.google.com/*' => Http::response($this->buildXlsx([
+                1 => ['A' => 'Hari', 'B' => 'Tanggal', 'C' => 'Waktu', 'D' => 'Nama', 'E' => 'Ujian', 'F' => 'Pembimbing 1', 'G' => 'Penguji 1'],
+                2 => ['A' => 'KAMIS', 'B' => '2026-10-08', 'C' => '09.00 WITA', 'D' => '  NUR   ASIFAH ASWA  ', 'E' => 'PROPOSAL PENELITIAN MBKM', 'F' => 'DR. BUDI SANTOSO, M.SI.', 'G' => 'Prof. M. Ikhwan, Ph.D.'],
+                3 => ['A' => 'Jumat', 'B' => '2026-10-09', 'C' => '10.00 WITA', 'D' => 'Budi Santoso', 'E' => 'Ujian Hasil Penelitian', 'F' => 'Dr. Siti Aminah, M.Si.', 'G' => 'ANDI RAHMAN, S.PD., M.PD.'],
+            ])),
+        ]);
+
+        $this->get('/jadwal-ujian')->assertOk()
+            ->assertSee('Kamis')
+            ->assertSee('Nur Asifah Aswa')
+            ->assertSee('Proposal Penelitian MBKM')
+            ->assertSee('Dr. Budi Santoso, M.Si.')
+            ->assertSee('Prof. M. Ikhwan, Ph.D.')
+            ->assertSee('Andi Rahman, S.Pd., M.Pd.')
+            ->assertSee('Ujian Hasil Penelitian')
+            ->assertSee('09.00 WITA')
+            ->assertDontSee('NUR ASIFAH ASWA')
+            ->assertDontSee('PROPOSAL PENELITIAN MBKM');
+
+        $cacheKey = 'jadwal-ujian.'.md5('https://docs.google.com/file/d/FORMAT/edit|1|1');
+        $this->assertSame('PROPOSAL PENELITIAN MBKM', Cache::get($cacheKey)[0]['Ujian']);
+    }
+
     /**
-     * @param  array<int, array<string, string>>  $rows
+     * @param  array<int, array<string, string|float|int>>  $rows
      */
     private function buildXlsx(array $rows): string
     {
@@ -60,7 +157,9 @@ class JadwalUjianTest extends TestCase
         foreach ($rows as $rowNumber => $columns) {
             $cells .= '<row r="'.$rowNumber.'">';
             foreach ($columns as $col => $value) {
-                $cells .= '<c r="'.$col.$rowNumber.'" t="inlineStr"><is><t>'.htmlspecialchars($value, ENT_XML1).'</t></is></c>';
+                $cells .= is_numeric($value) && ! is_string($value)
+                    ? '<c r="'.$col.$rowNumber.'"><v>'.$value.'</v></c>'
+                    : '<c r="'.$col.$rowNumber.'" t="inlineStr"><is><t>'.htmlspecialchars($value, ENT_XML1).'</t></is></c>';
             }
             $cells .= '</row>';
         }

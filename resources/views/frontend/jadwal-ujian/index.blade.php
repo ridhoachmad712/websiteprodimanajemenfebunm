@@ -22,9 +22,10 @@
                 <div class="card-header">
                     <div>
                         <h2 class="card-title mb-1">Daftar Jadwal Ujian</h2>
-                        <div class="text-secondary small">Data diperbarui otomatis dari Google Sheet dan disimpan sementara selama 30 menit.</div>
+                        <div class="text-secondary small">Menampilkan jadwal hari ini dan mendatang. Data dari Google Sheet diperbarui setiap 30 menit.</div>
                     </div>
                 </div>
+                @if ($jadwal)
                 <div class="card-body border-bottom">
                     <div class="row g-2">
                         <div class="col-md-8">
@@ -43,6 +44,7 @@
                         </div>
                     </div>
                 </div>
+                @endif
 
                 <div class="table-responsive" tabindex="0" role="region" aria-label="Jadwal ujian mahasiswa">
                     <table class="table table-vcenter table-mobile-md mb-0" id="jadwalTable">
@@ -68,8 +70,8 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="{{ count($columns) }}" class="text-center text-secondary py-5">
-                                        Belum ada jadwal ujian yang dapat ditampilkan.
+                                    <td colspan="{{ max(1, count($columns)) }}" class="text-center text-secondary py-5">
+                                        {{ $error ? 'Jadwal belum dapat ditampilkan.' : 'Belum ada jadwal ujian hari ini atau mendatang.' }}
                                     </td>
                                 </tr>
                             @endforelse

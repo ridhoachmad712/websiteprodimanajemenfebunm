@@ -24,9 +24,9 @@
                 @if ($kontakTelepon) <p class="mb-1"><i class="ti ti-phone me-1"></i> {{ $kontakTelepon }}</p> @endif
                 @if ($kontakEmail) <p class="mb-3"><i class="ti ti-mail me-1"></i> {{ $kontakEmail }}</p> @endif
                 <div class="d-flex gap-2">
-                    @if ($ig) <a href="{{ $ig }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a> @endif
-                    @if ($tt) <a href="{{ $tt }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a> @endif
-                    @if ($fb) <a href="{{ $fb }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a> @endif
+                    @if ($ig && trim($ig) !== '#') <a href="{{ $ig }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Instagram"><i class="ti ti-brand-instagram"></i></a> @endif
+                    @if ($tt && trim($tt) !== '#') <a href="{{ $tt }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="TikTok"><i class="ti ti-brand-tiktok"></i></a> @endif
+                    @if ($fb && trim($fb) !== '#') <a href="{{ $fb }}" class="btn btn-icon btn-dark" target="_blank" rel="noopener" aria-label="Facebook"><i class="ti ti-brand-facebook"></i></a> @endif
                 </div>
             </div>
 
@@ -36,7 +36,7 @@
                     @if (!empty($col['title']))<h3 class="text-white fs-5 mb-3">{{ $col['title'] }}</h3>@endif
                     <ul class="list-unstyled space-y-1">
                         @foreach ($col['links'] ?? [] as $l)
-                            <li><a class="link-secondary text-decoration-none" href="{{ $l['url'] ?: '#' }}">{{ $l['label'] }}</a></li>
+                            @if (!empty($l['url']) && trim($l['url']) !== '#')<li><a class="link-secondary text-decoration-none" href="{{ $l['url'] }}">{{ $l['label'] }}</a></li>@endif
                         @endforeach
                     </ul>
                 </div>

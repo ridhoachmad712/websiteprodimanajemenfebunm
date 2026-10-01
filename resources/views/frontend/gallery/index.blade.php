@@ -17,11 +17,11 @@
                     <h2 class="h3 mb-3">{{ $kategori }}</h2>
                     <div class="row g-3">
                         @foreach ($items as $item)
-                            <div class="col-6 col-md-4 col-lg-3">
+                            <div class="{{ $items->count() === 1 ? 'col-12 col-md-8 col-lg-6' : 'col-6 col-md-4 col-lg-3' }}">
                                 <a href="#" class="d-block" data-bs-toggle="modal" data-bs-target="#galleryModal"
                                    data-img="{{ Storage::url($item->gambar) }}" data-judul="{{ $item->judul }}">
-                                    <img src="{{ Storage::url($item->gambar) }}" class="rounded w-100" alt="{{ $item->judul }}" loading="lazy"
-                                         style="aspect-ratio:1/1;object-fit:cover;cursor:zoom-in">
+                                    <img src="{{ Storage::url($item->gambar) }}" class="w-100" alt="{{ $item->judul }}" loading="lazy"
+                                         style="aspect-ratio:{{ $items->count() === 1 ? '4/3' : '1/1' }};object-fit:cover;cursor:zoom-in">
                                 </a>
                             </div>
                         @endforeach
@@ -42,7 +42,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="galleryModalTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup galeri"></button>
                 </div>
                 <div class="modal-body text-center p-0">
                     <img src="" id="galleryModalImg" class="img-fluid" alt="">
@@ -57,6 +57,7 @@
     document.getElementById('galleryModal')?.addEventListener('show.bs.modal', function (e) {
         const t = e.relatedTarget;
         this.querySelector('#galleryModalImg').src = t.getAttribute('data-img');
+        this.querySelector('#galleryModalImg').alt = t.getAttribute('data-judul') || '';
         this.querySelector('#galleryModalTitle').textContent = t.getAttribute('data-judul') || '';
     });
 </script>

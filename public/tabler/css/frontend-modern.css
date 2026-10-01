@@ -192,6 +192,12 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
 .modern-filter label:first-child { flex: 1; max-width: 480px; }
 .modern-filter .btn { min-height: 48px; }
 .modern-filter .form-select { max-width: 100%; }
+.prestasi-filter-actions { display: flex; gap: 8px; }
+@media (max-width: 640px) {
+  .prestasi-filter { display: grid; grid-template-columns: 1fr; gap: 16px; }
+  .prestasi-filter label, .prestasi-filter label:first-child { width: 100%; max-width: none; }
+  .prestasi-filter-actions .btn { flex: 1; }
+}
 .modern-document { display: grid; grid-template-columns: 32px minmax(0,1fr) auto; gap: 24px; padding: 24px 0; border-bottom: 1px solid var(--modern-line); align-items: center; }
 .modern-document > .ti { font-size: 28px; color: var(--brand-blue); }
 .modern-document h2 { font-size: .9375rem; margin: 0 0 6px; line-height: 1.7; }
@@ -199,6 +205,15 @@ html.a11y-reduce-motion .frontend-modern .dosen-marquee-group[aria-hidden] { dis
 .frontend-modern [hidden] { display: none !important; }
 .frontend-modern .schedule-surface { border: 0; }
 .frontend-modern .schedule-surface > :is(.card-header,.card-body) { padding-inline: 0; }
+.frontend-modern #daftarPrev, .frontend-modern #daftarNext { min-width: 44px; min-height: 44px; }
+@media (max-width: 767.98px) {
+  .frontend-modern .schedule-surface .table-responsive { overflow: visible; }
+  .frontend-modern #jadwalTable, .frontend-modern #jadwalTable tbody { display: block; }
+  .frontend-modern #jadwalTable thead { display: none; }
+  .frontend-modern #jadwalTable tr[data-search] { display: block; padding: 16px 0; border-bottom: 1px solid var(--modern-line); }
+  .frontend-modern #jadwalTable tr[data-search] td { display: grid; grid-template-columns: minmax(100px, 36%) minmax(0, 1fr); gap: 12px; padding: 5px 0; border: 0; overflow-wrap: anywhere; }
+  .frontend-modern #jadwalTable tr[data-search] td::before { content: attr(data-label); font-weight: 600; color: var(--modern-ink); }
+}
 @media (max-width: 1199.98px) {
   .frontend-modern .container-xl { width: calc(100% - 48px); }
   .frontend-modern #siteSearchPanel { right: 24px; width: min(32rem, calc(100vw - 48px)); }

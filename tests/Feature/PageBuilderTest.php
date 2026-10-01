@@ -4,6 +4,7 @@ namespace Tests\Feature;
 
 use App\Models\Menu;
 use App\Models\Page;
+use App\Models\Setting;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
@@ -15,6 +16,20 @@ class PageBuilderTest extends TestCase
     private function admin(): User
     {
         return User::factory()->create();
+    }
+
+    public function test_contact_page_labels_fields_and_hides_empty_contact_details(): void
+    {
+        Page::create(['title' => 'Hubungi Kami', 'slug' => 'hubungi-kami', 'content' => 'Konten halaman Hubungi Kami akan diisi melalui panel admin.', 'status' => 'published']);
+        Setting::set('kontak.telepon', '', 'kontak');
+
+        $this->get('/hubungi-kami')->assertOk()
+            ->assertSee('for="contactNama"', false)
+            ->assertSee('for="contactEmail"', false)
+            ->assertSee('for="contactSubjek"', false)
+            ->assertSee('for="contactPesan"', false)
+            ->assertDontSee('>Telepon</div>', false)
+            ->assertDontSee('Konten halaman Hubungi Kami akan diisi melalui panel admin.');
     }
 
     public function test_admin_can_change_slug_of_custom_page(): void

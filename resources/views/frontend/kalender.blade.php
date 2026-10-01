@@ -50,7 +50,7 @@
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="kmTitle"></h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Tutup detail kegiatan"></button>
                 </div>
                 <div class="modal-body">
                     <p class="mb-2"><i class="ti ti-clock me-1 text-secondary"></i><span id="kmWaktu"></span></p>
