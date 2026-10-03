@@ -532,7 +532,14 @@ html.a11y-reduce-motion *::after {
 .mitra-marquee.is-grayscale .mitra-item img { filter: grayscale(1); opacity: .65; transition: filter .25s, opacity .25s; }
 .mitra-marquee.is-grayscale .mitra-item:hover img { filter: grayscale(0); opacity: 1; }
 @keyframes mitra-scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
-@media (prefers-reduced-motion: reduce) { .mitra-track { animation: none; flex-wrap: wrap; justify-content: center; row-gap: 1.5rem; } }
+@media (prefers-reduced-motion: reduce) {
+  .mitra-marquee { overflow: visible; -webkit-mask-image: none; mask-image: none; }
+  .mitra-track { width: 100%; animation: none; flex-wrap: wrap; justify-content: center; row-gap: 1.5rem; }
+  .mitra-item[aria-hidden] { display: none; }
+}
+html.a11y-reduce-motion .mitra-marquee { overflow: visible; -webkit-mask-image: none; mask-image: none; }
+html.a11y-reduce-motion .mitra-track { width: 100%; animation: none; flex-wrap: wrap; justify-content: center; row-gap: 1.5rem; }
+html.a11y-reduce-motion .mitra-item[aria-hidden] { display: none; }
 
 /* Aksen institusi: cukup untuk menandai judul dan tautan penting. */
 :root { --brand-accent: #f5a623; }

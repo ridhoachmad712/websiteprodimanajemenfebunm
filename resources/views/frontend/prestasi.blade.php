@@ -50,7 +50,7 @@
                                     @endif
                                     <span class="badge bg-primary-lt">{{ \App\Models\Prestasi::kategoriOptions()[$p->kategori] ?? $p->kategori }}</span>
                                 </div>
-                                <h3 class="h4 mb-1">{{ $p->judul }}</h3>
+                                <h2 class="h4 mb-1"><a href="{{ route('prestasi.show', $p) }}" class="stretched-link text-reset text-decoration-none">{{ $p->judul }}</a></h2>
                                 @if ($p->peraih)<div class="text-secondary mb-1"><i class="ti ti-user me-1"></i>{{ $p->peraih }}</div>@endif
                                 @if ($p->deskripsi)<p class="text-secondary small excerpt-clamp mb-2">{{ $p->deskripsi }}</p>@endif
                                 <div class="text-muted small mt-auto">

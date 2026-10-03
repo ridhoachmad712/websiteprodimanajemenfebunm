@@ -29,4 +29,11 @@ class PrestasiController extends Controller
             'tingkatAktif' => $tingkat,
         ]);
     }
+
+    public function show(Prestasi $prestasi): View
+    {
+        abort_unless($prestasi->isPublished(), 404);
+
+        return view('frontend.prestasi-show', ['prestasi' => $prestasi]);
+    }
 }

@@ -17,23 +17,31 @@
         $plainSections = $page->sections ? collect($page->sections)->reject(fn ($v, $k) => str_starts_with((string) $k, '_'))->all() : [];
     @endphp
 
-    @include('frontend.partials.page-hero', [
-        'title'  => $page->title,
-        'crumbs' => ['Beranda' => url('/'), $page->title => null],
-    ])
+    @if ($template !== 'landing')
+        @include('frontend.partials.page-hero', [
+            'title'  => $page->title,
+            'crumbs' => ['Beranda' => url('/'), $page->title => null],
+        ])
+    @endif
 
-    <section class="section">
+    <section class="section {{ $template === 'landing' ? 'page-landing' : '' }}">
         <div class="container-xl">
             @if ($template === 'landing')
-                <div class="text-center mx-auto mb-5" style="max-width:760px">
+                <header class="page-landing-header">
+                    <nav aria-label="breadcrumb">
+                        <ol class="breadcrumb breadcrumb-arrows">
+                            <li class="breadcrumb-item"><a href="{{ url('/') }}">Beranda</a></li>
+                            <li class="breadcrumb-item active" aria-current="page">{{ $page->title }}</li>
+                        </ol>
+                    </nav>
                     @if (!empty($templateData['eyebrow']))<span class="eyebrow">{{ $templateData['eyebrow'] }}</span>@endif
-                    <h2 class="section-title">{{ $templateData['hero_title'] ?: $page->title }}</h2>
+                    <h1>{{ $templateData['hero_title'] ?: $page->title }}</h1>
                     @if (!empty($templateData['hero_subtitle']))<p class="section-subtitle">{{ $templateData['hero_subtitle'] }}</p>@endif
-                    <div class="d-flex flex-wrap gap-2 justify-content-center mt-4">
+                    <div class="d-flex flex-wrap gap-2 mt-4">
                         @if (!empty($templateData['primary_label']) && !empty($templateData['primary_url']) && trim($templateData['primary_url']) !== '#')<a href="{{ $templateData['primary_url'] }}" class="btn btn-primary btn-lg">{{ $templateData['primary_label'] }}</a>@endif
                         @if (!empty($templateData['secondary_label']) && !empty($templateData['secondary_url']) && trim($templateData['secondary_url']) !== '#')<a href="{{ $templateData['secondary_url'] }}" class="btn btn-outline-primary btn-lg">{{ $templateData['secondary_label'] }}</a>@endif
                     </div>
-                </div>
+                </header>
                 @if (!empty($templateData['items']))
                     <div class="row g-3 mb-5">
                         @foreach ($templateData['items'] as $item)

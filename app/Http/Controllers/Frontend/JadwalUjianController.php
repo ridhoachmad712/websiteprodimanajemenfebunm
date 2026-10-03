@@ -83,7 +83,7 @@ class JadwalUjianController extends Controller
                 }
 
                 $date = $this->scheduleDate($row['Tanggal'] ?? '');
-                if ($date === null || $date->lessThan($today)) {
+                if ($date === null || $date->lessThan($today) || $date->year > $now->year + 10) {
                     continue;
                 }
 
@@ -100,9 +100,6 @@ class JadwalUjianController extends Controller
                 }
 
                 $warnings = [];
-                if ($date->year > $now->year + 10) {
-                    $warnings[] = 'Periksa tanggal di Sheet';
-                }
                 if ($time === null) {
                     $warnings[] = empty($row['Waktu']) ? 'Waktu belum diisi' : 'Periksa waktu di Sheet';
                 }

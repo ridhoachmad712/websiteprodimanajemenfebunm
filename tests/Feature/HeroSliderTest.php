@@ -23,6 +23,17 @@ class HeroSliderTest extends TestCase
             ->assertSee('Selamat Datang');
     }
 
+    public function test_home_uses_one_main_heading_and_hides_incomplete_slide_buttons(): void
+    {
+        HeroSlide::create(['gambar' => 'hero/a.jpg', 'judul' => 'Slide Utama', 'btn_label' => 'Lihat Profil', 'btn_url' => '#', 'aktif' => true, 'urutan' => 1]);
+        HeroSlide::create(['gambar' => 'hero/b.jpg', 'judul' => 'Slide Berikutnya', 'aktif' => true, 'urutan' => 2]);
+
+        $response = $this->get('/')->assertOk()->assertSee('Slide Berikutnya');
+
+        $this->assertSame(1, substr_count($response->getContent(), '<h1'));
+        $response->assertDontSee('href="#">Lihat Profil', false);
+    }
+
     public function test_home_hides_carousel_when_no_slides(): void
     {
         $this->get('/')->assertOk()->assertDontSee('heroCarousel', false);
@@ -54,5 +65,17 @@ class HeroSliderTest extends TestCase
     public function test_guest_cannot_manage_slides(): void
     {
         $this->get('/admin/hero-slides')->assertRedirect('/login');
+    }
+
+    public function test_admin_requires_a_real_url_with_slide_button_label(): void
+    {
+        Storage::fake('public');
+
+        $this->actingAs(User::factory()->create())->post('/admin/hero-slides', [
+            'gambar' => UploadedFile::fake()->image('slide.jpg', 1200, 500),
+            'judul' => 'Slide A',
+            'btn_label' => 'Lihat Profil',
+            'btn_url' => '#',
+        ])->assertSessionHasErrors('btn_url');
     }
 }

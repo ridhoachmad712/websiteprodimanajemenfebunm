@@ -28,7 +28,6 @@
                             @endif
                         </div>
                         <div class="card-body text-center">
-                            <h2 class="h3 mb-2">{{ $dosen->nama }}</h2>
                             @if ($dosen->jabatan)
                                 <div class="mb-2"><span class="badge bg-primary"><i class="ti ti-briefcase me-1"></i>{{ $dosen->jabatan }}</span></div>
                             @endif

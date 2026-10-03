@@ -70,6 +70,7 @@ Route::get('/gallery', [GalleryController::class, 'index'])->name('gallery.index
 
 // Prestasi
 Route::get('/prestasi', [PrestasiController::class, 'index'])->name('prestasi.index');
+Route::get('/prestasi/{prestasi}', [PrestasiController::class, 'show'])->name('prestasi.show');
 
 // Pusat Unduhan
 Route::get('/unduhan', [DownloadController::class, 'index'])->name('unduhan.index');

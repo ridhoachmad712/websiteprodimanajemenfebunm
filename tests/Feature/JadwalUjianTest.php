@@ -178,7 +178,7 @@ class JadwalUjianTest extends TestCase
             ->assertDontSee('Jumat</span>', false);
     }
 
-    public function test_it_marks_suspicious_dates_and_incomplete_schedule_details(): void
+    public function test_it_hides_implausible_dates_and_marks_incomplete_schedule_details(): void
     {
         Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/INCOMPLETE/edit', 'jadwal');
         Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
@@ -186,16 +186,18 @@ class JadwalUjianTest extends TestCase
         Http::fake([
             'drive.google.com/*' => Http::response($this->buildXlsx([
                 1 => ['A' => 'Tanggal', 'B' => 'Waktu', 'C' => 'Nama', 'D' => 'Ujian', 'E' => 'Pembimbing 1'],
-                2 => ['A' => '2926-08-27', 'B' => '25.90 WITA', 'C' => '', 'D' => '', 'E' => 'Dr. Budi'],
+                2 => ['A' => '2926-08-27', 'B' => '25.90 WITA', 'C' => 'Tanggal keliru', 'D' => '', 'E' => 'Dr. Budi'],
+                3 => ['A' => '2026-10-04', 'B' => '25.90 WITA', 'C' => '', 'D' => '', 'E' => 'Dr. Siti'],
             ])),
         ]);
 
         $this->get('/jadwal-ujian')->assertOk()
-            ->assertSee('Periksa tanggal di Sheet')
+            ->assertDontSee('Tanggal keliru')
+            ->assertDontSee('2926')
             ->assertSee('Periksa waktu di Sheet')
             ->assertSee('Nama belum diisi')
             ->assertSee('Jenis ujian belum diisi')
-            ->assertSee('Dr. Budi')
+            ->assertSee('Dr. Siti')
             ->assertSee('Moderator/Sekretaris')
             ->assertSee('Pembimbing 1')
             ->assertSee('Penguji 1')

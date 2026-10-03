@@ -22,6 +22,16 @@ class PrestasiTest extends TestCase
             ->assertDontSee('Prestasi Draft');
     }
 
+    public function test_published_prestasi_has_detail_page_but_draft_does_not(): void
+    {
+        $published = Prestasi::create(['judul' => 'Juara Nasional', 'kategori' => 'mahasiswa', 'tanggal' => '2026-01-01', 'peraih' => 'Budi', 'status' => 'published']);
+        $draft = Prestasi::create(['judul' => 'Prestasi Draft', 'kategori' => 'dosen', 'tanggal' => '2026-01-02', 'status' => 'draft']);
+
+        $this->get('/prestasi')->assertOk()->assertSee(route('prestasi.show', $published));
+        $this->get(route('prestasi.show', $published))->assertOk()->assertSee('Juara Nasional')->assertSee('Budi');
+        $this->get(route('prestasi.show', $draft))->assertNotFound();
+    }
+
     public function test_public_page_filters_by_kategori(): void
     {
         Prestasi::create(['judul' => 'Prestasi Mahasiswa', 'kategori' => 'mahasiswa', 'tanggal' => '2026-01-01', 'status' => 'published']);

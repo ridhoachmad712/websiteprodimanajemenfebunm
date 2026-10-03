@@ -58,4 +58,28 @@ class SearchTest extends TestCase
     {
         $this->get('/cari')->assertOk();
     }
+
+    public function test_search_shows_true_total_and_paginated_results(): void
+    {
+        $user = User::factory()->create();
+        foreach (range(1, 12) as $number) {
+            Post::create([
+                'judul' => "Riset Khusus {$number}",
+                'slug' => "riset-khusus-{$number}",
+                'konten' => 'Riset di bidang manajemen.',
+                'user_id' => $user->id,
+                'status' => 'published',
+                'published_at' => now()->subDays($number),
+            ]);
+        }
+
+        $this->get('/cari?q=khusus')->assertOk()
+            ->assertSee('Ditemukan <strong>12</strong> hasil', false)
+            ->assertSee('Riset Khusus 1')
+            ->assertDontSee('Riset Khusus 12');
+
+        $this->get('/cari?q=khusus&berita_page=2')->assertOk()
+            ->assertSee('Riset Khusus 12')
+            ->assertDontSee('>Riset Khusus 1<', false);
+    }
 }

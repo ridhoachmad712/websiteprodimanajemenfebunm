@@ -75,8 +75,8 @@ class HeroSlideController extends Controller
             'gambar' => [$imageRequired ? 'required' : 'nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:4096'],
             'judul' => ['nullable', 'string', 'max:255'],
             'subjudul' => ['nullable', 'string', 'max:500'],
-            'btn_label' => ['nullable', 'string', 'max:60'],
-            'btn_url' => ['nullable', 'string', 'max:2000'],
+            'btn_label' => ['nullable', 'required_with:btn_url', 'string', 'max:60'],
+            'btn_url' => ['nullable', 'required_with:btn_label', 'not_in:#', 'string', 'max:2000'],
             'urutan' => ['nullable', 'integer', 'min:0', 'max:9999'],
         ], [], ['gambar' => 'gambar slide']);
     }

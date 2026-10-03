@@ -56,10 +56,14 @@
                                 <div class="home-hero-layout">
                                     <div class="home-hero-copy">
                                         @if ($setting('hero.eyebrow'))<p class="home-eyebrow">{{ $setting('hero.eyebrow') }}</p>@endif
-                                        @if ($slide->judul)<h1>{{ $slide->judul }}</h1>@endif
+                                        @if ($loop->first)
+                                            <h1 class="home-hero-title">{{ $slide->judul ?: $heroTitle ?: 'Program Studi Manajemen FEB UNM' }}</h1>
+                                        @elseif ($slide->judul)
+                                            <h2 class="home-hero-title">{{ $slide->judul }}</h2>
+                                        @endif
                                         @if ($slide->subjudul)<p class="home-hero-lead">{{ $slide->subjudul }}</p>@endif
-                                        @if ($slide->btn_label)
-                                            <a class="home-primary-link" href="{{ $slide->btn_url ?: '#' }}">{{ $slide->btn_label }} <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
+                                        @if ($slide->btn_label && $slide->btn_url && trim($slide->btn_url) !== '#')
+                                            <a class="home-primary-link" href="{{ $slide->btn_url }}">{{ $slide->btn_label }} <i class="ti ti-arrow-right" aria-hidden="true"></i></a>
                                         @endif
                                         <p class="home-hero-meta"><span></span> {{ $heroMark }} · {{ $heroSubmark }}</p>
                                     </div>
@@ -81,7 +85,7 @@
                 <div class="home-hero-layout">
                     <div class="home-hero-copy">
                         @if ($setting('hero.eyebrow'))<p class="home-eyebrow">{{ $setting('hero.eyebrow') }}</p>@endif
-                        <h1>{{ $heroTitle }} @if ($heroAccent)<span>{{ $heroAccent }}</span>@endif</h1>
+                        <h1 class="home-hero-title">{{ $heroTitle }} @if ($heroAccent)<span>{{ $heroAccent }}</span>@endif</h1>
                         @if ($heroSubtitle)<p class="home-hero-lead">{{ $heroSubtitle }}</p>@endif
                         @if ($heroButton || $heroButton2)
                             <div class="home-hero-actions">

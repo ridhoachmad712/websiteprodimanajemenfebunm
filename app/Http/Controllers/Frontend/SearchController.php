@@ -14,7 +14,7 @@ use Illuminate\View\View;
 
 class SearchController extends Controller
 {
-    /** Maksimal hasil per jenis konten. */
+    /** Jumlah hasil per halaman untuk setiap jenis konten. */
     private const PER_TYPE = 10;
 
     public function index(Request $request): View
@@ -32,9 +32,9 @@ class SearchController extends Controller
                     ->orWhere('excerpt', 'like', $like)
                     ->orWhere('konten', 'like', $like))
                 ->orderByDesc('published_at')
-                ->limit(self::PER_TYPE)
-                ->get()
-                ->map(fn (Post $p) => [
+                ->paginate(self::PER_TYPE, ['*'], 'berita_page')
+                ->withQueryString()
+                ->through(fn (Post $p) => [
                     'title' => $p->judul,
                     'snippet' => $p->ringkasan(140),
                     'url' => $p->url(),
@@ -45,9 +45,9 @@ class SearchController extends Controller
                 ->orWhere('konsentrasi', 'like', $like)
                 ->orWhere('kepakaran', 'like', $like))
                 ->orderBy('nama')
-                ->limit(self::PER_TYPE)
-                ->get()
-                ->map(fn (Dosen $d) => [
+                ->paginate(self::PER_TYPE, ['*'], 'dosen_page')
+                ->withQueryString()
+                ->through(fn (Dosen $d) => [
                     'title' => $d->nama,
                     'snippet' => $d->konsentrasi ?: $d->kepakaran,
                     'url' => route('dosen.show', $d),
@@ -58,9 +58,9 @@ class SearchController extends Controller
                 ->where(fn ($w) => $w->where('judul', 'like', $like)
                     ->orWhere('konten', 'like', $like))
                 ->latest('published_at')
-                ->limit(self::PER_TYPE)
-                ->get()
-                ->map(fn (Pengumuman $p) => [
+                ->paginate(self::PER_TYPE, ['*'], 'pengumuman_page')
+                ->withQueryString()
+                ->through(fn (Pengumuman $p) => [
                     'title' => $p->judul,
                     'snippet' => $p->ringkasan(140),
                     'url' => $p->url(),
@@ -71,9 +71,9 @@ class SearchController extends Controller
                 ->where(fn ($w) => $w->where('title', 'like', $like)
                     ->orWhere('content', 'like', $like))
                 ->orderBy('title')
-                ->limit(self::PER_TYPE)
-                ->get()
-                ->map(fn (Page $p) => [
+                ->paginate(self::PER_TYPE, ['*'], 'halaman_page')
+                ->withQueryString()
+                ->through(fn (Page $p) => [
                     'title' => $p->title,
                     'snippet' => Str::limit(strip_tags((string) $p->content), 140),
                     'url' => $p->publicUrl(),
@@ -84,12 +84,12 @@ class SearchController extends Controller
                 ->where(fn ($w) => $w->where('judul', 'like', $like)
                     ->orWhere('peraih', 'like', $like))
                 ->orderByDesc('tanggal')
-                ->limit(self::PER_TYPE)
-                ->get()
-                ->map(fn (Prestasi $p) => [
+                ->paginate(self::PER_TYPE, ['*'], 'prestasi_page')
+                ->withQueryString()
+                ->through(fn (Prestasi $p) => [
                     'title' => $p->judul,
                     'snippet' => $p->peraih,
-                    'url' => route('prestasi.index'),
+                    'url' => route('prestasi.show', $p),
                     'meta' => $p->tanggal?->translatedFormat('d M Y'),
                 ]);
 
@@ -99,9 +99,9 @@ class SearchController extends Controller
                 'Dosen' => $dosen,
                 'Halaman' => $halaman,
                 'Prestasi' => $prestasi,
-            ], fn ($items) => $items->isNotEmpty());
+            ], fn ($items) => $items->total() > 0);
 
-            $total = array_sum(array_map(fn ($items) => $items->count(), $groups));
+            $total = array_sum(array_map(fn ($items) => $items->total(), $groups));
         }
 
         return view('frontend.search', [

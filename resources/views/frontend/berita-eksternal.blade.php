@@ -12,69 +12,31 @@
 
     <section class="section">
         <div class="container-xl">
-            <div class="card">
-                <div class="card-body border-bottom py-3">
-                    <form method="GET" class="row g-2 align-items-center">
-                        <div class="col-md-8">
-                            <div class="input-icon">
-                                <span class="input-icon-addon"><i class="ti ti-search"></i></span>
-                                <input type="search" name="cari" value="{{ request('cari') }}" class="form-control" placeholder="Cari judul atau nama media…">
-                            </div>
-                        </div>
-                        <div class="col-md-4 text-md-end">
-                            <button class="btn btn-primary">Cari</button>
-                            @if (request('cari'))<a href="{{ route('berita-eksternal.index') }}" class="btn btn-link">Reset</a>@endif
-                        </div>
-                    </form>
-                </div>
+            <form method="GET" class="modern-filter" role="search">
+                <label for="beritaEksternalCari">
+                    Cari berita
+                    <input id="beritaEksternalCari" type="search" name="cari" value="{{ request('cari') }}" class="form-control" placeholder="Judul atau nama media">
+                </label>
+                <button class="btn btn-primary" type="submit"><i class="ti ti-search me-1" aria-hidden="true"></i>Cari</button>
+                @if (request('cari'))<a href="{{ route('berita-eksternal.index') }}" class="btn btn-outline-primary">Reset</a>@endif
+            </form>
 
-                <div class="table-responsive">
-                    <table class="table table-vcenter table-hover mb-0">
-                        <thead>
-                            <tr>
-                                <th class="w-1">No</th>
-                                <th class="w-1 text-nowrap">Tanggal</th>
-                                <th>Judul Berita</th>
-                                <th>Media</th>
-                                <th class="w-1"></th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($berita as $b)
-                                <tr>
-                                    <td class="text-secondary">{{ $berita->firstItem() + $loop->index }}</td>
-                                    <td class="text-secondary text-nowrap">{{ $b->tanggal?->translatedFormat('d M Y') ?? '—' }}</td>
-                                    <td>
-                                        <a href="{{ $b->url }}" target="_blank" rel="noopener" class="fw-semibold text-reset text-decoration-none">
-                                            {{ $b->judul }}
-                                        </a>
-                                        @if ($b->ringkasan)
-                                            <div class="text-secondary small excerpt-clamp">{{ $b->ringkasan }}</div>
-                                        @endif
-                                    </td>
-                                    <td><span class="badge bg-primary-lt">{{ $b->sumber }}</span></td>
-                                    <td>
-                                        <a href="{{ $b->url }}" target="_blank" rel="noopener" class="btn btn-sm btn-outline-primary text-nowrap">
-                                            <i class="ti ti-external-link me-1"></i>Baca
-                                        </a>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="5" class="text-center text-secondary py-5">
-                                        <i class="ti ti-news-off fs-1 d-block mb-2"></i>
-                                        Belum ada berita eksternal yang ditampilkan.
-                                    </td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
-                </div>
-
-                @if ($berita->hasPages())
-                    <div class="card-footer d-flex align-items-center">{{ $berita->links() }}</div>
-                @endif
+            <p class="text-secondary mb-0">{{ $berita->total() }} berita</p>
+            <div class="external-news-list">
+                @forelse ($berita as $b)
+                    <article class="external-news-entry">
+                        <div class="external-news-meta">
+                            @if ($b->tanggal)<time datetime="{{ $b->tanggal->format('Y-m-d') }}">{{ $b->tanggal->translatedFormat('d M Y') }}</time>@endif
+                            <span>{{ $b->sumber }}</span>
+                        </div>
+                        <h2><a href="{{ $b->url }}" target="_blank" rel="noopener">{{ $b->judul }}<i class="ti ti-external-link" aria-hidden="true"></i></a></h2>
+                        @if ($b->ringkasan)<p>{{ $b->ringkasan }}</p>@endif
+                    </article>
+                @empty
+                    <div class="empty"><p class="empty-title">Belum ada berita eksternal yang ditampilkan.</p></div>
+                @endforelse
             </div>
+            @if ($berita->hasPages())<div class="mt-4">{{ $berita->links() }}</div>@endif
         </div>
     </section>
 @endsection
