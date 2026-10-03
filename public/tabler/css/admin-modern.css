@@ -168,6 +168,8 @@
   .admin-modern .card-body > form[method="GET"].row .form-control,
   .admin-modern .card-body > form[method="GET"].row .form-select { width: 100%; }
   .admin-modern .table { min-width: 760px; }
+  .admin-modern .writing-list .btn { min-height: 44px; }
+  .admin-modern .writing-form :is(.form-control, .form-select) { min-height: 44px; }
   .admin-modern .admin-summary .row > div { min-width: 0; }
   .admin-login .card-body { padding: 24px; }
 }

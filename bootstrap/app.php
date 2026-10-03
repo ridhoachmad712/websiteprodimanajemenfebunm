@@ -1,6 +1,8 @@
 <?php
 
 use App\Http\Middleware\EnsureAdmin;
+use App\Http\Middleware\EnsureContentEditor;
+use App\Http\Middleware\EnsureDosen;
 use Illuminate\Foundation\Application;
 use Illuminate\Foundation\Configuration\Exceptions;
 use Illuminate\Foundation\Configuration\Middleware;
@@ -15,6 +17,8 @@ return Application::configure(basePath: dirname(__DIR__))
     ->withMiddleware(function (Middleware $middleware): void {
         $middleware->alias([
             'admin' => EnsureAdmin::class,
+            'content-editor' => EnsureContentEditor::class,
+            'dosen' => EnsureDosen::class,
         ]);
     })
     ->withExceptions(function (Exceptions $exceptions): void {

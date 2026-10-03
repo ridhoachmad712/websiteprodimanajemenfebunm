@@ -16,14 +16,23 @@ use App\Models\Post;
 use App\Models\Prestasi;
 use App\Models\Seminar;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 
 class DashboardController extends Controller
 {
     /**
      * Tampilkan dashboard ringkasan panel admin.
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        if ($request->user()->isDosen()) {
+            return view('admin.writings.dashboard', [
+                'drafts' => Post::where('user_id', $request->user()->id)->where('status', 'draft')->whereNull('submitted_at')->count(),
+                'submitted' => Post::where('user_id', $request->user()->id)->where('status', 'draft')->whereNotNull('submitted_at')->count(),
+                'published' => Post::where('user_id', $request->user()->id)->where('status', 'published')->count(),
+            ]);
+        }
+
         $stats = [
             'berita' => Post::count(),
             'pengumuman' => Pengumuman::count(),

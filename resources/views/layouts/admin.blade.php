@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <title>@yield('title', 'Dashboard') &mdash; Admin {{ config('app.name') }}</title>
+    <title>@yield('title', 'Dashboard') &mdash; {{ auth()->user()->isDosen() ? 'Ruang Dosen' : 'Admin' }} {{ config('app.name') }}</title>
 
     <link href="{{ asset('tabler/css/tabler.min.css') }}" rel="stylesheet">
     <link href="{{ asset('tabler/icons/tabler-icons.min.css') }}" rel="stylesheet">
@@ -29,7 +29,8 @@
             <div class="container-xl">
                 <span class="admin-topbar-label d-none d-md-inline">Prodi Manajemen FEB UNM</span>
                 <div class="navbar-nav flex-row order-md-last ms-auto">
-                    @php($topUnread = \App\Models\ContactMessage::unread()->count())
+                    @php($topUnread = auth()->user()->canEditContent() ? \App\Models\ContactMessage::unread()->count() : 0)
+                    @if (auth()->user()->canEditContent())
                     <div class="nav-item me-2">
                         <a href="{{ route('admin.contacts.index') }}" class="nav-link px-0 position-relative" title="Pesan masuk" aria-label="Pesan masuk">
                             <i class="ti ti-mail fs-2"></i>
@@ -38,12 +39,13 @@
                             @endif
                         </a>
                     </div>
+                    @endif
                     <div class="nav-item dropdown">
                         <a href="#" class="nav-link d-flex lh-1 p-0 px-2" data-bs-toggle="dropdown" aria-label="Menu pengguna">
                             <span class="avatar avatar-sm bg-primary text-white">{{ strtoupper(substr(auth()->user()->name ?? 'A', 0, 1)) }}</span>
                             <div class="d-none d-xl-block ps-2">
                                 <div>{{ auth()->user()->name ?? 'Admin' }}</div>
-                                <div class="mt-1 small text-secondary">Administrator</div>
+                                <div class="mt-1 small text-secondary">{{ auth()->user()->roleLabel() }}</div>
                             </div>
                         </a>
                         <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -100,7 +102,7 @@
             <footer class="footer footer-transparent d-print-none">
                 <div class="container-xl">
                     <div class="text-center text-secondary">
-                        &copy; {{ date('Y') }} Prodi Manajemen FEB UNM &mdash; Panel Admin
+                        &copy; {{ date('Y') }} Prodi Manajemen FEB UNM &mdash; {{ auth()->user()->isDosen() ? 'Ruang Dosen' : 'Panel Admin' }}
                     </div>
                 </div>
             </footer>

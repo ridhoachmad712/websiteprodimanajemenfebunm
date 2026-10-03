@@ -22,11 +22,22 @@ class User extends Authenticatable
     public const ROLES = [
         'admin' => 'Administrator',
         'editor' => 'Editor',
+        'dosen' => 'Dosen',
     ];
 
     public function isAdmin(): bool
     {
         return $this->role === 'admin';
+    }
+
+    public function canEditContent(): bool
+    {
+        return in_array($this->role, ['admin', 'editor'], true);
+    }
+
+    public function isDosen(): bool
+    {
+        return $this->role === 'dosen';
     }
 
     public function roleLabel(): string

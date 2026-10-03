@@ -26,7 +26,7 @@ class UpdateUserRequest extends FormRequest
             // Kosongkan untuk mempertahankan sandi lama.
             'password' => ['nullable', 'confirmed', Password::defaults()],
             // Hanya admin yang boleh mengubah peran (diterapkan di controller).
-            'role' => ['nullable', 'in:admin,editor'],
+            'role' => ['nullable', 'in:admin,editor,dosen'],
         ];
     }
 

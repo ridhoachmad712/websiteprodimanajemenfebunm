@@ -19,6 +19,7 @@ class SitemapController extends Controller
         // Beranda + daftar utama
         $urls[] = ['loc' => url('/'), 'priority' => '1.0'];
         $urls[] = ['loc' => route('post.index'), 'priority' => '0.8'];
+        $urls[] = ['loc' => route('post.writings'), 'priority' => '0.7'];
         $urls[] = ['loc' => route('pengumuman.index'), 'priority' => '0.7'];
         $urls[] = ['loc' => route('dosen.index'), 'priority' => '0.7'];
         $urls[] = ['loc' => route('gallery.index'), 'priority' => '0.5'];

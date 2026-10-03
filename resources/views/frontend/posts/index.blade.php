@@ -4,6 +4,7 @@
 @section('content')
     @include('frontend.partials.page-hero', ['title' => 'Berita & Kegiatan', 'subtitle' => 'Kegiatan akademik, kolaborasi, dan kabar dari Program Studi Manajemen.', 'crumbs' => ['Beranda' => url('/'), 'Berita' => null]])
     <section class="section"><div class="container-xl">
+        <div class="d-flex justify-content-end mb-3"><a href="{{ route('post.writings') }}" class="section-text-link">Artikel & opini dosen <i class="ti ti-arrow-up-right" aria-hidden="true"></i></a></div>
         <form class="modern-filter" method="GET" action="{{ route('post.index') }}" role="search">
             <label>Cari berita<input class="form-control" name="q" type="search" maxlength="200" value="{{ request('q') }}" placeholder="Ketik kata kunci"></label>
             <label>Kategori<select class="form-select" name="category"><option value="">Semua kategori</option>@foreach ($categories as $category)<option value="{{ $category->slug }}" @selected(request('category') === $category->slug)>{{ $category->nama }}</option>@endforeach</select></label>

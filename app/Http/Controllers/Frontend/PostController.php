@@ -16,7 +16,7 @@ class PostController extends Controller
     public function index(Request $request): View
     {
         $filters = $request->validate(['q' => 'nullable|string|max:200', 'category' => 'nullable|string|max:200']);
-        $posts = Post::published()->with('categories')
+        $posts = Post::published()->where('jenis', 'berita')->with('categories', 'user')
             ->when($filters['q'] ?? null, fn ($query, $term) => $query->where('judul', 'like', '%'.$term.'%'))
             ->when($filters['category'] ?? null, fn ($query, $slug) => $query->whereHas('categories', fn ($category) => $category->where('slug', $slug)))
             ->latest('published_at')
@@ -28,6 +28,18 @@ class PostController extends Controller
         ]);
     }
 
+    public function writings(Request $request): View
+    {
+        $filters = $request->validate(['q' => 'nullable|string|max:200', 'jenis' => 'nullable|in:artikel,opini']);
+
+        return view('frontend.posts.writings', [
+            'posts' => Post::published()->whereIn('jenis', ['artikel', 'opini'])->with(['user', 'categories'])
+                ->when($filters['q'] ?? null, fn ($query, $term) => $query->where('judul', 'like', '%'.$term.'%'))
+                ->when($filters['jenis'] ?? null, fn ($query, $jenis) => $query->where('jenis', $jenis))
+                ->latest('published_at')->paginate(9)->withQueryString(),
+        ]);
+    }
+
     /**
      * Arsip berita per kategori.
      */
@@ -35,7 +47,7 @@ class PostController extends Controller
     {
         return view('frontend.posts.category', [
             'category' => $category,
-            'posts' => $category->posts()->published()->with('categories')->latest('published_at')->paginate(9),
+            'posts' => $category->posts()->published()->where('jenis', 'berita')->with('categories')->latest('published_at')->paginate(9),
             'categories' => Category::orderBy('nama')->get(),
         ]);
     }
@@ -62,6 +74,9 @@ class PostController extends Controller
             'post' => $post->load('categories', 'user'),
             'terkait' => Post::published()
                 ->where('id', '!=', $post->id)
+                ->when($post->jenis === 'berita',
+                    fn ($query) => $query->where('jenis', 'berita'),
+                    fn ($query) => $query->whereIn('jenis', ['artikel', 'opini']))
                 ->latest('published_at')
                 ->take(3)
                 ->get(),

@@ -7,6 +7,7 @@ use App\Http\Controllers\Admin\ContactMessageController as AdminContactControlle
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\DosenController as AdminDosenController;
 use App\Http\Controllers\Admin\DownloadController as AdminDownloadController;
+use App\Http\Controllers\Admin\DosenWritingController;
 use App\Http\Controllers\Admin\GalleryController as AdminGalleryController;
 use App\Http\Controllers\Admin\HeroSlideController as AdminHeroSlideController;
 use App\Http\Controllers\Admin\HomeBuilderController as AdminHomeBuilderController;
@@ -56,6 +57,7 @@ Route::get('/dosen/{dosen}', [DosenController::class, 'show'])->name('dosen.show
 
 // Berita
 Route::get('/berita', [PostController::class, 'index'])->name('post.index');
+Route::get('/tulisan', [PostController::class, 'writings'])->name('post.writings');
 Route::get('/category/{category}', [PostController::class, 'byCategory'])->name('post.category');
 
 // Berita eksternal (liputan media) — tabel
@@ -114,10 +116,27 @@ foreach ($staticPages as $slug) {
 
 Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('/', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
+    Route::put('users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
+
+    Route::middleware('dosen')->group(function () {
+        Route::get('tulisan', [DosenWritingController::class, 'index'])->name('admin.writings.index');
+        Route::get('tulisan/create', [DosenWritingController::class, 'create'])->name('admin.writings.create');
+        Route::post('tulisan', [DosenWritingController::class, 'store'])->name('admin.writings.store');
+        Route::get('tulisan/{post}/edit', [DosenWritingController::class, 'edit'])->name('admin.writings.edit');
+        Route::put('tulisan/{post}', [DosenWritingController::class, 'update'])->name('admin.writings.update');
+        Route::post('tulisan/{post}/submit', [DosenWritingController::class, 'submit'])->name('admin.writings.submit');
+        Route::post('tulisan/{post}/withdraw', [DosenWritingController::class, 'withdraw'])->name('admin.writings.withdraw');
+        Route::delete('tulisan/{post}', [DosenWritingController::class, 'destroy'])->name('admin.writings.destroy');
+        Route::post('tulisan/uploads/image', [AdminUploadController::class, 'image'])->name('admin.writings.uploads.image');
+    });
+
+    Route::middleware('content-editor')->group(function () {
     Route::post('dosen/reorder', [AdminDosenController::class, 'reorder'])->name('admin.dosen.reorder');
     Route::put('dosen/grouping', [AdminDosenController::class, 'updateGrouping'])->name('admin.dosen.grouping');
     Route::resource('dosen', AdminDosenController::class)->except('show')->names('admin.dosen');
     Route::resource('posts', AdminPostController::class)->except('show')->names('admin.posts');
+    Route::post('posts/{post}/return-to-draft', [AdminPostController::class, 'returnToDraft'])->name('admin.posts.return-to-draft');
     Route::resource('pengumuman', AdminPengumumanController::class)->except('show')->names('admin.pengumuman')->parameters(['pengumuman' => 'pengumuman']);
     Route::resource('pages', AdminPageController::class)->only(['index', 'create', 'store', 'edit', 'update', 'destroy'])->names('admin.pages');
     Route::resource('gallery', AdminGalleryController::class)->except('show')->names('admin.gallery')->parameters(['gallery' => 'gallery']);
@@ -133,10 +152,6 @@ Route::middleware('auth')->prefix('admin')->group(function () {
     Route::get('pesan', [AdminContactController::class, 'index'])->name('admin.contacts.index');
     Route::get('pesan/{contact}', [AdminContactController::class, 'show'])->name('admin.contacts.show');
     Route::delete('pesan/{contact}', [AdminContactController::class, 'destroy'])->name('admin.contacts.destroy');
-
-    // Akun sendiri: setiap pengguna boleh menyunting akunnya (dijaga di controller).
-    Route::get('users/{user}/edit', [AdminUserController::class, 'edit'])->name('admin.users.edit');
-    Route::put('users/{user}', [AdminUserController::class, 'update'])->name('admin.users.update');
 
     // Konfigurasi situs & manajemen pengguna — khusus Administrator.
     Route::middleware('admin')->group(function () {
@@ -156,6 +171,7 @@ Route::middleware('auth')->prefix('admin')->group(function () {
         Route::resource('hero-slides', AdminHeroSlideController::class)->except('show')->names('admin.hero-slides')->parameters(['hero-slides' => 'hero_slide']);
         Route::get('settings', [AdminSettingController::class, 'edit'])->name('admin.settings.edit');
         Route::put('settings', [AdminSettingController::class, 'update'])->name('admin.settings.update');
+    });
     });
 });
 

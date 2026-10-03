@@ -23,7 +23,10 @@ class HomeController extends Controller
 
             'berita'     => $this->postsByCategory('berita-informasi', 3),
             'prestasi'   => $this->postsByCategory('prestasi', 3),
-            'artikel'    => $this->postsByCategory('artikel', 3),
+            'artikel'    => Post::published()->where(fn ($query) => $query
+                ->whereIn('jenis', ['artikel', 'opini'])
+                ->orWhereHas('categories', fn ($category) => $category->where('slug', 'artikel')))
+                ->with('categories', 'user')->latest('published_at')->take(3)->get(),
             'pengumuman' => $this->postsByCategory('pengumuman', 4),
 
             'dosenPreview' => Dosen::orderBy('urutan')->take(6)->get(),

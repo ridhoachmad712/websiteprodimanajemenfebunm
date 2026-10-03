@@ -6,7 +6,7 @@
 @section('content')
     @include('frontend.partials.page-hero', [
         'title' => 'Pencarian',
-        'subtitle' => $q !== '' ? 'Hasil untuk "'.$q.'"' : 'Cari berita, dosen, halaman, dan prestasi.',
+        'subtitle' => $q !== '' ? 'Hasil untuk "'.$q.'"' : 'Cari berita, tulisan dosen, halaman, dan prestasi.',
         'crumbs' => ['Beranda' => url('/'), 'Pencarian' => null],
     ])
 

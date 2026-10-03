@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\StoreUserRequest;
 use App\Http\Requests\UpdateUserRequest;
 use App\Models\User;
+use App\Models\Post;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -66,7 +67,7 @@ class UserController extends Controller
         // Hanya admin yang boleh menetapkan peran; cegah admin terakhir menurunkan diri sendiri.
         if (! $actor->isAdmin()) {
             unset($data['role']);
-        } elseif (($data['role'] ?? null) === 'editor' && $user->isAdmin() && $this->adminCount() <= 1) {
+        } elseif (isset($data['role']) && $data['role'] !== 'admin' && $user->isAdmin() && $this->adminCount() <= 1) {
             return back()->with('error', 'Tidak dapat menurunkan admin terakhir menjadi editor.')->withInput();
         }
 
@@ -97,6 +98,10 @@ class UserController extends Controller
         // Lindungi: tidak boleh menghapus akun sendiri.
         if ($user->id === $request->user()->id) {
             return back()->with('error', 'Anda tidak dapat menghapus akun Anda sendiri.');
+        }
+
+        if (Post::where('user_id', $user->id)->exists()) {
+            return back()->with('error', 'Akun ini masih memiliki tulisan. Pertahankan akun agar tulisan dan nama penulis tidak hilang.');
         }
 
         // Lindungi: harus selalu ada minimal satu pengguna.

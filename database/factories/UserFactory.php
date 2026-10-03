@@ -42,6 +42,11 @@ class UserFactory extends Factory
         return $this->state(fn (array $attributes) => ['role' => 'editor']);
     }
 
+    public function dosen(): static
+    {
+        return $this->state(fn (array $attributes) => ['role' => 'dosen']);
+    }
+
     /**
      * Indicate that the model's email address should be unverified.
      */

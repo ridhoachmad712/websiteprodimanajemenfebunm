@@ -1,4 +1,4 @@
-@php($unread = \App\Models\ContactMessage::unread()->count())
+@php($unread = auth()->user()->canEditContent() ? \App\Models\ContactMessage::unread()->count() : 0)
 <aside class="navbar navbar-vertical navbar-expand-lg admin-sidebar">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
@@ -12,7 +12,7 @@
                     <img src="{{ Storage::url($adminLogo) }}" alt="Prodi Manajemen FEB UNM">
                 @else
                     <span class="avatar avatar-sm bg-primary text-white me-2">M</span>
-                    <span class="fw-bold">Admin Manajemen</span>
+                    <span class="fw-bold">{{ auth()->user()->isDosen() ? 'Ruang Dosen' : 'Admin Manajemen' }}</span>
                 @endif
             </a>
         </div>
@@ -26,11 +26,20 @@
                     </a>
                 </li>
 
+                @if (auth()->user()->isDosen())
+                    <li class="nav-section">Ruang Dosen</li>
+                    <li class="nav-item {{ request()->routeIs('admin.writings.*') ? 'active' : '' }}">
+                        <a class="nav-link" href="{{ route('admin.writings.index') }}">
+                            <span class="nav-link-icon"><i class="ti ti-pencil"></i></span>
+                            <span class="nav-link-title">Tulisan Saya</span>
+                        </a>
+                    </li>
+                @else
                 <li class="nav-section">Konten</li>
                 <li class="nav-item {{ request()->routeIs('admin.posts.*') ? 'active' : '' }}">
                     <a class="nav-link" href="{{ route('admin.posts.index') }}">
                         <span class="nav-link-icon"><i class="ti ti-news"></i></span>
-                        <span class="nav-link-title">Berita</span>
+                        <span class="nav-link-title">Publikasi</span>
                     </a>
                 </li>
                 <li class="nav-item {{ request()->routeIs('admin.pengumuman.*') ? 'active' : '' }}">
@@ -155,6 +164,7 @@
                             <span class="nav-link-title">Pengaturan</span>
                         </a>
                     </li>
+                @endif
                 @endif
             </ul>
         </div>

@@ -60,7 +60,7 @@
                     @endforeach
                 </select>
                 @error('role') <div class="invalid-feedback">{{ $message }}</div> @enderror
-                <small class="form-hint">Editor hanya dapat mengelola konten. Administrator memiliki akses penuh.</small>
+                <small class="form-hint">Dosen hanya dapat mengelola tulisan sendiri. Editor meninjau konten. Administrator memiliki akses penuh.</small>
             </div>
         @elseif ($u)
             <div class="mb-3">

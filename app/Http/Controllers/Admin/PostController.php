@@ -16,14 +16,22 @@ class PostController extends Controller
 {
     public function index(Request $request): View
     {
-        $query = Post::with('categories')->latest();
+        $query = Post::with('categories', 'user')->latest();
 
-        if ($status = $request->query('status')) {
-            $query->where('status', $status);
+        if (in_array($request->query('status'), ['draft', 'published'], true)) {
+            $query->where('status', $request->query('status'));
         }
 
         if ($cari = $request->query('cari')) {
             $query->where('judul', 'like', "%{$cari}%");
+        }
+
+        if (in_array($request->query('jenis'), array_keys(Post::JENIS), true)) {
+            $query->where('jenis', $request->query('jenis'));
+        }
+
+        if ($request->query('status') === 'menunggu') {
+            $query->where('status', 'draft')->whereNotNull('submitted_at');
         }
 
         return view('admin.posts.index', [
@@ -58,7 +66,7 @@ class PostController extends Controller
     public function edit(Post $post): View
     {
         return view('admin.posts.edit', [
-            'post' => $post->load('categories'),
+            'post' => $post->load('categories', 'user'),
             'categories' => Category::orderBy('nama')->get(),
             'selected' => $post->categories->pluck('id')->all(),
         ]);
@@ -98,6 +106,15 @@ class PostController extends Controller
             ->with('status', 'Berita berhasil dihapus.');
     }
 
+    public function returnToDraft(Post $post): RedirectResponse
+    {
+        abort_unless($post->isSubmitted(), 404);
+        $post->update(['submitted_at' => null]);
+
+        return redirect()->route('admin.posts.index', ['status' => 'menunggu'])
+            ->with('status', 'Tulisan dikembalikan ke draft penulis.');
+    }
+
     /**
      * Normalisasi data: set published_at otomatis jika status published & belum diisi.
      *
@@ -106,12 +123,17 @@ class PostController extends Controller
     private function prepareData(StorePostRequest $request): array
     {
         $data = $request->safe()->except(['categories', 'featured_image']);
+        $data['jenis'] = $data['jenis'] ?? 'berita';
 
         // Sanitasi HTML dari WYSIWYG untuk mencegah XSS.
         $data['konten'] = clean($data['konten']);
 
         if ($data['status'] === 'published' && empty($data['published_at'])) {
             $data['published_at'] = now();
+        }
+
+        if ($data['status'] === 'published') {
+            $data['submitted_at'] = null;
         }
 
         if ($data['status'] === 'draft') {

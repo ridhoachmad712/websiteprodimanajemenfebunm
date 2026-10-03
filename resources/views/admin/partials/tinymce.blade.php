@@ -23,7 +23,7 @@
             return new Promise(function (resolve, reject) {
                 var fd = new FormData();
                 fd.append('file', blobInfo.blob(), blobInfo.filename());
-                fetch('{{ route('admin.uploads.image') }}', {
+                fetch('{{ $uploadRoute ?? route('admin.uploads.image') }}', {
                     method: 'POST',
                     headers: { 'X-CSRF-TOKEN': '{{ csrf_token() }}', 'Accept': 'application/json' },
                     body: fd,

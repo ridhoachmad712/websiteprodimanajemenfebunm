@@ -15,17 +15,20 @@ class Post extends Model
 
     protected $fillable = [
         'judul',
+        'jenis',
         'slug',
         'excerpt',
         'konten',
         'featured_image',
         'user_id',
         'status',
+        'submitted_at',
         'published_at',
     ];
 
     protected $casts = [
         'published_at' => 'datetime',
+        'submitted_at' => 'datetime',
     ];
 
     public function user(): BelongsTo
@@ -46,6 +49,17 @@ class Post extends Model
         return $query->where('status', 'published')
             ->whereNotNull('published_at')
             ->where('published_at', '<=', now());
+    }
+
+    public const JENIS = [
+        'berita' => 'Berita',
+        'artikel' => 'Artikel',
+        'opini' => 'Opini',
+    ];
+
+    public function isSubmitted(): bool
+    {
+        return $this->status === 'draft' && $this->submitted_at !== null;
     }
 
     public function getRouteKeyName(): string

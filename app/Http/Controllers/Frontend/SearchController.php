@@ -28,6 +28,7 @@ class SearchController extends Controller
             $like = '%'.$q.'%';
 
             $berita = Post::published()
+                ->where('jenis', 'berita')
                 ->where(fn ($w) => $w->where('judul', 'like', $like)
                     ->orWhere('excerpt', 'like', $like)
                     ->orWhere('konten', 'like', $like))
@@ -39,6 +40,21 @@ class SearchController extends Controller
                     'snippet' => $p->ringkasan(140),
                     'url' => $p->url(),
                     'meta' => $p->published_at?->translatedFormat('d M Y'),
+                ]);
+
+            $tulisan = Post::published()
+                ->whereIn('jenis', ['artikel', 'opini'])
+                ->where(fn ($w) => $w->where('judul', 'like', $like)
+                    ->orWhere('excerpt', 'like', $like)
+                    ->orWhere('konten', 'like', $like))
+                ->orderByDesc('published_at')
+                ->paginate(self::PER_TYPE, ['*'], 'tulisan_page')
+                ->withQueryString()
+                ->through(fn (Post $p) => [
+                    'title' => $p->judul,
+                    'snippet' => $p->ringkasan(140),
+                    'url' => $p->url(),
+                    'meta' => Post::JENIS[$p->jenis].' · '.$p->published_at?->translatedFormat('d M Y'),
                 ]);
 
             $dosen = Dosen::where(fn ($w) => $w->where('nama', 'like', $like)
@@ -95,6 +111,7 @@ class SearchController extends Controller
 
             $groups = array_filter([
                 'Berita' => $berita,
+                'Tulisan Dosen' => $tulisan,
                 'Pengumuman' => $pengumuman,
                 'Dosen' => $dosen,
                 'Halaman' => $halaman,

@@ -7,15 +7,20 @@
     @include('frontend.partials.page-hero', [
         'title'  => $post->judul,
         'variant' => 'article',
-        'crumbs' => ['Beranda' => url('/'), 'Berita' => route('post.index'), 'Artikel' => null],
+        'crumbs' => ['Beranda' => url('/'), ($post->jenis === 'berita' ? 'Berita' : 'Tulisan Dosen') => ($post->jenis === 'berita' ? route('post.index') : route('post.writings')), ($post->jenis === 'berita' ? 'Artikel' : (\App\Models\Post::JENIS[$post->jenis] ?? 'Tulisan')) => null],
     ])
 
     <section class="section">
         <div class="container-xl">
             <article class="article-shell">
                     <div class="mb-2">
+                        @if ($post->jenis !== 'berita')<span class="badge bg-primary-lt">{{ \App\Models\Post::JENIS[$post->jenis] ?? $post->jenis }}</span>@endif
                         @foreach ($post->categories as $c)
-                            <a href="{{ route('post.category', $c) }}" class="badge bg-primary-lt text-decoration-none">{{ $c->nama }}</a>
+                            @if ($post->jenis === 'berita')
+                                <a href="{{ route('post.category', $c) }}" class="badge bg-primary-lt text-decoration-none">{{ $c->nama }}</a>
+                            @else
+                                <span class="badge bg-primary-lt">{{ $c->nama }}</span>
+                            @endif
                         @endforeach
                     </div>
                     <div class="article-meta text-secondary">
@@ -28,7 +33,7 @@
                         <img src="{{ Storage::url($post->featured_image) }}" class="rounded mb-4 img-fluid w-100" alt="{{ $post->judul }}" loading="lazy">
                     @endif
 
-                    {{-- Konten HTML dari editor (dibuat oleh admin tepercaya) --}}
+                    {{-- Konten telah disanitasi saat disimpan. --}}
                     <div class="markdown">
                         {!! $post->konten !!}
                     </div>
@@ -36,13 +41,13 @@
                     @include('frontend.partials.share', ['url' => $post->url(), 'judul' => $post->judul])
 
                     <hr class="my-4">
-                    <a href="{{ route('post.index') }}" class="btn btn-link px-0"><i class="ti ti-arrow-left me-1"></i> Semua berita</a>
+                    <a href="{{ $post->jenis === 'berita' ? route('post.index') : route('post.writings') }}" class="btn btn-link px-0"><i class="ti ti-arrow-left me-1"></i> {{ $post->jenis === 'berita' ? 'Semua berita' : 'Semua tulisan' }}</a>
             </article>
 
             @if ($terkait->isNotEmpty())
                 <div class="row justify-content-center mt-5">
                     <div class="col-lg-10">
-                        <h2 class="h3 mb-3">Berita lainnya</h2>
+                        <h2 class="h3 mb-3">{{ $post->jenis === 'berita' ? 'Berita lainnya' : 'Tulisan lainnya' }}</h2>
                         <div class="row row-cards">
                             @foreach ($terkait as $post)
                                 <div class="col-md-4">

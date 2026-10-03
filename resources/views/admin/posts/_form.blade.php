@@ -30,7 +30,7 @@
                 </div>
 
                 <div class="mb-1">
-                    <label class="form-label required">Isi berita</label>
+                    <label class="form-label required">Isi tulisan</label>
                     <textarea id="editor-konten" name="konten" rows="14"
                               class="form-control @error('konten') is-invalid @enderror">{{ old('konten', $p->konten ?? '') }}</textarea>
                     @error('konten') <div class="invalid-feedback d-block">{{ $message }}</div> @enderror
@@ -40,6 +40,15 @@
     </div>
 
     <div class="col-lg-4">
+        <div class="card mb-3"><div class="card-body">
+            @if ($p)<div class="text-secondary small mb-2">Penulis: {{ $p->user?->name ?? 'Tidak diketahui' }}</div>@endif
+            <label for="postJenis" class="form-label">Jenis konten</label>
+            <select id="postJenis" name="jenis" class="form-select">
+                @foreach (\App\Models\Post::JENIS as $value => $label)
+                    <option value="{{ $value }}" @selected(old('jenis', $p->jenis ?? 'berita') === $value)>{{ $label }}</option>
+                @endforeach
+            </select>
+        </div></div>
         <div class="card mb-3">
             <div class="card-header"><h3 class="card-title">Publikasi</h3></div>
             <div class="card-body">
