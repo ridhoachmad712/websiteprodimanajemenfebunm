@@ -24,6 +24,31 @@ class FrontendModernTest extends TestCase
             ->assertOk()->assertDontSee('frontend-modern.css');
     }
 
+    public function test_topbar_shows_labeled_social_links_when_enabled(): void
+    {
+        Setting::set('navbar.show_topbar', '1', 'navbar');
+        Setting::set('kontak.email', 'prodi@example.com', 'kontak');
+        Setting::set('sosmed.instagram', 'https://instagram.com/prodi', 'sosmed');
+        Setting::set('sosmed.tiktok', 'https://tiktok.com/@prodi', 'sosmed');
+        Setting::set('sosmed.facebook', 'https://facebook.com/prodi', 'sosmed');
+
+        $this->get('/')->assertOk()
+            ->assertSee('topbar-contact-link', false)
+            ->assertSee('prodi@example.com')
+            ->assertSee('Ikuti Kami')
+            ->assertSee('topbar-social-pill', false)
+            ->assertSee('topbar-social-link--instagram', false)
+            ->assertSee('topbar-social-link--tiktok', false)
+            ->assertSee('topbar-social-link--facebook', false)
+            ->assertSeeInOrder(['Instagram</span>', 'TikTok</span>', 'Facebook</span>'], false);
+
+        Setting::set('sosmed.facebook', '#', 'sosmed');
+        $this->get('/')->assertOk()->assertDontSee('topbar-social-link--facebook', false);
+
+        Setting::set('navbar.show_topbar', '0', 'navbar');
+        $this->get('/')->assertOk()->assertDontSee('class="topbar d-none d-md-block"', false);
+    }
+
     public function test_news_search_category_and_pagination_preserve_publication_rules(): void
     {
         $user = User::factory()->create();

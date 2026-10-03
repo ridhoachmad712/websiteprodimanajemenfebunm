@@ -21,7 +21,6 @@ class JadwalUjianController extends Controller
     private const DEFAULT_HEADER_ROW = 4;
 
     private const PUBLIC_COLUMNS = [
-        'hari' => 'Hari',
         'tanggal' => 'Tanggal',
         'waktu' => 'Waktu',
         'nama' => 'Nama',
@@ -34,11 +33,6 @@ class JadwalUjianController extends Controller
     ];
 
     private const PERSON_COLUMNS = ['Nama', 'Moderator/Sekertaris', 'Pembimbing 1', 'Pembimbing 2', 'Penguji 1', 'Penguji 2'];
-
-    private const WEEKDAYS = [
-        'senin' => 'Senin', 'selasa' => 'Selasa', 'rabu' => 'Rabu',
-        'kamis' => 'Kamis', 'jumat' => 'Jumat', "jum'at" => 'Jumat', 'sabtu' => 'Sabtu', 'minggu' => 'Minggu',
-    ];
 
     private const CREDENTIALS = [
         'm.si' => 'M.Si', 's.pd' => 'S.Pd', 's.pd.i' => 'S.Pd.I',
@@ -76,9 +70,10 @@ class JadwalUjianController extends Controller
                 return $reader->read($response->body(), $sheetNumber, $headerRow);
             });
 
-            $today = CarbonImmutable::now('Asia/Makassar')->startOfDay();
+            $now = CarbonImmutable::now('Asia/Makassar');
+            $today = $now->startOfDay();
             $upcoming = [];
-            foreach ($jadwal as $sourceRow) {
+            foreach ($jadwal as $index => $sourceRow) {
                 $row = [];
                 foreach ($sourceRow as $column => $value) {
                     $label = self::PUBLIC_COLUMNS[mb_strtolower(trim($column))] ?? null;
@@ -92,17 +87,46 @@ class JadwalUjianController extends Controller
                     continue;
                 }
 
-                $row['Tanggal'] = $date->locale('id')->translatedFormat('d M Y');
+                $time = $this->scheduleTime($row['Waktu'] ?? '', $date);
+                if ($time !== null && $time->lessThan($now)) {
+                    continue;
+                }
+
+                $row['Tanggal'] = $date->locale('id')->translatedFormat('l, j M Y');
                 foreach ($row as $column => $value) {
                     if ($column !== 'Tanggal') {
                         $row[$column] = $this->displayValue($column, (string) $value);
                     }
                 }
-                $upcoming[] = ['date' => $date, 'row' => $row];
+
+                $warnings = [];
+                if ($date->year > $now->year + 10) {
+                    $warnings[] = 'Periksa tanggal di Sheet';
+                }
+                if ($time === null) {
+                    $warnings[] = empty($row['Waktu']) ? 'Waktu belum diisi' : 'Periksa waktu di Sheet';
+                }
+                if (empty($row['Nama'])) {
+                    $warnings[] = 'Nama belum diisi';
+                }
+                if (empty($row['Ujian'])) {
+                    $warnings[] = 'Jenis ujian belum diisi';
+                }
+
+                $upcoming[] = [
+                    'date' => $date,
+                    'time' => $time,
+                    'index' => $index,
+                    'row' => $row,
+                    'warnings' => $warnings,
+                ];
             }
 
-            usort($upcoming, fn (array $a, array $b): int => $a['date']->getTimestamp() <=> $b['date']->getTimestamp());
-            $jadwal = array_column($upcoming, 'row');
+            usort($upcoming, fn (array $a, array $b): int =>
+                ($a['date']->getTimestamp() <=> $b['date']->getTimestamp())
+                ?: (($a['time']?->getTimestamp() ?? PHP_INT_MAX) <=> ($b['time']?->getTimestamp() ?? PHP_INT_MAX))
+                ?: ($a['index'] <=> $b['index']));
+            $jadwal = $upcoming;
         } catch (\Throwable) {
             $error = 'Jadwal ujian belum dapat dimuat. Pastikan file Google Sheet dapat diakses publik dan URL pada Pengaturan sudah benar.';
         }
@@ -110,17 +134,24 @@ class JadwalUjianController extends Controller
         return view('frontend.jadwal-ujian.index', [
             'jadwal' => $jadwal,
             'error' => $error,
-            'columns' => $this->columns($jadwal),
         ]);
+    }
+
+    private function scheduleTime(string $value, CarbonImmutable $date): ?CarbonImmutable
+    {
+        if (! preg_match('/^\s*(\d{1,2})[.:](\d{2})(?!\d)/', $value, $matches)) {
+            return null;
+        }
+
+        $hour = (int) $matches[1];
+        $minute = (int) $matches[2];
+
+        return $hour < 24 && $minute < 60 ? $date->setTime($hour, $minute) : null;
     }
 
     private function displayValue(string $column, string $value): string
     {
         $value = preg_replace('/\s+/u', ' ', trim($value)) ?? trim($value);
-
-        if ($column === 'Hari') {
-            return self::WEEKDAYS[mb_strtolower($value, 'UTF-8')] ?? $value;
-        }
 
         if ($column === 'Ujian' && $this->isUppercase($value)) {
             $title = mb_convert_case($value, MB_CASE_TITLE, 'UTF-8');
@@ -193,28 +224,6 @@ class JadwalUjianController extends Controller
         }
 
         return null;
-    }
-
-    /**
-     * Kolom tabel diturunkan dari header sheet yang sebenarnya (gabungan
-     * seluruh kunci baris, menjaga urutan kemunculan) agar tetap akurat
-     * meski struktur sheet berubah. Kosong bila tak ada data.
-     *
-     * @param  array<int, array<string, string>>  $jadwal
-     * @return array<int, string>
-     */
-    private function columns(array $jadwal): array
-    {
-        $columns = [];
-        foreach ($jadwal as $row) {
-            foreach (array_keys($row) as $label) {
-                if (! in_array($label, $columns, true)) {
-                    $columns[] = $label;
-                }
-            }
-        }
-
-        return $columns;
     }
 
     /**

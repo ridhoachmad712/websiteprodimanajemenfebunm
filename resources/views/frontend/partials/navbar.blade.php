@@ -13,6 +13,9 @@
     $instagram = \App\Models\Setting::get('sosmed.instagram');
     $tiktok = \App\Models\Setting::get('sosmed.tiktok');
     $facebook = \App\Models\Setting::get('sosmed.facebook');
+    $instagram = $instagram === '#' ? null : $instagram;
+    $tiktok = $tiktok === '#' ? null : $tiktok;
+    $facebook = $facebook === '#' ? null : $facebook;
     $defaults = \App\Http\Controllers\Admin\AppearanceController::defaults();
     $setting = fn ($key) => \App\Models\Setting::get($key, $defaults[$key] ?? null);
     $logo = $setting('navbar.logo');
@@ -27,16 +30,19 @@
 
 @if ($navTopbar)
     <div class="topbar d-none d-md-block">
-        <div class="container-xl d-flex justify-content-between align-items-center">
-            <div class="d-flex gap-3">
+        <div class="container-xl topbar-inner">
+            <div class="topbar-contact">
                 @if ($telepon)<span><i class="ti ti-phone me-1" aria-hidden="true"></i>{{ $telepon }}</span>@endif
-                @if ($email)<a href="mailto:{{ $email }}" class="topbar-link"><i class="ti ti-mail me-1" aria-hidden="true"></i>{{ $email }}</a>@endif
+                @if ($email)<a href="mailto:{{ $email }}" class="topbar-contact-link"><i class="ti ti-mail me-1" aria-hidden="true"></i>{{ $email }}</a>@endif
             </div>
-            <div class="d-flex gap-2 align-items-center">
-                @if ($instagram)<a href="{{ $instagram }}" target="_blank" rel="noopener" class="topbar-link" aria-label="Instagram"><i class="ti ti-brand-instagram" aria-hidden="true"></i></a>@endif
-                @if ($tiktok)<a href="{{ $tiktok }}" target="_blank" rel="noopener" class="topbar-link" aria-label="TikTok"><i class="ti ti-brand-tiktok" aria-hidden="true"></i></a>@endif
-                @if ($facebook)<a href="{{ $facebook }}" target="_blank" rel="noopener" class="topbar-link" aria-label="Facebook"><i class="ti ti-brand-facebook" aria-hidden="true"></i></a>@endif
-            </div>
+            @if ($instagram || $tiktok || $facebook)
+                <div class="topbar-social" aria-label="Media sosial Program Studi Manajemen">
+                    <span class="topbar-social-label">Ikuti Kami</span>
+                    @if ($instagram)<a href="{{ $instagram }}" target="_blank" rel="noopener" class="topbar-social-link topbar-social-link--instagram"><span class="topbar-social-pill"><i class="ti ti-brand-instagram" aria-hidden="true"></i><span>Instagram</span></span></a>@endif
+                    @if ($tiktok)<a href="{{ $tiktok }}" target="_blank" rel="noopener" class="topbar-social-link topbar-social-link--tiktok"><span class="topbar-social-pill"><i class="ti ti-brand-tiktok" aria-hidden="true"></i><span>TikTok</span></span></a>@endif
+                    @if ($facebook)<a href="{{ $facebook }}" target="_blank" rel="noopener" class="topbar-social-link topbar-social-link--facebook"><span class="topbar-social-pill"><i class="ti ti-brand-facebook" aria-hidden="true"></i><span>Facebook</span></span></a>@endif
+                </div>
+            @endif
         </div>
     </div>
 @endif

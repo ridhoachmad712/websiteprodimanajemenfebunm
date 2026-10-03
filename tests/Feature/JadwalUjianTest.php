@@ -29,13 +29,17 @@ class JadwalUjianTest extends TestCase
         Http::fake([
             'drive.google.com/*' => Http::response($this->buildXlsx([
                 1 => ['A' => 'Hari', 'B' => 'Tanggal', 'C' => 'Nama', 'D' => 'Ujian'],
-                2 => ['A' => 'Jumat', 'B' => '2026-10-02', 'C' => 'Budi Santoso', 'D' => 'Skripsi'],
+                2 => ['A' => 'Senin', 'B' => '2026-10-02', 'C' => 'Budi Santoso', 'D' => 'Skripsi'],
             ])),
         ]);
 
         $response = $this->get('/jadwal-ujian');
 
         $response->assertOk();
+        $this->assertSame(1, substr_count($response->getContent(), '<h1'));
+        $response->assertSeeInOrder(['Beranda', 'Jadwal Ujian', 'Cari jadwal', 'Waktu Makassar (WITA)', 'Budi Santoso']);
+        $response->assertDontSee('Daftar Jadwal Ujian');
+        $response->assertSee('Jumat, 2 Okt 2026');
         $response->assertSee('Budi Santoso');
         $response->assertSee('Skripsi');
         $response->assertDontSee('belum dapat dimuat');
@@ -114,7 +118,7 @@ class JadwalUjianTest extends TestCase
         $this->travelTo(CarbonImmutable::parse('2026-10-03 00:01:00', 'Asia/Makassar'));
         $this->get('/jadwal-ujian')->assertOk()
             ->assertDontSee('Ujian Jumat')
-            ->assertSee('Belum ada jadwal ujian hari ini atau mendatang.');
+            ->assertSee('Belum ada jadwal ujian yang akan datang.');
 
         Http::assertSentCount(1);
     }
@@ -146,6 +150,56 @@ class JadwalUjianTest extends TestCase
 
         $cacheKey = 'jadwal-ujian.'.md5('https://docs.google.com/file/d/FORMAT/edit|1|1');
         $this->assertSame('PROPOSAL PENELITIAN MBKM', Cache::get($cacheKey)[0]['Ujian']);
+    }
+
+    public function test_it_filters_past_start_times_and_sorts_today_by_time(): void
+    {
+        Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/TIMES/edit', 'jadwal');
+        Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
+
+        Http::fake([
+            'drive.google.com/*' => Http::response($this->buildXlsx([
+                1 => ['A' => 'Hari', 'B' => 'Tanggal', 'C' => 'Waktu', 'D' => 'Nama', 'E' => 'Ujian'],
+                2 => ['A' => 'Jumat', 'B' => '2026-10-02', 'C' => '14.00 WITA', 'D' => 'Jadwal sore', 'E' => 'Skripsi'],
+                3 => ['A' => 'Jumat', 'B' => '2026-10-02', 'C' => '11.00 WITA', 'D' => 'Jadwal lewat', 'E' => 'Skripsi'],
+                4 => ['A' => 'Jumat', 'B' => '2026-10-02', 'C' => '13:30 WITA', 'D' => 'Jadwal sekarang', 'E' => 'Skripsi'],
+                5 => ['A' => 'Jumat', 'B' => '2026-10-02', 'C' => '', 'D' => 'Jam belum ada', 'E' => 'Skripsi'],
+                6 => ['A' => 'Sabtu', 'B' => '2026-10-03', 'C' => '09.00 WITA', 'D' => 'Jadwal besok', 'E' => 'Skripsi'],
+            ])),
+        ]);
+
+        $this->travelTo(CarbonImmutable::parse('2026-10-02 13:30:00', 'Asia/Makassar'));
+
+        $this->get('/jadwal-ujian')->assertOk()
+            ->assertSee('Jumat, 2 Okt 2026')
+            ->assertSeeInOrder(['Jadwal sekarang', 'Jadwal sore', 'Jam belum ada', 'Jadwal besok'])
+            ->assertDontSee('Jadwal lewat')
+            ->assertSee('Waktu belum diisi')
+            ->assertDontSee('Jumat</span>', false);
+    }
+
+    public function test_it_marks_suspicious_dates_and_incomplete_schedule_details(): void
+    {
+        Setting::set('jadwal_ujian.file_url', 'https://docs.google.com/file/d/INCOMPLETE/edit', 'jadwal');
+        Setting::set('jadwal_ujian.header_row', '1', 'jadwal');
+
+        Http::fake([
+            'drive.google.com/*' => Http::response($this->buildXlsx([
+                1 => ['A' => 'Tanggal', 'B' => 'Waktu', 'C' => 'Nama', 'D' => 'Ujian', 'E' => 'Pembimbing 1'],
+                2 => ['A' => '2926-08-27', 'B' => '25.90 WITA', 'C' => '', 'D' => '', 'E' => 'Dr. Budi'],
+            ])),
+        ]);
+
+        $this->get('/jadwal-ujian')->assertOk()
+            ->assertSee('Periksa tanggal di Sheet')
+            ->assertSee('Periksa waktu di Sheet')
+            ->assertSee('Nama belum diisi')
+            ->assertSee('Jenis ujian belum diisi')
+            ->assertSee('Dr. Budi')
+            ->assertSee('Moderator/Sekretaris')
+            ->assertSee('Pembimbing 1')
+            ->assertSee('Penguji 1')
+            ->assertDontSee('<details', false);
     }
 
     /**
